@@ -12936,7 +12936,7 @@ const DEFAULT_STATE = {
   daily: { date: todayStr(), reviews: 0, lessons: 0 },
   history: {},
   script: { progress: {}, best: 0, batch: 5, quizDir: "recognize", chart: "hira" },
-  kanji: { level: "N5", learned: {}, best: 0 },
+  kanji: { level: "N5", learned: {}, best: 0, batch: 5 },
 };
 
 function Bar({ pct, h = 8 }) {
@@ -13115,7 +13115,7 @@ function LearnSession({ pool, batch, onLearn, onGrade, onExit }) {
 }
 
 /* ===================== HOME ===================== */
-function HomeView({ state, level, levelPct, lessons, reviews, leeches, stageCounts, streak, onGo, onTrouble, onSetting, onReset }) {
+function HomeView({ state, level, levelPct, lessons, reviews, leeches, stageCounts, streak, onGo, onTrouble, onSetting, onReset, onUnlock }) {
   const [confirm, setConfirm] = useState(false);
   const Tile = ({ label, value, sub, color, onClick, dim }) => (
     <button className="tap" onClick={onClick} disabled={dim} style={{ flex: 1, textAlign: "left", border: `1px solid ${T.line}`, background: T.panel, borderRadius: 16, padding: "14px 15px", opacity: dim ? 0.55 : 1, cursor: dim ? "default" : "pointer" }}>
@@ -13135,6 +13135,11 @@ function HomeView({ state, level, levelPct, lessons, reviews, leeches, stageCoun
           <div style={{ height: "100%", width: `${Math.round(levelPct * 100)}%`, background: "#fff", transition: "width .4s ease" }} />
         </div>
         <div style={{ fontSize: 11.5, opacity: 0.92, marginTop: 6 }}>{Math.round(levelPct * 100)}% of this level at Guru — reach 90% to unlock Level {Math.min(level + 1, MAX_LEVEL)}</div>
+        {level < MAX_LEVEL && (
+          <button className="tap" onClick={onUnlock} style={{ width: "100%", marginTop: 12, padding: "9px 10px", borderRadius: 11, border: "1px solid rgba(255,255,255,.55)", background: "rgba(255,255,255,.16)", color: "#fff", fontWeight: 700, fontSize: 13 }}>
+            I already know these — unlock Level {level + 1} →
+          </button>
+        )}
       </div>
 
       <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
@@ -13390,7 +13395,7 @@ function kanaTypeMatch(typed, glyph) {
 
 /* ---- wrapper with mode tabs + hiragana/katakana toggle ---- */
 /* ===================== STROKE-ORDER GUIDE (numbers + arrows) ===================== */
-function StrokeGuide({ char, show }) {
+function StrokeGuide({ char, show, diagram }) {
   if (!show) return null;
   const data = STROKE_DATA[char];
   if (!data) {
@@ -13402,7 +13407,7 @@ function StrokeGuide({ char, show }) {
   return (
     <svg viewBox="0 0 109 109" preserveAspectRatio="xMidYMid meet" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
       {data.map((st, i) => (
-        <path key={"p" + i} d={st[0]} fill="none" stroke={T.textDim} strokeOpacity={0.4} strokeWidth={3.4} strokeLinecap="round" strokeLinejoin="round" />
+        <path key={"p" + i} d={st[0]} fill="none" stroke={diagram ? T.text : T.textDim} strokeOpacity={diagram ? 0.7 : 0.4} strokeWidth={3.4} strokeLinecap="round" strokeLinejoin="round" />
       ))}
       {data.map((st, i) => (
         <path key={"a" + i} d="M0,-2.4 L4.4,0 L0,2.4 Z" fill={babyPink} transform={`translate(${st[3]} ${st[4]}) rotate(${st[5]})`} />
@@ -14087,6 +14092,9 @@ function KanjiView({ kanjiState, setKanji }) {
   const [mode, setMode] = useState("browse"); // browse | study | quiz
   const list = KANJI_BY_LEVEL[level] || [];
   const learnedCount = list.filter((k) => learned[k.char]).length;
+  const batch = ks.batch || 5;
+  const setBatch = (n) => setKanji({ ...ks, batch: n });
+  const onBest = (b) => setKanji({ ...ks, best: Math.max(ks.best || 0, b) });
 
   return (
     <div className="fade" style={{ paddingTop: 6 }}>
@@ -14115,7 +14123,7 @@ function KanjiView({ kanjiState, setKanji }) {
       </div>
 
       {mode === "browse" && <KanjiBrowse list={list} learned={learned} onMark={markLearned} />}
-      {mode === "study" && <KanjiStudy key={level} list={list} learned={learned} onMark={markLearned} />}
+      {mode === "study" && <KanjiStudy key={level} list={list} learned={learned} onMark={markLearned} batch={batch} setBatch={setBatch} best={ks.best || 0} onBest={onBest} />}
       {mode === "quiz" && <KanjiQuiz key={level} list={list} level={level} best={ks.best || 0} onBest={(b) => setKanji({ ...ks, best: Math.max(ks.best || 0, b) })} />}
       {mode === "trace" && <KanjiTrace key={level} list={list} />}
     </div>
@@ -14148,6 +14156,12 @@ function KanjiBrowse({ list, learned, onMark }) {
               </div>
             </div>
           </div>
+          <div style={{ position: "relative", width: 150, height: 150, margin: "14px auto 0", border: `1px solid ${T.line}`, borderRadius: 14, background: T.panel, overflow: "hidden" }}>
+            <div style={{ position: "absolute", top: "50%", left: 0, right: 0, borderTop: `1px dashed ${T.line}`, pointerEvents: "none" }} />
+            <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, borderLeft: `1px dashed ${T.line}`, pointerEvents: "none" }} />
+            <StrokeGuide char={k.char} show diagram />
+          </div>
+          <div style={{ fontSize: 10.5, color: T.textDim, textAlign: "center", marginTop: 6 }}>stroke order — numbered starts, pink direction arrows</div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 14, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 12, padding: "10px 12px" }}>
             <div style={{ flex: 1 }}>
               {k.exJa ? (
@@ -14197,55 +14211,165 @@ function KanjiBrowse({ list, learned, onMark }) {
   );
 }
 
-/* ---- Study: flashcards through the level ---- */
-function KanjiStudy({ list, learned, onMark }) {
-  const [idx, setIdx] = useState(0);
-  const [revealed, setRevealed] = useState(false);
-  if (!list.length) return <div style={{ color: T.textDim, textAlign: "center", padding: 30 }}>No kanji in this level yet.</div>;
-  const k = list[idx % list.length];
-  const advance = () => { setRevealed(false); setIdx((i) => (i + 1) % list.length); };
+/* ---- Study: lesson system — learn a batch, then quiz (with stroke guides) ---- */
+function KanjiStudy({ list, learned, onMark, batch, setBatch, best, onBest }) {
+  const [mode, setMode] = useState("menu"); // menu | teach | quiz | done
+  const [teach, setTeach] = useState([]);
+  const [tIdx, setTIdx] = useState(0);
+  const [quizSet, setQuizSet] = useState([]);
+  const [qIdx, setQIdx] = useState(0);
+  const [q, setQ] = useState(null);
+  const [picked, setPicked] = useState(null);
+  const [sess, setSess] = useState({ right: 0, total: 0, streak: 0, best: best || 0 });
+  const timer = useRef(null);
+  useEffect(() => () => clearTimeout(timer.current), []);
 
+  const unlearned = list.filter((k) => !learned[k.char]);
+  const learnedList = list.filter((k) => learned[k.char]);
+  const pool = list.length >= 4 ? list : KANJI;
+
+  const startLearn = () => { const next = unlearned.slice(0, batch); if (!next.length) return; setTeach(next); setTIdx(0); setMode("teach"); };
+  const startQuiz = (arr) => {
+    if (!arr.length) return;
+    const s = shuffle(arr).slice(0, 12);
+    setQuizSet(s); setQIdx(0); setPicked(null); setQ(makeKanjiQ(s[0], pool));
+    setSess({ right: 0, total: 0, streak: 0, best: best || 0 }); setMode("quiz");
+  };
+  const advance = () => { const n = qIdx + 1; if (n >= quizSet.length) { setMode("done"); return; } setQIdx(n); setPicked(null); setQ(makeKanjiQ(quizSet[n], pool)); };
+  const choose = (opt) => {
+    if (picked) return;
+    const ok = opt.char === q.answer.char;
+    speak(kanjiSpeak(q.answer)); setPicked(opt);
+    setSess((p) => { const streak = ok ? p.streak + 1 : 0; const nb = Math.max(p.best, streak); if (nb > p.best) onBest(nb); return { right: p.right + (ok ? 1 : 0), total: p.total + 1, streak, best: nb }; });
+    timer.current = setTimeout(advance, 1000);
+  };
+  const meaning = (k) => k.meaning.split(",")[0];
+
+  if (!list.length) return <div style={{ color: T.textDim, textAlign: "center", padding: 30 }}>No kanji in this level yet.</div>;
+
+  /* ----- MENU ----- */
+  if (mode === "menu") {
+    return (
+      <div className="fade" style={{ paddingTop: 2 }}>
+        <div style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 20, padding: "18px 18px 16px", marginBottom: 14 }}>
+          <div style={{ fontFamily: displayFont, fontSize: 20, color: T.gold }}>Learn {batch}, then quiz</div>
+          <div style={{ fontSize: 12.5, color: T.textDim, marginTop: 3, lineHeight: 1.5 }}>Study {batch} new kanji — meaning, readings, and stroke order — then quiz them. Same rhythm as the word lessons.</div>
+          <div style={{ margin: "12px 0 6px" }}><Bar pct={list.length ? learnedList.length / list.length : 0} /></div>
+          <div style={{ fontSize: 12, color: T.textDim }}>{learnedList.length} / {list.length} learned · {unlearned.length} to go</div>
+        </div>
+
+        <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+          <Stat label="Best streak" value={`${best || 0}🔥`} color={T.terra} />
+          <Stat label="Learned" value={learnedList.length} color={T.gold} />
+          <Stat label="Remaining" value={unlearned.length} color={unlearned.length ? T.text : T.textDim} />
+        </div>
+
+        <button className="tap" onClick={startLearn} disabled={!unlearned.length} style={{ width: "100%", padding: 15, borderRadius: 14, marginBottom: 10, border: unlearned.length ? "none" : `1px solid ${T.line}`, background: unlearned.length ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : T.panel, color: unlearned.length ? "#fff" : T.textDim, fontSize: 15, fontWeight: 700, boxShadow: unlearned.length ? "0 8px 20px rgba(128,29,92,.18)" : "none" }}>
+          {unlearned.length ? `Learn next ${Math.min(batch, unlearned.length)} kanji →` : "All kanji in this level learned 🎉"}
+        </button>
+        <button className="tap" onClick={() => startQuiz(learnedList)} disabled={!learnedList.length} style={{ width: "100%", padding: 13, borderRadius: 13, marginBottom: 14, border: `1px solid ${learnedList.length ? T.gold : T.line}`, background: learnedList.length ? `${T.gold}10` : T.panel, color: learnedList.length ? T.gold : T.textDim, fontSize: 14, fontWeight: 700 }}>
+          ✨ Quiz learned kanji
+        </button>
+
+        <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16, padding: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <span style={{ fontSize: 14 }}>New kanji per lesson</span>
+            <div style={{ display: "flex", gap: 8 }}>
+              {[3, 5, 10].map((n) => (
+                <button key={n} className="tap" onClick={() => setBatch(n)} style={{ border: `1px solid ${batch === n ? T.gold : T.line}`, background: batch === n ? `${T.gold}18` : "transparent", color: batch === n ? T.gold : T.textDim, borderRadius: 9, padding: "6px 11px", fontSize: 13, fontWeight: 600 }}>{n}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ----- TEACH ----- */
+  if (mode === "teach") {
+    const k = teach[tIdx];
+    return (
+      <div className="fade">
+        <div style={{ height: 4, background: T.line, borderRadius: 4, overflow: "hidden", marginBottom: 14 }}>
+          <div style={{ height: "100%", width: `${(tIdx / teach.length) * 100}%`, background: `linear-gradient(90deg, ${T.gold}, ${T.terra})` }} />
+        </div>
+        <div className="pop" key={k.char} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "22px 20px", textAlign: "center", boxShadow: "0 12px 34px rgba(128,29,92,.10)" }}>
+          <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: 1, color: T.goldSoft }}>New kanji</div>
+          <div style={{ position: "relative", width: 168, height: 168, margin: "8px auto 4px", border: `1px solid ${T.line}`, borderRadius: 16, background: T.panel, overflow: "hidden" }}>
+            <div style={{ position: "absolute", top: "50%", left: 0, right: 0, borderTop: `1px dashed ${T.line}`, pointerEvents: "none" }} />
+            <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, borderLeft: `1px dashed ${T.line}`, pointerEvents: "none" }} />
+            <StrokeGuide char={k.char} show diagram />
+          </div>
+          <div style={{ fontSize: 19, fontWeight: 700, color: T.gold }}>{k.meaning}</div>
+          <div style={{ fontSize: 13, color: T.textDim, marginTop: 4, lineHeight: 1.6 }}>
+            <span style={{ color: T.terra, fontWeight: 700 }}>On</span> {k.on}　·　<span style={{ color: T.goldSoft, fontWeight: 700 }}>Kun</span> {k.kun}
+          </div>
+          {k.exJa && (
+            <div style={{ fontSize: 12.5, color: T.textDim, marginTop: 6 }}>
+              <span style={{ fontFamily: jaFont, fontSize: 15, color: T.text }}>{k.exJa}</span> · {k.exKana} · {k.exEn}
+            </div>
+          )}
+          <div style={{ marginTop: 10 }}><Speaker text={kanjiSpeak(k)} size={20} color={T.gold} /></div>
+        </div>
+        <button className="tap" onClick={() => { onMark(k.char, true); if (tIdx + 1 >= teach.length) startQuiz(teach); else setTIdx(tIdx + 1); }}
+          style={{ width: "100%", marginTop: 14, padding: 15, borderRadius: 14, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontSize: 15, fontWeight: 700 }}>
+          {tIdx + 1 >= teach.length ? "Got them — quiz me →" : "Learn it ✓"}
+        </button>
+        <div style={{ textAlign: "center", fontSize: 12, color: T.textDim, marginTop: 10 }}>Learning {tIdx + 1} of {teach.length}</div>
+      </div>
+    );
+  }
+
+  /* ----- DONE ----- */
+  if (mode === "done") {
+    const acc = sess.total ? Math.round((sess.right / sess.total) * 100) : 0;
+    return (
+      <div className="fade pop" style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 20, padding: "40px 24px", textAlign: "center" }}>
+        <div style={{ fontSize: 38, marginBottom: 8 }}>🎉</div>
+        <div style={{ fontFamily: displayFont, fontSize: 22 }}>Lesson complete!</div>
+        <div style={{ color: T.textDim, fontSize: 14, marginTop: 8 }}>{sess.right}/{sess.total} correct · {acc}% · best streak {sess.best}🔥</div>
+        <button className="tap" onClick={() => setMode("menu")} style={{ width: "100%", marginTop: 18, padding: 14, borderRadius: 13, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontWeight: 700 }}>Back</button>
+      </div>
+    );
+  }
+
+  /* ----- QUIZ ----- */
+  const ans = q.answer;
   return (
     <div className="fade">
-      <div style={{ height: 4, background: T.line, borderRadius: 4, overflow: "hidden", marginBottom: 14 }}>
-        <div style={{ height: "100%", width: `${((idx % list.length) / list.length) * 100}%`, background: `linear-gradient(90deg, ${T.gold}, ${T.terra})` }} />
+      <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+        <Stat label="Score" value={`${sess.right}/${sess.total}`} color={T.gold} />
+        <Stat label="Streak" value={`${sess.streak}🔥`} color={T.terra} />
+        <Stat label="Best" value={sess.best} color={T.green} />
       </div>
-
-      <div className="pop" key={k.char} onClick={() => setRevealed(true)} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "30px 22px", textAlign: "center", boxShadow: "0 12px 34px rgba(128,29,92,.10)", cursor: revealed ? "default" : "pointer", minHeight: 240 }}>
-        <div style={{ fontFamily: jaFont, fontSize: 104, color: T.text, lineHeight: 1.05 }}>{k.char}</div>
-        {!revealed ? (
-          <div style={{ fontSize: 13, color: T.textDim, marginTop: 14 }}>Tap to reveal the reading & meaning</div>
-        ) : (
-          <div className="fade">
-            <div style={{ fontSize: 19, fontWeight: 700, color: T.gold }}>{k.meaning}</div>
-            <div style={{ fontSize: 13, color: T.textDim, marginTop: 6, lineHeight: 1.6 }}>
-              <span style={{ color: T.terra, fontWeight: 700 }}>On</span> {k.on}　·　<span style={{ color: T.goldSoft, fontWeight: 700 }}>Kun</span> {k.kun}
-            </div>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 12, padding: "8px 12px" }}>
-              {k.exJa && <span style={{ fontFamily: jaFont, fontSize: 18 }}>{k.exJa}</span>}
-              {k.exJa && <span style={{ color: T.goldSoft, fontStyle: "italic", fontSize: 13 }}>{k.exKana}</span>}
-              <Speaker text={kanjiSpeak(k)} size={16} color={T.terra} />
-            </div>
-            {k.exEn && <div style={{ fontSize: 12.5, color: T.textDim, marginTop: 6 }}>{k.exEn}</div>}
-          </div>
-        )}
+      <div className="pop" key={ans.char + qIdx} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "26px 20px", textAlign: "center", boxShadow: "0 12px 30px rgba(128,29,92,.10)", marginBottom: 16 }}>
+        <div style={{ fontSize: 12, color: T.textDim, marginBottom: 10 }}>What does this kanji mean?</div>
+        <div style={{ fontFamily: jaFont, fontSize: 84, color: T.text, lineHeight: 1 }}>{ans.char}</div>
       </div>
-
-      {!revealed ? (
-        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
-          <button className="tap" onClick={() => setIdx((i) => (i - 1 + list.length) % list.length)} style={ctrlBtn(false)}>‹ Prev</button>
-          <button className="tap" onClick={() => setRevealed(true)} style={{ ...ctrlBtn(true), flex: 2 }}>Reveal</button>
-          <button className="tap" onClick={advance} style={ctrlBtn(false)}>Next ›</button>
-        </div>
-      ) : (
-        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
-          <button className="tap" onClick={advance} style={{ flex: 1, padding: "12px 4px", borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: "pointer", border: `1.5px solid ${T.line}`, background: T.panel, color: T.text }}>Still learning</button>
-          <button className="tap" onClick={() => { onMark(k.char, true); advance(); }} style={{ flex: 1, padding: "12px 4px", borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: "pointer", border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff" }}>Got it ✓</button>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        {q.options.map((opt, i) => {
+          let bg = T.panel, border = T.line, col = T.text;
+          if (picked) {
+            const isCorrect = opt.char === ans.char, isPicked = opt.char === picked.char;
+            if (isCorrect) { bg = `${T.green}1a`; border = T.green; col = T.gold; }
+            else if (isPicked) { bg = `${T.red}1a`; border = T.red; col = T.red; }
+          }
+          return (
+            <button key={i} className="tap" onClick={() => choose(opt)} style={{ background: bg, border: `1.5px solid ${border}`, borderRadius: 14, padding: "14px 8px", cursor: "pointer", minHeight: 64, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontFamily: displayFont, fontSize: 17, color: col, fontWeight: 600, textAlign: "center" }}>{meaning(opt)}</span>
+            </button>
+          );
+        })}
+      </div>
+      {picked && (
+        <div className="fade" style={{ textAlign: "center", marginTop: 14, fontSize: 14 }}>
+          <span style={{ fontFamily: jaFont, fontSize: 26, color: T.text }}>{ans.char}</span>
+          <span style={{ color: T.textDim }}> = </span>
+          <span style={{ color: T.gold, fontWeight: 700 }}>{ans.meaning}</span>
         </div>
       )}
-      <div style={{ textAlign: "center", fontSize: 12, color: T.textDim, marginTop: 10 }}>
-        {(idx % list.length) + 1} of {list.length}{learned[k.char] ? " · already learned" : ""}
-      </div>
+      <button className="tap" onClick={() => { clearTimeout(timer.current); setMode("menu"); }} style={{ width: "100%", marginTop: 16, padding: 10, borderRadius: 12, border: "none", background: "transparent", color: T.textDim, fontSize: 12 }}>End lesson</button>
+      <div style={{ fontSize: 11, color: T.textDim, textAlign: "center", marginTop: 4 }}>{qIdx + 1} of {quizSet.length}</div>
     </div>
   );
 }
@@ -14638,6 +14762,7 @@ function App() {
             lessons={derived.pool.length} reviews={derived.due.length} leeches={derived.leechList.length}
             stageCounts={derived.stageCounts} streak={streak} onGo={setView}
             onTrouble={() => startPractice("leeches")}
+            onUnlock={() => persist({ ...state, currentLevel: Math.min(state.currentLevel + 1, MAX_LEVEL) })}
             onSetting={(patch) => persist({ ...state, settings: { ...state.settings, ...patch } })}
             onReset={() => { persist({ ...DEFAULT_STATE, custom: state.custom, settings: state.settings, script: state.script, kanji: state.kanji, daily: { date: todayStr(), reviews: 0, lessons: 0 } }); setView("home"); }} />
         )}

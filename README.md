@@ -13,17 +13,21 @@ trainer. The whole thing is a single self-contained HTML file.
   8,000 words organised into bite-size levels (e.g. *N5 · 1*, *N5 · 2* … through
   N1). Each card shows the word in kanji/kana, its reading, the English meaning,
   and tap-to-hear audio. WaniKani-style scheduling brings cards back at growing
-  intervals, and reaching **Guru** on most of a level unlocks the next.
+  intervals, and reaching **Guru** on most of a level unlocks the next — or, if
+  you already know the basics, tap **"I already know these — unlock Level N"**
+  on the home screen to jump ahead whenever you're ready.
 - **Romaji typed answers with a live kana preview** — type the reading in
   romaji and watch it turn into kana as you go. Both romaji and kana input are
   accepted, and long vowels (e.g. *ou / uu*) count.
 - **Kanji by JLPT level — the complete set (N5 → N1)** — every kanji in the
   standard JLPT lists: **2,211 characters** (N5 79, N4 166, N3 367, N2 367,
-  N1 1,232). Browse a grid and tap any character for its on'yomi / kun'yomi
-  readings and meanings; study them as flashcards and mark what you've learned;
-  quiz yourself in either direction (kanji → meaning or meaning → kanji); and
-  trace each character with full stroke-order guidance. Many common kanji also
-  include an example word with audio.
+  N1 1,232). Browse a grid and tap any character to see its readings, meaning,
+  and a full **stroke-order diagram** (numbered starts, pink direction arrows);
+  **study** with a lesson loop that teaches 5 new kanji at a time — each with its
+  stroke order — then quizzes them; quiz yourself freely in either direction
+  (kanji → meaning or meaning → kanji); and trace each character with the same
+  stroke-order guidance. Many common kanji also include an example word with
+  audio. Kana practice uses the same learn-5-then-quiz lesson rhythm.
 - **Search** — a search bar in the Kanji browser and the vocabulary list lets
   you find anything instantly by English meaning, the character itself, kana
   reading (hiragana or katakana), or romaji. Kanji search spans all JLPT levels
