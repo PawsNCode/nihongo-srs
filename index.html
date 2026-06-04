@@ -2487,18 +2487,19 @@ function StrokeGuide({ char, show }) {
       <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: jaFont, fontSize: "min(58vw, 320px)", color: T.terra, opacity: 0.2, pointerEvents: "none", userSelect: "none", lineHeight: 1 }}>{char}</div>
     );
   }
+  const babyPink = "#f7a8c9";
   return (
     <svg viewBox="0 0 109 109" preserveAspectRatio="xMidYMid meet" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
       {data.map((st, i) => (
         <path key={"p" + i} d={st[0]} fill="none" stroke={T.textDim} strokeOpacity={0.4} strokeWidth={3.4} strokeLinecap="round" strokeLinejoin="round" />
       ))}
       {data.map((st, i) => (
-        <path key={"a" + i} d="M0,-2.6 L4.8,0 L0,2.6 Z" fill={T.terra} opacity={0.92} transform={`translate(${st[3]} ${st[4]}) rotate(${st[5]})`} />
+        <path key={"a" + i} d="M0,-2.4 L4.4,0 L0,2.4 Z" fill={babyPink} transform={`translate(${st[3]} ${st[4]}) rotate(${st[5]})`} />
       ))}
       {data.map((st, i) => (
         <g key={"n" + i}>
-          <circle cx={st[1]} cy={st[2]} r={6} fill={T.terra} stroke="#fff" strokeWidth={0.9} />
-          <text x={st[1]} y={st[2]} dy="0.35em" textAnchor="middle" fill="#fff" fontSize={7.6} fontWeight="700" style={{ fontFamily: uiFont }}>{i + 1}</text>
+          <circle cx={st[1]} cy={st[2]} r={3.6} fill={T.terra} stroke="#fff" strokeWidth={0.55} />
+          <text x={st[1]} y={st[2]} dy="0.34em" textAnchor="middle" fill="#fff" fontSize={i + 1 > 9 ? 3.8 : 4.4} fontWeight="700" style={{ fontFamily: uiFont }}>{i + 1}</text>
         </g>
       ))}
     </svg>
