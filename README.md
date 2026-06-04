@@ -30,6 +30,19 @@ trainer. The whole thing is a single self-contained HTML file.
   (kanji → meaning or meaning → kanji); and trace each character with the same
   stroke-order guidance. Many common kanji also include an example word with
   audio. Kana practice uses the same learn-5-then-quiz lesson rhythm.
+- **Tap any kanji to look it up** — in lessons, reviews, and the vocabulary
+  dictionary, the individual kanji inside a word are tappable (shown with a
+  dotted underline). Tapping one jumps straight to the Kanji page and opens that
+  character's full entry — readings, meaning, example, and stroke order.
+- **Trace remembers the last kanji you opened** — open a character anywhere on
+  the Kanji page, then switch to **Trace** and it starts on that same character.
+  The Trace tab also has its own **search**, so you can pull up any kanji to
+  practice writing it (by English, the character, kana, or romaji).
+- **Build-your-own quizzes** — the Kanji **Quiz** opens with a selection screen:
+  tap the characters you want (or search to add any), and start. If you select
+  nothing, it quizzes only the kanji you've **learned** by default. The Vocab
+  tab works the same way — tap learned words to pick exactly what to drill, or
+  just hit **Practice learned words** to review everything you've learned.
 - **Vocabulary dictionary (Vocab tab)** — the whole ~8,000-word deck in one
   searchable place, with the running total shown and a JLPT band selector
   (N5–N1) to browse a level at a time. Long lists are capped to the first 200

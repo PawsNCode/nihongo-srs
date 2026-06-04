@@ -13219,6 +13219,21 @@ const KANJI_BY_LEVEL = JLPT_LEVELS.reduce((acc, lv) => {
   acc[lv] = KANJI.filter((k) => k.jlpt === lv);
   return acc;
 }, {});
+const KANJI_INDEX = (() => { const m = {}; KANJI.forEach((k) => { m[k.char] = k; }); return m; })();
+function isKanjiChar(ch) { const c = ch.codePointAt(0); return (c >= 0x4e00 && c <= 0x9fff) || (c >= 0x3400 && c <= 0x4dbf) || (c >= 0xf900 && c <= 0xfaff); }
+/* Renders a Japanese string with each known kanji as a tappable span → onKanji(char). */
+function JaText({ text, onKanji, style }) {
+  if (!onKanji) return <span style={style}>{text}</span>;
+  return (
+    <span style={style}>
+      {Array.from(text || "").map((ch, i) => (
+        isKanjiChar(ch) && KANJI_INDEX[ch] ? (
+          <span key={i} onClick={(e) => { e.stopPropagation(); onKanji(ch); }} title={`See ${ch} — ${KANJI_INDEX[ch].meaning}`} style={{ cursor: "pointer", borderBottom: `1.5px dotted ${T.terra}88`, paddingBottom: 1 }}>{ch}</span>
+        ) : (<span key={i}>{ch}</span>)
+      ))}
+    </span>
+  );
+}
 
 /* ---- Time + dates ---- */
 const HOUR = 3600000;
@@ -13293,7 +13308,7 @@ function Bar({ pct, h = 8 }) {
 }
 
 /* ===================== TYPED QUIZ (romaji, with live kana preview) ===================== */
-function TypedQuiz({ items, mode, onGrade, onExit, title }) {
+function TypedQuiz({ items, mode, onGrade, onExit, title, onKanji }) {
   const [queue] = useState(() => items);
   const [i, setI] = useState(0);
   const [answer, setAnswer] = useState("");
@@ -13382,7 +13397,7 @@ function TypedQuiz({ items, mode, onGrade, onExit, title }) {
       {feedback && (
         <div className="fade" style={{ marginTop: 12, background: T.panel, border: `1px solid ${wrong ? T.red : T.green}`, borderRadius: 14, padding: "12px 14px", textAlign: "center" }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: wrong ? T.red : T.green }}>{correct ? "Correct!" : "Answer:"}</div>
-          <div style={{ fontFamily: jaFont, fontSize: 30, color: T.text, marginTop: 4 }}>{item.ja}</div>
+          <JaText text={item.ja} onKanji={onKanji} style={{ fontFamily: jaFont, fontSize: 30, color: T.text, marginTop: 4, display: "inline-block" }} />
           {item.kana !== item.ja && (<div style={{ fontFamily: jaFont, fontSize: 17, color: T.textDim }}>{item.kana}</div>)}
           <div style={{ color: T.goldSoft, fontStyle: "italic", fontSize: 14 }}>{item.romaji}</div>
           <div style={{ marginTop: 8 }}><Speaker text={item.ja} color={T.terra} /></div>
@@ -13408,7 +13423,7 @@ function TypedQuiz({ items, mode, onGrade, onExit, title }) {
 }
 
 /* ===================== LEARN SESSION (teach N, then quiz them) ===================== */
-function LearnSession({ pool, batch, onLearn, onGrade, onExit }) {
+function LearnSession({ pool, batch, onLearn, onGrade, onExit, onKanji }) {
   const [queue] = useState(() => pool.slice(0, batch));
   const [phase, setPhase] = useState(queue.length ? "teach" : "empty");
   const [i, setI] = useState(0);
@@ -13431,7 +13446,7 @@ function LearnSession({ pool, batch, onLearn, onGrade, onExit }) {
         <div style={{ textAlign: "center", fontSize: 12.5, color: T.textDim, margin: "0 0 12px", lineHeight: 1.5 }}>
           Now type each reading to lock it in 👇
         </div>
-        <TypedQuiz items={queue} mode="srs" onGrade={onGrade} onExit={onExit} title="Lesson quiz" />
+        <TypedQuiz items={queue} mode="srs" onGrade={onGrade} onExit={onExit} title="Lesson quiz" onKanji={onKanji} />
       </div>
     );
   }
@@ -13444,7 +13459,7 @@ function LearnSession({ pool, batch, onLearn, onGrade, onExit }) {
       </div>
       <div className="pop" key={item.id} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "30px 22px", textAlign: "center", boxShadow: "0 12px 34px rgba(128,29,92,.10)" }}>
         <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: 1, color: T.goldSoft }}>New {item.type} · Level {item.level}</div>
-        <div style={{ fontFamily: jaFont, fontSize: item.type === "sentence" ? 30 : 46, color: T.text, margin: "14px 0 4px", lineHeight: 1.35 }}>{item.ja}</div>
+        <JaText text={item.ja} onKanji={onKanji} style={{ display: "block", fontFamily: jaFont, fontSize: item.type === "sentence" ? 30 : 46, color: T.text, margin: "14px 0 4px", lineHeight: 1.35 }} />
         {item.kana !== item.ja && (<div style={{ fontFamily: jaFont, fontSize: 18, color: T.textDim }}>{item.kana}</div>)}
         <div style={{ color: T.goldSoft, fontStyle: "italic", fontSize: 16, marginTop: 4 }}>{item.romaji}</div>
         <div style={{ fontFamily: displayFont, fontSize: 20, marginTop: 6 }}>{item.en}</div>
@@ -13540,7 +13555,7 @@ function HomeView({ state, level, levelPct, lessons, reviews, leeches, stageCoun
 }
 
 /* ===================== ITEMS BROWSER ===================== */
-function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice }) {
+function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice, onKanji }) {
   const [q, setQ] = useState("");
   const [band, setBand] = useState("All");
   const [filter, setFilter] = useState("all");
@@ -13583,6 +13598,7 @@ function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice }) 
     if (items.length) onStartPractice(items);
   };
   const selCount = Object.values(selected).filter(Boolean).length;
+  const learnedItems = allItems.filter((it) => state.progress[it.id]);
   const filters = [["all", "All"], ["learned", "Learned"], ["due", "Due"], ["leech", "Tricky"]];
 
   return (
@@ -13608,10 +13624,17 @@ function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice }) 
         ))}
       </div>
 
-      {selCount > 0 && (
+      {selCount > 0 ? (
         <button className="tap" onClick={startSelected} style={{ width: "100%", margin: "10px 0", padding: 12, borderRadius: 13, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontWeight: 700 }}>
           Practice {selCount} selected →
         </button>
+      ) : learnedItems.length > 0 ? (
+        <button className="tap" onClick={() => onStartPractice(shuffle(learnedItems).slice(0, 20))} style={{ width: "100%", margin: "10px 0", padding: 12, borderRadius: 13, border: `1px solid ${T.gold}`, background: `${T.gold}10`, color: T.gold, fontWeight: 700 }}>
+          ✨ Practice learned words ({learnedItems.length}) →
+        </button>
+      ) : null}
+      {selCount === 0 && learnedItems.length > 0 && (
+        <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", margin: "0 4px 4px" }}>Tip: tap learned words to pick exactly which ones to quiz — otherwise it quizzes your learned words.</div>
       )}
 
       <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -13622,7 +13645,7 @@ function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice }) 
           const bnd = it.custom ? "Custom" : bandOf(it.level);
           return (
             <div key={it.id} onClick={() => p && toggle(it.id)} style={{ display: "flex", alignItems: "center", gap: 12, background: sel ? `${T.gold}0e` : T.panel, border: `1px solid ${sel ? T.gold : T.line}`, borderRadius: 14, padding: "11px 13px", cursor: p ? "pointer" : "default" }}>
-              <div style={{ fontFamily: jaFont, fontSize: 26, color: T.text, minWidth: 64 }}>{it.ja}</div>
+              <div style={{ fontFamily: jaFont, fontSize: 26, color: T.text, minWidth: 64 }}><JaText text={it.ja} onKanji={onKanji} /></div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 14, color: T.text, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{it.en}</div>
                 <div style={{ fontSize: 12, color: T.goldSoft, fontStyle: "italic" }}>{it.romaji}{it.kana && it.kana !== it.ja ? ` · ${it.kana}` : ""}</div>
@@ -14457,7 +14480,7 @@ function makeKanjiQ(answer, pool) {
   return { answer, options: shuffle([answer, ...distractors]) };
 }
 
-function KanjiView({ kanjiState, setKanji }) {
+function KanjiView({ kanjiState, setKanji, focusChar, onFocusDone }) {
   const ks = kanjiState || {};
   const level = ks.level || "N5";
   const learned = ks.learned || {};
@@ -14468,12 +14491,21 @@ function KanjiView({ kanjiState, setKanji }) {
     setKanji({ ...ks, learned: next });
   };
 
-  const [mode, setMode] = useState("browse"); // browse | study | quiz
+  const [mode, setMode] = useState("browse"); // browse | study | quiz | trace
+  const [selChar, setSelChar] = useState(null); // last-opened kanji (shared by Browse + Trace)
   const list = KANJI_BY_LEVEL[level] || [];
   const learnedCount = list.filter((k) => learned[k.char]).length;
   const batch = ks.batch || 5;
   const setBatch = (n) => setKanji({ ...ks, batch: n });
   const onBest = (b) => setKanji({ ...ks, best: Math.max(ks.best || 0, b) });
+
+  // A kanji was tapped elsewhere (a lesson, the dictionary…) → open it here.
+  useEffect(() => {
+    if (!focusChar) return;
+    const k = KANJI_INDEX[focusChar];
+    if (k) { if (k.jlpt !== level) setLevel(k.jlpt); setSelChar(focusChar); setMode("browse"); }
+    onFocusDone && onFocusDone();
+  }, [focusChar]);
 
   return (
     <div className="fade" style={{ paddingTop: 6 }}>
@@ -14501,18 +14533,17 @@ function KanjiView({ kanjiState, setKanji }) {
         ))}
       </div>
 
-      {mode === "browse" && <KanjiBrowse list={list} learned={learned} onMark={markLearned} />}
+      {mode === "browse" && <KanjiBrowse list={list} learned={learned} onMark={markLearned} selChar={selChar} setSelChar={setSelChar} />}
       {mode === "study" && <KanjiStudy key={level} list={list} learned={learned} onMark={markLearned} batch={batch} setBatch={setBatch} best={ks.best || 0} onBest={onBest} />}
-      {mode === "quiz" && <KanjiQuiz key={level} list={list} level={level} best={ks.best || 0} onBest={(b) => setKanji({ ...ks, best: Math.max(ks.best || 0, b) })} />}
-      {mode === "trace" && <KanjiTrace key={level} list={list} />}
+      {mode === "quiz" && <KanjiQuiz key={level} list={list} level={level} learned={learned} best={ks.best || 0} onBest={(b) => setKanji({ ...ks, best: Math.max(ks.best || 0, b) })} />}
+      {mode === "trace" && <KanjiTrace key={level} list={list} initialChar={selChar} />}
     </div>
   );
 }
 
 /* ---- Browse: grid + tap for detail ---- */
-function KanjiBrowse({ list, learned, onMark }) {
+function KanjiBrowse({ list, learned, onMark, selChar, setSelChar }) {
   const [q, setQ] = useState("");
-  const [selChar, setSelChar] = useState(null);
   const searching = q.trim().length > 0;
   const displayList = searching ? KANJI.filter((kj) => kanjiMatches(kj, q)) : list;
   const k = selChar ? KANJI.find((x) => x.char === selChar) : null;
@@ -14754,29 +14785,84 @@ function KanjiStudy({ list, learned, onMark, batch, setBatch, best, onBest }) {
 }
 
 /* ---- Quiz: kanji ⇄ meaning multiple choice ---- */
-function KanjiQuiz({ list, level, best, onBest }) {
-  const [dir, setDir] = useState("k2m"); // k2m: kanji→meaning · m2k: meaning→kanji
-  const [q, setQ] = useState(() => (list.length ? makeKanjiQ(list[Math.floor(Math.random() * list.length)], list) : null));
+function KanjiQuiz({ list, level, learned, best, onBest }) {
+  const [phase, setPhase] = useState("setup"); // setup | quiz
+  const [sel, setSel] = useState({});          // char -> true (selection)
+  const [search, setSearch] = useState("");
+  const [pool, setPool] = useState([]);         // chosen kanji for this quiz
+  const [dir, setDir] = useState("k2m");
+  const [q, setQ] = useState(null);
   const [picked, setPicked] = useState(null);
   const [score, setScore] = useState({ right: 0, total: 0, streak: 0, best });
   const timer = useRef(null);
   useEffect(() => () => clearTimeout(timer.current), []);
 
-  if (!list.length || !q) return <div style={{ color: T.textDim, textAlign: "center", padding: 30 }}>No kanji in this level yet.</div>;
+  const learnedList = list.filter((k) => learned && learned[k.char]);
+  const selCount = Object.values(sel).filter(Boolean).length;
+  const gridList = search.trim() ? KANJI.filter((k) => kanjiMatches(k, search)) : list;
+  const GRID_CAP = 80;
 
+  const toggle = (ch) => setSel((s) => ({ ...s, [ch]: !s[ch] }));
+  const selectLearned = () => { const m = {}; learnedList.forEach((k) => { m[k.char] = true; }); setSel(m); };
+
+  const begin = () => {
+    let chosen = Object.keys(sel).filter((c) => sel[c]).map((c) => KANJI_INDEX[c]).filter(Boolean);
+    if (!chosen.length) chosen = learnedList;   // default: only what you've learned
+    if (!chosen.length) chosen = list;          // last-resort fallback so it's never empty
+    setPool(chosen);
+    setScore({ right: 0, total: 0, streak: 0, best });
+    setDir("k2m"); setPicked(null);
+    setQ(makeKanjiQ(chosen[Math.floor(Math.random() * chosen.length)], chosen.length >= 4 ? chosen : KANJI));
+    setPhase("quiz");
+  };
+
+  /* ----- SETUP ----- */
+  if (phase === "setup") {
+    if (!list.length) return <div style={{ color: T.textDim, textAlign: "center", padding: 30 }}>No kanji in this level yet.</div>;
+    return (
+      <div className="fade">
+        <div style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 18, padding: "16px 16px 14px", marginBottom: 14 }}>
+          <div style={{ fontFamily: displayFont, fontSize: 18, color: T.gold }}>Build your quiz</div>
+          <div style={{ fontSize: 12.5, color: T.textDim, marginTop: 4, lineHeight: 1.5 }}>
+            Tap kanji below to include them. <b style={{ color: T.text }}>If you pick none</b>, the quiz uses only the kanji you've <b style={{ color: T.text }}>learned</b> ({learnedList.length} in {level}).
+          </div>
+          <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+            <button className="tap" onClick={selectLearned} disabled={!learnedList.length} style={{ flex: 1, padding: "9px 4px", borderRadius: 11, border: `1px solid ${learnedList.length ? T.gold : T.line}`, background: learnedList.length ? `${T.gold}10` : T.panel, color: learnedList.length ? T.gold : T.textDim, fontSize: 12.5, fontWeight: 700 }}>Select my learned ({learnedList.length})</button>
+            <button className="tap" onClick={() => setSel({})} disabled={!selCount} style={{ flex: 1, padding: "9px 4px", borderRadius: 11, border: `1px solid ${T.line}`, background: T.panel, color: selCount ? T.text : T.textDim, fontSize: 12.5, fontWeight: 700 }}>Clear ({selCount})</button>
+          </div>
+        </div>
+
+        <SearchBox value={search} onChange={setSearch} placeholder="Search to add any kanji — English, kanji, kana, romaji" />
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 6, marginBottom: 8 }}>
+          {gridList.slice(0, GRID_CAP).map((kj) => {
+            const on = !!sel[kj.char];
+            return (
+              <button key={kj.char} className="tap" onClick={() => toggle(kj.char)} style={{ position: "relative", aspectRatio: "1 / 1", background: on ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : T.panel, border: `1.5px solid ${on ? T.gold : T.line}`, borderRadius: 11, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {learned && learned[kj.char] && !on && <span style={{ position: "absolute", top: 3, right: 5, fontSize: 9, color: T.green }}>●</span>}
+                <span style={{ fontFamily: jaFont, fontSize: 24, color: on ? "#fff" : T.text }}>{kj.char}</span>
+              </button>
+            );
+          })}
+        </div>
+        {gridList.length > GRID_CAP && <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginBottom: 8 }}>Showing {GRID_CAP} of {gridList.length} — search to find a specific kanji to add.</div>}
+
+        <button className="tap" onClick={begin} style={{ width: "100%", marginTop: 4, padding: 15, borderRadius: 14, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontSize: 15, fontWeight: 700, boxShadow: "0 8px 20px rgba(128,29,92,.18)" }}>
+          {selCount ? `Start quiz — ${selCount} selected →` : learnedList.length ? `Start quiz — ${learnedList.length} learned →` : "Start quiz — whole level →"}
+        </button>
+      </div>
+    );
+  }
+
+  /* ----- QUIZ ----- */
+  if (!q) return <div style={{ color: T.textDim, textAlign: "center", padding: 30 }}>Nothing to quiz.</div>;
   const showKanji = dir === "k2m";
-  const next = () => { setPicked(null); setQ(makeKanjiQ(list[Math.floor(Math.random() * list.length)], list)); };
+  const next = () => { setPicked(null); setQ(makeKanjiQ(pool[Math.floor(Math.random() * pool.length)], pool.length >= 4 ? pool : KANJI)); };
   const choose = (opt) => {
     if (picked) return;
     const ok = opt.char === q.answer.char;
     speak(kanjiSpeak(q.answer));
     setPicked(opt);
-    setScore((s) => {
-      const streak = ok ? s.streak + 1 : 0;
-      const nb = Math.max(s.best, streak);
-      if (nb > s.best) onBest(nb);
-      return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: nb };
-    });
+    setScore((s) => { const streak = ok ? s.streak + 1 : 0; const nb = Math.max(s.best, streak); if (nb > s.best) onBest(nb); return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: nb }; });
     timer.current = setTimeout(next, 1000);
   };
   const acc = score.total ? Math.round((score.right / score.total) * 100) : 0;
@@ -14784,18 +14870,21 @@ function KanjiQuiz({ list, level, best, onBest }) {
 
   return (
     <div className="fade">
-      <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
         <Stat label="Score" value={`${score.right}/${score.total}`} color={T.gold} />
         <Stat label="Accuracy" value={`${acc}%`} color={T.terra} />
         <Stat label="Streak" value={`${score.streak}🔥`} color={T.amber} />
         <Stat label="Best" value={score.best} color={T.green} />
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 16 }}>
         <button className="tap" onClick={() => { setDir((d) => (d === "k2m" ? "m2k" : "k2m")); setPicked(null); }} style={{ border: `1px solid ${T.line}`, background: T.panelHi, color: T.gold, borderRadius: 20, padding: "7px 14px", fontSize: 12.5, fontWeight: 600 }}>
           {showKanji ? "See kanji → pick meaning" : "See meaning → pick kanji"} ⇄
         </button>
+        <button className="tap" onClick={() => { clearTimeout(timer.current); setPhase("setup"); }} style={{ border: `1px solid ${T.line}`, background: T.panelHi, color: T.textDim, borderRadius: 20, padding: "7px 12px", fontSize: 12.5, fontWeight: 600 }}>Change selection</button>
       </div>
+
+      <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginBottom: 10 }}>Quizzing {pool.length} kanji</div>
 
       <div className="pop" key={q.answer.char + dir} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "28px 20px", textAlign: "center", boxShadow: "0 14px 36px rgba(128,29,92,.10)", marginBottom: 16 }}>
         <div style={{ fontSize: 12, color: T.textDim, marginBottom: 10 }}>{showKanji ? "What does this kanji mean?" : "Which kanji means this?"}</div>
@@ -14847,12 +14936,16 @@ function KanjiQuiz({ list, level, best, onBest }) {
   );
 }
 
-/* ---- Kanji handwriting trace (practice + quiz) ---- */
-function KanjiTrace({ list }) {
+/* ---- Kanji handwriting trace — searchable, opens last-viewed kanji ---- */
+function KanjiTrace({ list, initialChar }) {
+  const [q, setQ] = useState("");
+  const searching = q.trim().length > 0;
+  const pool = searching ? KANJI.filter((kj) => kanjiMatches(kj, q)) : list;
+
   const [tmode, setTmode] = useState("practice"); // practice | quiz
-  const [idx, setIdx] = useState(0);
+  const [idx, setIdx] = useState(() => { const p = initialChar ? (list || []).findIndex((x) => x.char === initialChar) : -1; return p >= 0 ? p : 0; });
   const [showGuide, setShowGuide] = useState(true);
-  const [qIdx, setQIdx] = useState(() => (list.length ? Math.floor(Math.random() * list.length) : 0));
+  const [qIdx, setQIdx] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [score, setScore] = useState({ right: 0, total: 0, streak: 0, best: 0 });
   const canvasRef = useRef(null);
@@ -14861,8 +14954,8 @@ function KanjiTrace({ list }) {
   const [, setStrokes] = useState(0);
 
   const isQuiz = tmode === "quiz";
-  const activeIdx = list.length ? (isQuiz ? qIdx : idx) % list.length : 0;
-  const k = list[activeIdx];
+  const activeIdx = pool.length ? (isQuiz ? qIdx : idx) % pool.length : 0;
+  const k = pool.length ? pool[activeIdx] : null;
   const guideOn = isQuiz ? revealed : showGuide;
   const showDetails = !isQuiz || revealed;
 
@@ -14880,20 +14973,30 @@ function KanjiTrace({ list }) {
   const clear = useCallback(() => { const c = canvasRef.current; if (!c) return; const ctx = c.getContext("2d"); ctx.clearRect(0, 0, c.width, c.height); setStrokes(0); }, []);
   useEffect(() => { clear(); }, [activeIdx, tmode, clear]);
 
+  // jump to the last-viewed kanji when it arrives
+  useEffect(() => {
+    if (!initialChar) return;
+    const p = (list || []).findIndex((x) => x.char === initialChar);
+    if (p >= 0) { setQ(""); setTmode("practice"); setIdx(p); }
+  }, [initialChar]);
+  // reset position when the search query changes (but not on first mount)
+  const firstQ = useRef(true);
+  useEffect(() => { if (firstQ.current) { firstQ.current = false; return; } setIdx(0); setQIdx(0); setRevealed(false); }, [q]);
+
   const pos = (e) => { const c = canvasRef.current; const rect = c.getBoundingClientRect(); const p = e.touches ? e.touches[0] : e; return { x: p.clientX - rect.left, y: p.clientY - rect.top }; };
   const start = (e) => { e.preventDefault(); drawing.current = true; lastPt.current = pos(e); setStrokes((s) => s + 1); };
   const move = (e) => { if (!drawing.current) return; e.preventDefault(); const ctx = canvasRef.current.getContext("2d"); const p = pos(e); ctx.beginPath(); ctx.moveTo(lastPt.current.x, lastPt.current.y); ctx.lineTo(p.x, p.y); ctx.stroke(); lastPt.current = p; };
   const end = () => { drawing.current = false; };
 
-  const nextQuiz = () => { setRevealed(false); clear(); setQIdx((prev) => { let n; do { n = Math.floor(Math.random() * list.length); } while (n === prev && list.length > 1); return n; }); };
+  const nextQuiz = () => { setRevealed(false); clear(); setQIdx((prev) => { if (pool.length <= 1) return 0; let n; do { n = Math.floor(Math.random() * pool.length); } while (n === prev); return n; }); };
   const grade = (ok) => { setScore((s) => { const streak = ok ? s.streak + 1 : 0; return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: Math.max(s.best, streak) }; }); nextQuiz(); };
-  const switchMode = (m) => { if (m === tmode) return; setTmode(m); setRevealed(false); clear(); if (m === "quiz") setQIdx(Math.floor(Math.random() * list.length)); };
+  const switchMode = (m) => { if (m === tmode) return; setTmode(m); setRevealed(false); clear(); if (m === "quiz") setQIdx(pool.length ? Math.floor(Math.random() * pool.length) : 0); };
   const acc = score.total ? Math.round((score.right / score.total) * 100) : 0;
-
-  if (!list.length) return <div style={{ color: T.textDim, textAlign: "center", padding: 30 }}>No kanji in this level yet.</div>;
 
   return (
     <div className="fade">
+      <SearchBox value={q} onChange={setQ} placeholder="Search any kanji to trace — English, kanji, kana, romaji" />
+
       <div style={{ display: "flex", gap: 6, background: T.panelHi, border: `1px solid ${T.line}`, padding: 5, borderRadius: 12, marginBottom: 14 }}>
         {[["practice", "Practice"], ["quiz", "Quiz"]].map(([m, label]) => (
           <button key={m} className="tap" onClick={() => switchMode(m)} style={{ flex: 1, border: "none", borderRadius: 8, padding: "8px 4px", fontSize: 12.5, fontWeight: 600, color: tmode === m ? "#fff" : T.textDim, background: tmode === m ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : "transparent" }}>
@@ -14902,87 +15005,95 @@ function KanjiTrace({ list }) {
         ))}
       </div>
 
-      <div style={{ background: T.panelHi, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px", marginBottom: 14, fontSize: 12.5, lineHeight: 1.7 }}>
-        <b style={{ color: T.gold }}>Golden rules of kanji handwriting</b>
-        <div style={{ color: T.textDim, marginTop: 5 }}>
-          1. Write left → right, top → bottom.<br />
-          2. Horizontal strokes before crossing verticals.<br />
-          3. Outer enclosures before what goes inside.<br />
-          4. Keep the character balanced inside the box.
-        </div>
-      </div>
-
-      {isQuiz && (
-        <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
-          <Stat label="Score" value={`${score.right}/${score.total}`} color={T.gold} />
-          <Stat label="Accuracy" value={`${acc}%`} color={T.terra} />
-          <Stat label="Streak" value={`${score.streak}🔥`} color={T.amber} />
-          <Stat label="Best" value={score.best} color={T.green} />
-        </div>
-      )}
-
-      <div style={{ display: "flex", alignItems: "center", gap: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px", marginBottom: 14 }}>
-        <div style={{ flex: 1 }}>
-          {isQuiz && !revealed && (
-            <div style={{ fontSize: 11, color: T.terra, fontWeight: 700, letterSpacing: 0.4, marginBottom: 3 }}>WRITE THIS KANJI FROM MEMORY</div>
-          )}
-          {showDetails ? (
-            <>
-              <div style={{ fontSize: 16, color: T.text, fontWeight: 700 }}>{k.meaning}</div>
-              <div style={{ fontSize: 12, color: T.textDim, marginTop: 3, lineHeight: 1.6 }}>
-                <span style={{ color: T.terra, fontWeight: 700 }}>On</span> {k.on}　·　<span style={{ color: T.goldSoft, fontWeight: 700 }}>Kun</span> {k.kun}
-              </div>
-              {k.exJa && (
-                <div style={{ fontSize: 12.5, color: T.gold, marginTop: 5 }}>
-                  <span style={{ fontFamily: jaFont, fontSize: 15 }}>{k.exJa}</span> · {k.exKana} · {k.exEn}
-                </div>
-              )}
-            </>
-          ) : (
-            <div style={{ fontSize: 14, color: T.text, fontWeight: 600 }}>Reading: <span style={{ color: T.gold }}>{k.meaning}</span></div>
-          )}
-        </div>
-        <Speaker text={kanjiSpeak(k)} color={T.terra} />
-        {!isQuiz && <div style={{ fontSize: 12, color: T.textDim }}>{activeIdx + 1}/{list.length}</div>}
-      </div>
-
-      <div style={{ position: "relative", width: "100%", aspectRatio: "1 / 1", background: T.panel, border: `1px solid ${T.line}`, borderRadius: 20, overflow: "hidden", boxShadow: "0 14px 36px rgba(128,29,92,.10)" }}>
-        <StrokeGuide char={k.char} show={guideOn} />
-        <div style={{ position: "absolute", top: "50%", left: 0, right: 0, borderTop: `2px dashed ${T.line}`, pointerEvents: "none" }} />
-        <div style={{ position: "absolute", top: 0, bottom: 0, left: "50%", borderLeft: `2px dashed ${T.line}`, pointerEvents: "none" }} />
-        <canvas ref={canvasRef} onMouseDown={start} onMouseMove={move} onMouseUp={end} onMouseLeave={end} onTouchStart={start} onTouchMove={move} onTouchEnd={end}
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", touchAction: "none", cursor: "crosshair" }} />
-      </div>
-
-      {!isQuiz ? (
-        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
-          <button className="tap" onClick={() => setIdx((i) => (i - 1 + list.length) % list.length)} style={ctrlBtn(false)}>‹ Prev</button>
-          <button className="tap" onClick={clear} style={ctrlBtn(false)}>Clear</button>
-          <button className="tap" onClick={() => setShowGuide((g) => !g)} style={ctrlBtn(showGuide)}>{showGuide ? "Hide guide" : "Show guide"}</button>
-          <button className="tap" onClick={() => setIdx((i) => (i + 1) % list.length)} style={ctrlBtn(true)}>Next ›</button>
-        </div>
-      ) : !revealed ? (
-        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
-          <button className="tap" onClick={clear} style={ctrlBtn(false)}>Clear</button>
-          <button className="tap" onClick={nextQuiz} style={ctrlBtn(false)}>Skip</button>
-          <button className="tap" onClick={() => setRevealed(true)} style={{ ...ctrlBtn(true), flex: 2 }}>Reveal answer</button>
+      {pool.length === 0 ? (
+        <div style={{ textAlign: "center", color: T.textDim, padding: "30px 10px", fontSize: 13.5 }}>
+          No kanji match “{q}”. Try an English meaning, a reading in kana, or romaji like “mizu”.
         </div>
       ) : (
-        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
-          <button className="tap" onClick={() => grade(false)} style={{ flex: 1, padding: "12px 4px", borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: "pointer", border: `1.5px solid ${T.red}`, background: `${T.red}14`, color: T.text }}>Practice again</button>
-          <button className="tap" onClick={() => grade(true)} style={{ flex: 1, padding: "12px 4px", borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: "pointer", border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff" }}>Got it ✓</button>
-        </div>
-      )}
+        <>
+          <div style={{ background: T.panelHi, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px", marginBottom: 14, fontSize: 12.5, lineHeight: 1.7 }}>
+            <b style={{ color: T.gold }}>Golden rules of kanji handwriting</b>
+            <div style={{ color: T.textDim, marginTop: 5 }}>
+              1. Write left → right, top → bottom.<br />
+              2. Horizontal strokes before crossing verticals.<br />
+              3. Outer enclosures before what goes inside.<br />
+              4. Keep the character balanced inside the box.
+            </div>
+          </div>
 
-      <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginTop: 16, lineHeight: 1.6 }}>
-        {!isQuiz ? (
-          <>Follow the numbered circles in order, drawing each stroke toward its arrow. Tap “Hide guide” to test yourself from memory.</>
-        ) : !revealed ? (
-          <>Picture the kanji for the meaning shown, write it from memory, then tap <b style={{ color: T.text }}>Reveal answer</b> to check.</>
-        ) : (
-          <>Compare your writing to the guide. Be honest — did you get the <b style={{ color: T.text }}>shape and proportions</b> right?</>
-        )}
-      </div>
+          {isQuiz && (
+            <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+              <Stat label="Score" value={`${score.right}/${score.total}`} color={T.gold} />
+              <Stat label="Accuracy" value={`${acc}%`} color={T.terra} />
+              <Stat label="Streak" value={`${score.streak}🔥`} color={T.amber} />
+              <Stat label="Best" value={score.best} color={T.green} />
+            </div>
+          )}
+
+          <div style={{ display: "flex", alignItems: "center", gap: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px", marginBottom: 14 }}>
+            <div style={{ flex: 1 }}>
+              {isQuiz && !revealed && (
+                <div style={{ fontSize: 11, color: T.terra, fontWeight: 700, letterSpacing: 0.4, marginBottom: 3 }}>WRITE THIS KANJI FROM MEMORY</div>
+              )}
+              {showDetails ? (
+                <>
+                  <div style={{ fontSize: 16, color: T.text, fontWeight: 700 }}>{k.meaning} <span style={{ fontSize: 10, fontWeight: 800, color: T.terra, border: `1px solid ${T.terra}55`, borderRadius: 6, padding: "1px 5px", marginLeft: 4 }}>{k.jlpt}</span></div>
+                  <div style={{ fontSize: 12, color: T.textDim, marginTop: 3, lineHeight: 1.6 }}>
+                    <span style={{ color: T.terra, fontWeight: 700 }}>On</span> {k.on}　·　<span style={{ color: T.goldSoft, fontWeight: 700 }}>Kun</span> {k.kun}
+                  </div>
+                  {k.exJa && (
+                    <div style={{ fontSize: 12.5, color: T.gold, marginTop: 5 }}>
+                      <span style={{ fontFamily: jaFont, fontSize: 15 }}>{k.exJa}</span> · {k.exKana} · {k.exEn}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div style={{ fontSize: 14, color: T.text, fontWeight: 600 }}>Reading: <span style={{ color: T.gold }}>{k.meaning}</span></div>
+              )}
+            </div>
+            <Speaker text={kanjiSpeak(k)} color={T.terra} />
+            {!isQuiz && <div style={{ fontSize: 12, color: T.textDim }}>{activeIdx + 1}/{pool.length}</div>}
+          </div>
+
+          <div style={{ position: "relative", width: "100%", aspectRatio: "1 / 1", background: T.panel, border: `1px solid ${T.line}`, borderRadius: 20, overflow: "hidden", boxShadow: "0 14px 36px rgba(128,29,92,.10)" }}>
+            <StrokeGuide char={k.char} show={guideOn} />
+            <div style={{ position: "absolute", top: "50%", left: 0, right: 0, borderTop: `2px dashed ${T.line}`, pointerEvents: "none" }} />
+            <div style={{ position: "absolute", top: 0, bottom: 0, left: "50%", borderLeft: `2px dashed ${T.line}`, pointerEvents: "none" }} />
+            <canvas ref={canvasRef} onMouseDown={start} onMouseMove={move} onMouseUp={end} onMouseLeave={end} onTouchStart={start} onTouchMove={move} onTouchEnd={end}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", touchAction: "none", cursor: "crosshair" }} />
+          </div>
+
+          {!isQuiz ? (
+            <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+              <button className="tap" onClick={() => setIdx((i) => (i - 1 + pool.length) % pool.length)} style={ctrlBtn(false)}>‹ Prev</button>
+              <button className="tap" onClick={clear} style={ctrlBtn(false)}>Clear</button>
+              <button className="tap" onClick={() => setShowGuide((g) => !g)} style={ctrlBtn(showGuide)}>{showGuide ? "Hide guide" : "Show guide"}</button>
+              <button className="tap" onClick={() => setIdx((i) => (i + 1) % pool.length)} style={ctrlBtn(true)}>Next ›</button>
+            </div>
+          ) : !revealed ? (
+            <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+              <button className="tap" onClick={clear} style={ctrlBtn(false)}>Clear</button>
+              <button className="tap" onClick={nextQuiz} style={ctrlBtn(false)}>Skip</button>
+              <button className="tap" onClick={() => setRevealed(true)} style={{ ...ctrlBtn(true), flex: 2 }}>Reveal answer</button>
+            </div>
+          ) : (
+            <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+              <button className="tap" onClick={() => grade(false)} style={{ flex: 1, padding: "12px 4px", borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: "pointer", border: `1.5px solid ${T.red}`, background: `${T.red}14`, color: T.text }}>Practice again</button>
+              <button className="tap" onClick={() => grade(true)} style={{ flex: 1, padding: "12px 4px", borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: "pointer", border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff" }}>Got it ✓</button>
+            </div>
+          )}
+
+          <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginTop: 16, lineHeight: 1.6 }}>
+            {!isQuiz ? (
+              <>Follow the numbered circles in order, drawing each stroke toward its arrow. Search above to trace any kanji, or tap “Hide guide” to test yourself.</>
+            ) : !revealed ? (
+              <>Picture the kanji for the meaning shown, write it from memory, then tap <b style={{ color: T.text }}>Reveal answer</b> to check.</>
+            ) : (
+              <>Compare your writing to the guide. Be honest — did you get the <b style={{ color: T.text }}>shape and proportions</b> right?</>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -14991,6 +15102,8 @@ function App() {
   const [state, setState] = useState(null);
   const [view, setView] = useState("home");
   const [practiceItems, setPracticeItems] = useState([]);
+  const [kanjiFocus, setKanjiFocus] = useState(null);
+  const openKanji = useCallback((ch) => { setKanjiFocus(ch); setView("kanji"); }, []);
   const stateRef = useRef(state);
   useEffect(() => { stateRef.current = state; }, [state]);
 
@@ -15145,12 +15258,12 @@ function App() {
             onSetting={(patch) => persist({ ...state, settings: { ...state.settings, ...patch } })}
             onReset={() => { persist({ ...DEFAULT_STATE, custom: state.custom, settings: state.settings, script: state.script, kanji: state.kanji, daily: { date: todayStr(), reviews: 0, lessons: 0 } }); setView("home"); }} />
         )}
-        {view === "lessons" && (<LearnSession pool={derived.pool} batch={state.settings.lessonBatch} onLearn={commitLearn} onGrade={grade} onExit={() => setView("home")} />)}
-        {view === "reviews" && <TypedQuiz items={derived.due} mode="srs" onGrade={grade} onExit={() => setView("home")} title="Reviews" />}
-        {view === "practice" && <TypedQuiz items={practiceItems} mode="practice" onGrade={grade} onExit={() => setView("items")} title="Practice" />}
+        {view === "lessons" && (<LearnSession pool={derived.pool} batch={state.settings.lessonBatch} onLearn={commitLearn} onGrade={grade} onExit={() => setView("home")} onKanji={openKanji} />)}
+        {view === "reviews" && <TypedQuiz items={derived.due} mode="srs" onGrade={grade} onExit={() => setView("home")} title="Reviews" onKanji={openKanji} />}
+        {view === "practice" && <TypedQuiz items={practiceItems} mode="practice" onGrade={grade} onExit={() => setView("items")} title="Practice" onKanji={openKanji} />}
         {view === "script" && <ScriptView scriptState={state.script} setScript={(next) => persist({ ...state, script: next })} />}
-        {view === "kanji" && <KanjiView kanjiState={state.kanji} setKanji={(next) => persist({ ...state, kanji: next })} />}
-        {view === "items" && (<ItemsView allItems={allItems} state={state} level={state.currentLevel} leeches={derived.leechList.length} onAdd={(c) => persist({ ...state, custom: [...state.custom, c] })} onStartPractice={startPractice} />)}
+        {view === "kanji" && <KanjiView kanjiState={state.kanji} setKanji={(next) => persist({ ...state, kanji: next })} focusChar={kanjiFocus} onFocusDone={() => setKanjiFocus(null)} />}
+        {view === "items" && (<ItemsView allItems={allItems} state={state} level={state.currentLevel} leeches={derived.leechList.length} onAdd={(c) => persist({ ...state, custom: [...state.custom, c] })} onStartPractice={startPractice} onKanji={openKanji} />)}
         {view === "stats" && <StatsView state={state} allItems={allItems} level={state.currentLevel} streak={streak} />}
       </div>
     </div>
