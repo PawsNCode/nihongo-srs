@@ -32,8 +32,10 @@ thing is a single self-contained HTML file.
   particle は→wa, を→o, へ→e).
 - **Kana quiz** — match kana to sounds (or sounds to kana), with live score,
   accuracy, and streaks.
-- **Handwriting trainer** — trace kana with your finger over a faint guide glyph
-  and centre lines, plus a Quiz mode that asks you to write a kana from memory.
+- **Handwriting trainer with stroke order** — trace any kana *or kanji* over a
+  guide that shows the real stroke order: numbered start points, direction
+  arrows on each stroke, and the exact stroke shapes (from the KanjiVG project).
+  A Quiz mode hides the guide and asks you to write the character from memory.
 - **Progress saves on your device** and the app installs to your home screen.
 
 ## How to use
@@ -51,6 +53,15 @@ thing is a single self-contained HTML file.
 - Pronunciation via the browser's Web Speech API (uses your device's Japanese
   voice; install a `ja-JP` voice for the best results)
 - Progress stored locally with `localStorage` — nothing leaves your device
+
+## Credits & licence
+
+Stroke-order data (the numbers, arrows, and stroke shapes in the handwriting
+trainer) comes from the **[KanjiVG](https://kanjivg.tagaini.net)** project by
+Ulrich Apel, used under the **Creative Commons Attribution-ShareAlike 3.0**
+licence (CC BY-SA 3.0). Because KanjiVG is share-alike, if you redistribute this
+app you should keep this attribution and license any modifications to that data
+under the same terms.
 
 ## Hosting on GitHub Pages
 
