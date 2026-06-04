@@ -23,6 +23,10 @@ thing is a single self-contained HTML file.
   direction (kanji → meaning or meaning → kanji); and trace each character by
   hand over a faint guide with practice and from-memory quiz modes. Common kanji
   also include an example word with audio.
+- **Search** — a search bar in the Kanji browser and the vocabulary list lets
+  you find anything instantly by English meaning, the character itself, kana
+  reading (hiragana or katakana), or romaji. Kanji search spans all JLPT levels
+  at once and tags each result with its level.
 - **Script reference** — the full hiragana and katakana charts with a
   pronunciation key, stroke counts, and notes on the tricky kana (し・ち・つ,
   particle は→wa, を→o, へ→e).
