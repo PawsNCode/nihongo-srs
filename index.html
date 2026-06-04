@@ -1,0 +1,2938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Nihongo" />
+<meta name="theme-color" content="#f1e7d4" />
+<link rel="apple-touch-icon" href="data:image/png;base64,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" />
+<title>Nihongo SRS — Japanese</title>
+<style>html,body{margin:0;padding:0;background:#f1e7d4;}#root{min-height:100vh;}</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, useCallback, useRef } = React;
+
+/* ============================================================
+   Nihongo SRS — Japanese (Masri-style SRS, rebuilt for 日本語)
+   WaniKani-style levels + SRS stages, lessons & reviews,
+   romaji-typed answers with live kana conversion, plus a
+   hiragana / katakana Script trainer (chart, quiz, trace).
+   ============================================================ */
+
+const STORE_KEY = "nihongo-wk-v1";
+
+/* ---- Theme: sumi ink + indigo (藍) + vermilion (朱) on washi paper ---- */
+const T = {
+  bg: "#fff4fb",
+  bg2: "#ffffff",
+  panel: "#ffffff",
+  panelHi: "#fdeef5",
+  line: "#f1dce7",
+  gold: "#801d5c",
+  goldSoft: "#c02e80",
+  terra: "#c02e80",
+  text: "#34232d",
+  textDim: "#9c8a93",
+  green: "#801d5c",
+  amber: "#af8a8f",
+  red: "#b23a5e",
+  blue: "#c02e80",
+  pink: "#cd81a9",
+};
+
+const jaFont =
+  '"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","Shippori Mincho","Songti SC",serif';
+const displayFont = '"Hiragino Mincho ProN","Iowan Old Style",Georgia,"Times New Roman",serif';
+const uiFont =
+  '"Hiragino Sans","Yu Gothic",ui-sans-serif,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif';
+
+/* ---- Pronunciation (Web Speech API — uses the device's Japanese voice) ---- */
+function speak(text) {
+  try {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices() || [];
+    const v = voices.find((x) => x.lang && x.lang.toLowerCase().startsWith("ja"));
+    if (v) u.voice = v;
+    u.lang = v ? v.lang : "ja-JP";
+    u.rate = 0.85;
+    window.speechSynthesis.speak(u);
+  } catch {
+    /* ignore */
+  }
+}
+
+function Speaker({ text, size = 18, color = "#c8453b" }) {
+  return (
+    <button
+      className="tap"
+      aria-label="Play pronunciation"
+      onClick={(e) => { e.stopPropagation(); speak(text); }}
+      style={{
+        border: `1px solid ${color}66`, background: `${color}1f`, color,
+        borderRadius: 999, width: size + 18, height: size + 18,
+        display: "inline-flex", alignItems: "center", justifyContent: "center",
+        fontSize: size, cursor: "pointer", flexShrink: 0,
+      }}
+    >
+      🔊
+    </button>
+  );
+}
+
+/* ===================== KANA: hiragana + katakana ===================== */
+/* [glyph, romaji, hint] */
+const HIRAGANA = [
+  ["あ","a","like 'a' in 'father'"],["い","i","like 'ee' in 'see'"],["う","u","like 'oo' in 'food'"],["え","e","like 'e' in 'bed'"],["お","o","like 'o' in 'or'"],
+  ["か","ka",""],["き","ki",""],["く","ku",""],["け","ke",""],["こ","ko",""],
+  ["さ","sa",""],["し","shi","'shi', not 'si'"],["す","su",""],["せ","se",""],["そ","so",""],
+  ["た","ta",""],["ち","chi","'chi', not 'ti'"],["つ","tsu","'tsu', not 'tu'"],["て","te",""],["と","to",""],
+  ["な","na",""],["に","ni",""],["ぬ","nu",""],["ね","ne",""],["の","no",""],
+  ["は","ha","as particle, read 'wa'"],["ひ","hi",""],["ふ","fu","soft 'fu'"],["へ","he","as particle, read 'e'"],["ほ","ho",""],
+  ["ま","ma",""],["み","mi",""],["む","mu",""],["め","me",""],["も","mo",""],
+  ["や","ya",""],["ゆ","yu",""],["よ","yo",""],
+  ["ら","ra","light tapped r"],["り","ri",""],["る","ru",""],["れ","re",""],["ろ","ro",""],
+  ["わ","wa",""],["を","wo","object particle, read 'o'"],["ん","n","the only solo consonant"],
+];
+const KATAKANA = [
+  ["ア","a",""],["イ","i",""],["ウ","u",""],["エ","e",""],["オ","o",""],
+  ["カ","ka",""],["キ","ki",""],["ク","ku",""],["ケ","ke",""],["コ","ko",""],
+  ["サ","sa",""],["シ","shi","compare with ツ (tsu)"],["ス","su",""],["セ","se",""],["ソ","so","compare with ン (n)"],
+  ["タ","ta",""],["チ","chi",""],["ツ","tsu","compare with シ (shi)"],["テ","te",""],["ト","to",""],
+  ["ナ","na",""],["ニ","ni",""],["ヌ","nu",""],["ネ","ne",""],["ノ","no",""],
+  ["ハ","ha",""],["ヒ","hi",""],["フ","fu",""],["ヘ","he",""],["ホ","ho",""],
+  ["マ","ma",""],["ミ","mi",""],["ム","mu",""],["メ","me",""],["モ","mo",""],
+  ["ヤ","ya",""],["ユ","yu",""],["ヨ","yo",""],
+  ["ラ","ra",""],["リ","ri",""],["ル","ru",""],["レ","re",""],["ロ","ro",""],
+  ["ワ","wa",""],["ヲ","wo",""],["ン","n","compare with ソ (so)"],
+];
+
+const LEGEND = [
+  ["shi", "し / シ — never 'si'"],
+  ["chi", "ち / チ — never 'ti'"],
+  ["tsu", "つ / ツ — never 'tu'"],
+  ["fu", "ふ / フ — a soft f, between f and h"],
+  ["は → wa", "は is 'ha', but reads 'wa' as a topic particle"],
+  ["を → o", "を is the object particle, read 'o'"],
+  ["へ → e", "へ reads 'e' as a direction particle"],
+  ["゛ ゜", "dakuten/handakuten turn か→が, は→ば, は→ぱ"],
+];
+
+/* ---- Stroke counts + short cues for handwriting (hiragana) ---- */
+const STROKES = {
+  "あ":[3,"Cross-stroke, a vertical, then the loop-and-curl below."],
+  "い":[2,"Left stroke curving down, then a short stroke on the right."],
+  "う":[2,"A small top dash, then a curve that hooks down-left."],
+  "え":[2,"A short top mark, then a zig-zag finishing flat to the right."],
+  "お":[3,"Horizontal, a hooking vertical with a loop, then a dot top-right."],
+  "か":[3,"A hooked vertical-curve, a slanted stroke, then a small dot."],
+  "き":[4,"Two horizontals, a curving vertical, then a short stroke."],
+  "く":[1,"One angled stroke, like a sideways check-mark."],
+  "け":[3,"A vertical on the left, then a vertical and a curve on the right."],
+  "こ":[2,"A short top stroke, then a longer curved stroke below."],
+  "さ":[3,"A horizontal, then a curve that loops to the lower-left."],
+  "し":[1,"One stroke down and hooking up to the right."],
+  "す":[2,"A horizontal, then a vertical that loops into a small curl."],
+  "せ":[3,"A horizontal, a crossing vertical, then a curve to the right."],
+  "そ":[1,"One flowing zig-zag stroke, top to bottom."],
+  "た":[4,"A cross (like た's left), then こ on the right."],
+  "ち":[2,"A horizontal stroke, then a big curve hooking left."],
+  "つ":[1,"One stroke sweeping right then curving down-left."],
+  "て":[1,"One stroke: a flat top that drops and hooks left."],
+  "と":[2,"A short stroke, then a longer curve hooking up."],
+  "な":[4,"A cross, a vertical, then a small loop at the lower-right."],
+  "に":[3,"A vertical on the left, then two short strokes on the right."],
+  "ぬ":[2,"A short stroke, then a long curve ending in a loop."],
+  "ね":[2,"A vertical, then a long curve ending in a loop on the right."],
+  "の":[1,"One spiralling stroke, anticlockwise into a loop."],
+  "は":[3,"A vertical, a small stroke, then a loop on the right."],
+  "ひ":[1,"One wide stroke curving down and hooking up."],
+  "ふ":[4,"A small top dot, a curve, then two short dots."],
+  "へ":[1,"One gentle stroke up then down — like a low mountain."],
+  "ほ":[4,"は's shape but with an extra horizontal across the right loop."],
+  "ま":[3,"Two horizontals, then a vertical that loops at the bottom."],
+  "み":[2,"A curving stroke, then a loop crossing through it."],
+  "む":[3,"A horizontal, a looping vertical, then a dot."],
+  "め":[2,"A short stroke, then a long curve ending in a loop."],
+  "も":[3,"A hooking vertical, then two horizontals across it."],
+  "や":[3,"A curving stroke, a small slant, then a sweep."],
+  "ゆ":[2,"A big loop, then a vertical stroke through it."],
+  "よ":[2,"A vertical, then a horizontal with a loop at the base."],
+  "ら":[2,"A small top stroke, then a curve hooking down-left."],
+  "り":[2,"A short curving stroke, then a long stroke on the right."],
+  "る":[1,"One stroke curving down into a closed loop at the base."],
+  "れ":[2,"A vertical, then a curve that swings out to the right."],
+  "ろ":[1,"One zig-zag stroke, like る without the loop."],
+  "わ":[2,"A vertical, then a curve that swings out to the right."],
+  "を":[3,"A horizontal, a crossing curve, then a sweep to the right."],
+  "ん":[1,"One stroke: down, then a bounce up to the right."],
+};
+const STROKES_KATA = {
+  "ア":[2],"イ":[2],"ウ":[3],"エ":[3],"オ":[3],"カ":[2],"キ":[3],"ク":[2],"ケ":[3],"コ":[2],
+  "サ":[3],"シ":[3],"ス":[2],"セ":[2],"ソ":[2],"タ":[3],"チ":[3],"ツ":[3],"テ":[3],"ト":[2],
+  "ナ":[2],"ニ":[2],"ヌ":[2],"ネ":[4],"ノ":[1],"ハ":[2],"ヒ":[2],"フ":[1],"ヘ":[1],"ホ":[4],
+  "マ":[2],"ミ":[3],"ム":[2],"メ":[2],"モ":[3],"ヤ":[2],"ユ":[2],"ヨ":[3],"ラ":[2],"リ":[2],
+  "ル":[2],"レ":[1],"ロ":[3],"ワ":[2],"ヲ":[3],"ン":[2],
+};
+
+/* ===================== ROMAJI ⇄ KANA ENGINE ===================== */
+/* Wapuro-style romaji → hiragana, used for grading + a live preview. */
+const ROMA = (() => {
+  const m = {};
+  const base = {
+    a:"あ",i:"い",u:"う",e:"え",o:"お",
+    ka:"か",ki:"き",ku:"く",ke:"け",ko:"こ",
+    sa:"さ",shi:"し",si:"し",su:"す",se:"せ",so:"そ",
+    ta:"た",chi:"ち",ti:"ち",tsu:"つ",tu:"つ",te:"て",to:"と",
+    na:"な",ni:"に",nu:"ぬ",ne:"ね",no:"の",
+    ha:"は",hi:"ひ",fu:"ふ",hu:"ふ",he:"へ",ho:"ほ",
+    ma:"ま",mi:"み",mu:"む",me:"め",mo:"も",
+    ya:"や",yu:"ゆ",yo:"よ",
+    ra:"ら",ri:"り",ru:"る",re:"れ",ro:"ろ",
+    wa:"わ",wo:"を",
+    ga:"が",gi:"ぎ",gu:"ぐ",ge:"げ",go:"ご",
+    za:"ざ",ji:"じ",zi:"じ",zu:"ず",ze:"ぜ",zo:"ぞ",
+    da:"だ",di:"ぢ",du:"づ",de:"で",do:"ど",
+    ba:"ば",bi:"び",bu:"ぶ",be:"べ",bo:"ぼ",
+    pa:"ぱ",pi:"ぴ",pu:"ぷ",pe:"ぺ",po:"ぽ",
+    kya:"きゃ",kyu:"きゅ",kyo:"きょ",
+    sha:"しゃ",shu:"しゅ",sho:"しょ",sya:"しゃ",syu:"しゅ",syo:"しょ",
+    cha:"ちゃ",chu:"ちゅ",cho:"ちょ",tya:"ちゃ",tyu:"ちゅ",tyo:"ちょ",
+    nya:"にゃ",nyu:"にゅ",nyo:"にょ",
+    hya:"ひゃ",hyu:"ひゅ",hyo:"ひょ",
+    mya:"みゃ",myu:"みゅ",myo:"みょ",
+    rya:"りゃ",ryu:"りゅ",ryo:"りょ",
+    gya:"ぎゃ",gyu:"ぎゅ",gyo:"ぎょ",
+    ja:"じゃ",ju:"じゅ",jo:"じょ",jya:"じゃ",jyu:"じゅ",jyo:"じょ",
+    bya:"びゃ",byu:"びゅ",byo:"びょ",
+    pya:"ぴゃ",pyu:"ぴゅ",pyo:"ぴょ",
+  };
+  Object.assign(m, base);
+  return m;
+})();
+
+function romajiToKana(input) {
+  let s = (input || "").toLowerCase();
+  s = s.replace(/[āáàâ]/g,"aa").replace(/[īíìî]/g,"ii").replace(/[ūúùû]/g,"uu")
+       .replace(/[ēéèê]/g,"ee").replace(/[ōóòô]/g,"ou");
+  let out = "";
+  let i = 0;
+  const vowels = "aiueo";
+  while (i < s.length) {
+    const c = s[i];
+    if (c === " ") { out += " "; i++; continue; }
+    // sokuon: doubled consonant (not n) -> small tsu
+    if (c !== "n" && !vowels.includes(c) && s[i+1] === c) {
+      out += "っ"; i++; continue;
+    }
+    // syllabic n: a lone n before any consonant (or end) -> ん
+    if (c === "n") {
+      const nx = s[i+1];
+      if (nx === "'") { out += "ん"; i += 2; continue; }
+      if (nx === undefined || (!vowels.includes(nx) && nx !== "y")) {
+        out += "ん"; i++; continue;
+      }
+    }
+    // try 3, then 2, then 1 char match
+    let matched = false;
+    for (let len = 3; len >= 1; len--) {
+      const chunk = s.slice(i, i + len);
+      if (ROMA[chunk]) { out += ROMA[chunk]; i += len; matched = true; break; }
+    }
+    if (!matched) { out += c; i++; }
+  }
+  return out;
+}
+
+const kataToHira = (s) =>
+  (s || "").replace(/[\u30a1-\u30f6]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) - 0x60));
+
+/* normalise a kana string for comparison */
+function kanaNorm(s) {
+  return kataToHira(s || "")
+    .replace(/[ー〜・、。\s]/g, "")
+    .replace(/[^\u3040-\u309f]/g, "");
+}
+/* normalise a romaji string for comparison */
+function normRomaji(s) {
+  return (s || "").toLowerCase()
+    .replace(/[āáàâ]/g,"aa").replace(/[īíìî]/g,"ii").replace(/[ūúùû]/g,"uu")
+    .replace(/[ēéèê]/g,"ee").replace(/[ōóòô]/g,"ou")
+    .replace(/[^a-z]/g, "");
+}
+
+function answerMatches(input, item) {
+  const raw = (input || "").trim();
+  if (!raw) return false;
+  const r = normRomaji(raw);
+  if (r) {
+    if (r === normRomaji(item.romaji)) return true;
+    if ((item.alts || []).some((x) => normRomaji(x) === r)) return true;
+  }
+  const hasKana = /[\u3040-\u30ff]/.test(raw);
+  const typedKana = hasKana ? kanaNorm(raw) : kanaNorm(romajiToKana(r));
+  if (typedKana && typedKana === kanaNorm(item.kana)) return true;
+  return false;
+}
+
+/* ===================== CONTENT: leveled words, phrases & sentences ===================== */
+/* [id, level, type, ja(display), kana(reading), romaji, en, alts?] */
+const RAW = [
+  // ===== L1 — Greetings & courtesy =====
+  ["konnichiwa",1,"phrase","こんにちは","こんにちは","konnichiwa","Hello / good afternoon"],
+  ["ohayou",1,"phrase","おはよう","おはよう","ohayou","Good morning (casual)"],
+  ["ohayougozaimasu",1,"phrase","おはようございます","おはようございます","ohayou gozaimasu","Good morning (polite)"],
+  ["konbanwa",1,"phrase","こんばんは","こんばんは","konbanwa","Good evening"],
+  ["oyasumi",1,"phrase","おやすみ","おやすみ","oyasumi","Good night"],
+  ["sayounara",1,"word","さようなら","さようなら","sayounara","Goodbye"],
+  ["arigatou",1,"phrase","ありがとう","ありがとう","arigatou","Thank you"],
+  ["arigatougozaimasu",1,"phrase","ありがとうございます","ありがとうございます","arigatou gozaimasu","Thank you (polite)"],
+  ["sumimasen",1,"word","すみません","すみません","sumimasen","Excuse me / sorry"],
+  ["gomennasai",1,"phrase","ごめんなさい","ごめんなさい","gomen nasai","I'm sorry"],
+  ["hai",1,"word","はい","はい","hai","Yes"],
+  ["iie",1,"word","いいえ","いいえ","iie","No"],
+  ["onegaishimasu",1,"phrase","お願いします","おねがいします","onegaishimasu","Please"],
+  ["douitashimashite",1,"phrase","どういたしまして","どういたしまして","dou itashimashite","You're welcome"],
+  ["hajimemashite",1,"phrase","はじめまして","はじめまして","hajimemashite","Nice to meet you"],
+
+  // ===== L2 — Self & basics =====
+  ["watashi",2,"word","私","わたし","watashi","I / me"],
+  ["anata",2,"word","あなた","あなた","anata","You"],
+  ["kare",2,"word","彼","かれ","kare","He"],
+  ["kanojo",2,"word","彼女","かのじょ","kanojo","She"],
+  ["watashitachi",2,"word","私たち","わたしたち","watashitachi","We"],
+  ["namae",2,"word","名前","なまえ","namae","Name"],
+  ["nihon",2,"word","日本","にほん","nihon","Japan"],
+  ["nihongo",2,"word","日本語","にほんご","nihongo","Japanese (language)"],
+  ["eigo",2,"word","英語","えいご","eigo","English (language)"],
+  ["gakusei",2,"word","学生","がくせい","gakusei","Student"],
+  ["sensei",2,"word","先生","せんせい","sensei","Teacher"],
+  ["tomodachi",2,"word","友達","ともだち","tomodachi","Friend"],
+  ["soudesu",2,"phrase","そうです","そうです","sou desu","That's right"],
+  ["chigaimasu",2,"phrase","違います","ちがいます","chigaimasu","That's wrong / different"],
+
+  // ===== L3 — Question words =====
+  ["nani",3,"word","何","なに","nani","What",["nan"]],
+  ["dare",3,"word","誰","だれ","dare","Who"],
+  ["doko",3,"word","どこ","どこ","doko","Where"],
+  ["itsu",3,"word","いつ","いつ","itsu","When"],
+  ["doushite",3,"word","どうして","どうして","doushite","Why",["naze"]],
+  ["dou",3,"word","どう","どう","dou","How"],
+  ["ikura",3,"word","いくら","いくら","ikura","How much (price)"],
+  ["ikutsu",3,"word","いくつ","いくつ","ikutsu","How many / how old"],
+  ["dore",3,"word","どれ","どれ","dore","Which one"],
+  ["dochira",3,"word","どちら","どちら","dochira","Which (of two)"],
+  ["nanji",3,"word","何時","なんじ","nanji","What time"],
+
+  // ===== L4 — Numbers 1–10 =====
+  ["ichi",4,"word","一","いち","ichi","One"],
+  ["ni",4,"word","二","に","ni","Two"],
+  ["san",4,"word","三","さん","san","Three"],
+  ["yon",4,"word","四","よん","yon","Four",["shi"]],
+  ["go",4,"word","五","ご","go","Five"],
+  ["roku",4,"word","六","ろく","roku","Six"],
+  ["nana",4,"word","七","なな","nana","Seven",["shichi"]],
+  ["hachi",4,"word","八","はち","hachi","Eight"],
+  ["kyuu",4,"word","九","きゅう","kyuu","Nine",["ku"]],
+  ["juu",4,"word","十","じゅう","juu","Ten"],
+  ["zero",4,"word","ゼロ","ぜろ","zero","Zero",["rei"]],
+
+  // ===== L5 — Days & time =====
+  ["kyou",5,"word","今日","きょう","kyou","Today"],
+  ["ashita",5,"word","明日","あした","ashita","Tomorrow"],
+  ["kinou",5,"word","昨日","きのう","kinou","Yesterday"],
+  ["ima",5,"word","今","いま","ima","Now"],
+  ["asa",5,"word","朝","あさ","asa","Morning"],
+  ["hiru",5,"word","昼","ひる","hiru","Noon / daytime"],
+  ["yoru",5,"word","夜","よる","yoru","Night"],
+  ["jikan",5,"word","時間","じかん","jikan","Time / hour"],
+  ["mainichi",5,"word","毎日","まいにち","mainichi","Every day"],
+  ["shuumatsu",5,"word","週末","しゅうまつ","shuumatsu","Weekend"],
+  ["getsuyoubi",5,"word","月曜日","げつようび","getsuyoubi","Monday"],
+  ["nichiyoubi",5,"word","日曜日","にちようび","nichiyoubi","Sunday"],
+
+  // ===== L6 — Food & drink =====
+  ["mizu",6,"word","水","みず","mizu","Water"],
+  ["ocha",6,"word","お茶","おちゃ","ocha","Tea"],
+  ["koohii",6,"word","コーヒー","コーヒー","koohii","Coffee"],
+  ["gohan",6,"word","ご飯","ごはん","gohan","Rice / meal"],
+  ["pan",6,"word","パン","パン","pan","Bread"],
+  ["niku",6,"word","肉","にく","niku","Meat"],
+  ["sakana",6,"word","魚","さかな","sakana","Fish"],
+  ["yasai",6,"word","野菜","やさい","yasai","Vegetables"],
+  ["tamago",6,"word","卵","たまご","tamago","Egg"],
+  ["gyuunyuu",6,"word","牛乳","ぎゅうにゅう","gyuunyuu","Milk"],
+  ["oishii",6,"word","おいしい","おいしい","oishii","Delicious"],
+  ["asagohan",6,"word","朝ご飯","あさごはん","asagohan","Breakfast"],
+
+  // ===== L7 — Common verbs (-masu) =====
+  ["ikimasu",7,"word","行きます","いきます","ikimasu","Go"],
+  ["kimasu",7,"word","来ます","きます","kimasu","Come"],
+  ["mimasu",7,"word","見ます","みます","mimasu","See / watch"],
+  ["shimasu",7,"word","します","します","shimasu","Do"],
+  ["kikimasu",7,"word","聞きます","ききます","kikimasu","Listen / ask"],
+  ["hanashimasu",7,"word","話します","はなします","hanashimasu","Speak / talk"],
+  ["yomimasu",7,"word","読みます","よみます","yomimasu","Read"],
+  ["kakimasu",7,"word","書きます","かきます","kakimasu","Write"],
+  ["tabemasu",7,"word","食べます","たべます","tabemasu","Eat"],
+  ["nomimasu",7,"word","飲みます","のみます","nomimasu","Drink"],
+  ["kaimasu",7,"word","買います","かいます","kaimasu","Buy"],
+  ["wakarimasu",7,"word","分かります","わかります","wakarimasu","Understand"],
+  ["nemasu",7,"word","寝ます","ねます","nemasu","Sleep"],
+
+  // ===== L8 — Adjectives =====
+  ["ookii",8,"word","大きい","おおきい","ookii","Big"],
+  ["chiisai",8,"word","小さい","ちいさい","chiisai","Small"],
+  ["atarashii",8,"word","新しい","あたらしい","atarashii","New"],
+  ["furui",8,"word","古い","ふるい","furui","Old (things)"],
+  ["ii",8,"word","いい","いい","ii","Good"],
+  ["warui",8,"word","悪い","わるい","warui","Bad"],
+  ["takai",8,"word","高い","たかい","takai","Expensive / tall"],
+  ["yasui",8,"word","安い","やすい","yasui","Cheap"],
+  ["atsui",8,"word","暑い","あつい","atsui","Hot"],
+  ["samui",8,"word","寒い","さむい","samui","Cold"],
+  ["omoshiroi",8,"word","面白い","おもしろい","omoshiroi","Interesting / fun"],
+  ["muzukashii",8,"word","難しい","むずかしい","muzukashii","Difficult"],
+  ["kawaii",8,"word","かわいい","かわいい","kawaii","Cute"],
+
+  // ===== L9 — Family & people =====
+  ["kazoku",9,"word","家族","かぞく","kazoku","Family"],
+  ["haha",9,"word","母","はは","haha","Mother (one's own)"],
+  ["chichi",9,"word","父","ちち","chichi","Father (one's own)"],
+  ["okaasan",9,"word","お母さん","おかあさん","okaasan","Mother (polite)"],
+  ["otousan",9,"word","お父さん","おとうさん","otousan","Father (polite)"],
+  ["ani",9,"word","兄","あに","ani","Older brother"],
+  ["ane",9,"word","姉","あね","ane","Older sister"],
+  ["otouto",9,"word","弟","おとうと","otouto","Younger brother"],
+  ["imouto",9,"word","妹","いもうと","imouto","Younger sister"],
+  ["kodomo",9,"word","子供","こども","kodomo","Child"],
+  ["otoko",9,"word","男","おとこ","otoko","Man"],
+  ["onna",9,"word","女","おんな","onna","Woman"],
+  ["hito",9,"word","人","ひと","hito","Person"],
+
+  // ===== L10 — Places around town =====
+  ["ie",10,"word","家","いえ","ie","House / home"],
+  ["gakkou",10,"word","学校","がっこう","gakkou","School"],
+  ["kaisha",10,"word","会社","かいしゃ","kaisha","Company / office"],
+  ["eki",10,"word","駅","えき","eki","Station"],
+  ["byouin",10,"word","病院","びょういん","byouin","Hospital"],
+  ["mise",10,"word","店","みせ","mise","Shop / store"],
+  ["ginkou",10,"word","銀行","ぎんこう","ginkou","Bank"],
+  ["toshokan",10,"word","図書館","としょかん","toshokan","Library"],
+  ["resutoran",10,"word","レストラン","レストラン","resutoran","Restaurant"],
+  ["kouen",10,"word","公園","こうえん","kouen","Park"],
+  ["toire",10,"word","トイレ","トイレ","toire","Toilet"],
+  ["daigaku",10,"word","大学","だいがく","daigaku","University"],
+
+  // ===== L11 — Shopping & money =====
+  ["okane",11,"word","お金","おかね","okane","Money"],
+  ["kaimono",11,"word","買い物","かいもの","kaimono","Shopping"],
+  ["en",11,"word","円","えん","en","Yen"],
+  ["kore",11,"word","これ","これ","kore","This (one)"],
+  ["sore",11,"word","それ","それ","sore","That (one)"],
+  ["are",11,"word","あれ","あれ","are","That over there"],
+  ["kudasai",11,"word","ください","ください","kudasai","Please give me"],
+  ["kippu",11,"word","切符","きっぷ","kippu","Ticket"],
+  ["kaado",11,"word","カード","カード","kaado","Card"],
+  ["fukuro",11,"word","袋","ふくろ","fukuro","Bag"],
+  ["kore_o_kudasai",11,"sentence","これをください","これをください","kore o kudasai","This one, please"],
+
+  // ===== L12 — Getting around =====
+  ["migi",12,"word","右","みぎ","migi","Right (direction)"],
+  ["hidari",12,"word","左","ひだり","hidari","Left (direction)"],
+  ["massugu",12,"word","まっすぐ","まっすぐ","massugu","Straight ahead"],
+  ["koko",12,"word","ここ","ここ","koko","Here"],
+  ["soko",12,"word","そこ","そこ","soko","There"],
+  ["asoko",12,"word","あそこ","あそこ","asoko","Over there"],
+  ["michi",12,"word","道","みち","michi","Road / street"],
+  ["kuruma",12,"word","車","くるま","kuruma","Car"],
+  ["densha",12,"word","電車","でんしゃ","densha","Train"],
+  ["basu",12,"word","バス","バス","basu","Bus"],
+  ["takushii",12,"word","タクシー","タクシー","takushii","Taxi"],
+  ["chikatetsu",12,"word","地下鉄","ちかてつ","chikatetsu","Subway"],
+
+  // ===== L13 — Feelings & states =====
+  ["ureshii",13,"word","嬉しい","うれしい","ureshii","Happy / glad"],
+  ["kanashii",13,"word","悲しい","かなしい","kanashii","Sad"],
+  ["tanoshii",13,"word","楽しい","たのしい","tanoshii","Fun / enjoyable"],
+  ["genki",13,"word","元気","げんき","genki","Well / energetic"],
+  ["isogashii",13,"word","忙しい","いそがしい","isogashii","Busy"],
+  ["kowai",13,"word","怖い","こわい","kowai","Scary / afraid"],
+  ["byouki",13,"word","病気","びょうき","byouki","Sick / illness"],
+  ["daijoubu",13,"word","大丈夫","だいじょうぶ","daijoubu","Okay / all right"],
+  ["tsukareta",13,"phrase","疲れた","つかれた","tsukareta","Tired"],
+  ["onakagasuita",13,"sentence","お腹がすいた","おなかがすいた","onaka ga suita","I'm hungry"],
+  ["nodogakawaita",13,"sentence","のどが渇いた","のどがかわいた","nodo ga kawaita","I'm thirsty"],
+
+  // ===== L14 — Useful expressions =====
+  ["chottomatte",14,"phrase","ちょっと待って","ちょっとまって","chotto matte","Wait a moment"],
+  ["ganbatte",14,"phrase","頑張って","がんばって","ganbatte","Good luck / do your best"],
+  ["kiotsukete",14,"phrase","気をつけて","きをつけて","ki o tsukete","Take care"],
+  ["omedetou",14,"word","おめでとう","おめでとう","omedetou","Congratulations"],
+  ["ittekimasu",14,"phrase","いってきます","いってきます","ittekimasu","I'm off (and coming back)"],
+  ["itadakimasu",14,"phrase","いただきます","いただきます","itadakimasu","Said before eating"],
+  ["gochisousama",14,"phrase","ごちそうさま","ごちそうさま","gochisousama","Said after eating"],
+  ["wakarimashita",14,"phrase","分かりました","わかりました","wakarimashita","Understood"],
+  ["mouichido",14,"phrase","もう一度","もういちど","mou ichido","One more time"],
+  ["yukkuri",14,"word","ゆっくり","ゆっくり","yukkuri","Slowly"],
+  ["kanpai",14,"word","乾杯","かんぱい","kanpai","Cheers"],
+
+  // ===== L15 — Particles & connectors =====
+  ["to",15,"word","と","と","to","And (between nouns)"],
+  ["mo",15,"word","も","も","mo","Also / too"],
+  ["demo",15,"word","でも","でも","demo","But"],
+  ["dakara",15,"word","だから","だから","dakara","So / therefore"],
+  ["soshite",15,"word","そして","そして","soshite","And then"],
+  ["kara",15,"word","から","から","kara","From / because"],
+  ["made",15,"word","まで","まで","made","Until / up to"],
+  ["ka",15,"word","か","か","ka","Question particle"],
+  ["ne",15,"word","ね","ね","ne","..., right? (tag)"],
+  ["yo",15,"word","よ","よ","yo","(emphasis particle)"],
+
+  // ===== L16 — Colors =====
+  ["aka",16,"word","赤","あか","aka","Red"],
+  ["ao",16,"word","青","あお","ao","Blue"],
+  ["kiiro",16,"word","黄色","きいろ","kiiro","Yellow"],
+  ["midori",16,"word","緑","みどり","midori","Green"],
+  ["shiro",16,"word","白","しろ","shiro","White"],
+  ["kuro",16,"word","黒","くろ","kuro","Black"],
+  ["chairo",16,"word","茶色","ちゃいろ","chairo","Brown"],
+  ["pinku",16,"word","ピンク","ピンク","pinku","Pink"],
+  ["murasaki",16,"word","紫","むらさき","murasaki","Purple"],
+  ["iro",16,"word","色","いろ","iro","Color"],
+
+  // ===== L17 — Body & health =====
+  ["atama",17,"word","頭","あたま","atama","Head"],
+  ["me",17,"word","目","め","me","Eye"],
+  ["mimi",17,"word","耳","みみ","mimi","Ear"],
+  ["kuchi",17,"word","口","くち","kuchi","Mouth"],
+  ["te",17,"word","手","て","te","Hand"],
+  ["ashi",17,"word","足","あし","ashi","Foot / leg"],
+  ["onaka",17,"word","お腹","おなか","onaka","Stomach / belly"],
+  ["kao",17,"word","顔","かお","kao","Face"],
+  ["itai",17,"word","痛い","いたい","itai","Painful / it hurts"],
+  ["kusuri",17,"word","薬","くすり","kusuri","Medicine"],
+
+  // ===== L18 — Home & objects =====
+  ["hon",18,"word","本","ほん","hon","Book"],
+  ["tsukue",18,"word","机","つくえ","tsukue","Desk"],
+  ["isu",18,"word","椅子","いす","isu","Chair"],
+  ["doa",18,"word","ドア","ドア","doa","Door"],
+  ["mado",18,"word","窓","まど","mado","Window"],
+  ["denwa",18,"word","電話","でんわ","denwa","Telephone"],
+  ["tokei",18,"word","時計","とけい","tokei","Clock / watch"],
+  ["kaban",18,"word","かばん","かばん","kaban","Bag"],
+  ["kagi",18,"word","鍵","かぎ","kagi","Key"],
+  ["terebi",18,"word","テレビ","テレビ","terebi","TV"],
+  ["keitai",18,"word","携帯","けいたい","keitai","Cellphone"],
+
+  // ===== L19 — Useful sentences =====
+  ["onamaewa",19,"sentence","お名前は何ですか","おなまえはなんですか","o namae wa nan desu ka","What's your name?"],
+  ["watashiwagakusei",19,"sentence","私は学生です","わたしはがくせいです","watashi wa gakusei desu","I am a student"],
+  ["ekiwadoko",19,"sentence","駅はどこですか","えきはどこですか","eki wa doko desu ka","Where is the station?"],
+  ["ikuradesuka",19,"sentence","いくらですか","いくらですか","ikura desu ka","How much is it?"],
+  ["wakarimasen",19,"sentence","日本語が分かりません","にほんごがわかりません","nihongo ga wakarimasen","I don't understand Japanese"],
+  ["eigohanasemasu",19,"sentence","英語が話せますか","えいごがはなせますか","eigo ga hanasemasu ka","Can you speak English?"],
+  ["toirewadoko",19,"sentence","トイレはどこですか","トイレはどこですか","toire wa doko desu ka","Where is the toilet?"],
+  ["mouichidoonegai",19,"sentence","もう一度お願いします","もういちどおねがいします","mou ichido onegaishimasu","Once more, please"],
+
+  // ===== L20 — Conversation =====
+  ["yoroshiku",20,"sentence","よろしくお願いします","よろしくおねがいします","yoroshiku onegaishimasu","Pleased to meet you"],
+  ["nihonnisundeimasu",20,"sentence","日本に住んでいます","にほんにすんでいます","nihon ni sundeimasu","I live in Japan"],
+  ["kyouwaatsui",20,"sentence","今日は暑いです","きょうはあついです","kyou wa atsui desu","It's hot today"],
+  ["benkyou",20,"sentence","日本語を勉強しています","にほんごをべんきょうしています","nihongo o benkyou shiteimasu","I'm studying Japanese"],
+  ["koohiikudasai",20,"sentence","コーヒーをください","コーヒーをください","koohii o kudasai","Coffee, please"],
+  ["okaikei",20,"sentence","お会計お願いします","おかいけいおねがいします","okaikei onegaishimasu","The check, please"],
+  ["tasuketekudasai",20,"sentence","助けてください","たすけてください","tasukete kudasai","Please help me"],
+  ["mataashita",20,"sentence","また明日","またあした","mata ashita","See you tomorrow"],
+];
+
+const ITEMS = RAW.map(([id, level, type, ja, kana, romaji, en, alts]) => ({
+  id, level, type, ja, kana, romaji, en, alts: alts || [], custom: false,
+}));
+const MAX_LEVEL = Math.max(...ITEMS.map((i) => i.level));
+const LEVEL_TITLES = {
+  1:"Greetings & Courtesy",2:"Self & Basics",3:"Question Words",4:"Numbers 1–10",
+  5:"Days & Time",6:"Food & Drink",7:"Common Verbs",8:"Adjectives",9:"Family & People",
+  10:"Places Around Town",11:"Shopping & Money",12:"Getting Around",13:"Feelings & States",
+  14:"Useful Expressions",15:"Particles & Connectors",16:"Colors",17:"Body & Health",
+  18:"Home & Objects",19:"Useful Sentences",20:"Conversation",
+};
+
+/* ===================== KANJI (by JLPT level N5–N1) ===================== */
+/* A curated, representative set per level. Tuple:
+   [char, jlpt, meaning, onyomi, kunyomi, exampleJa, exampleKana, exampleEn] */
+const KANJI_RAW = [
+  // ===== N5 =====
+  ["日","N5","day, sun, japan","ニチ・ジツ","ひ","日本","にほん","Japan"],
+  ["一","N5","one","イチ・イツ","ひと・ひと(つ)","一つ","ひとつ","one (thing)"],
+  ["国","N5","country","コク","くに","外国","がいこく","foreign country"],
+  ["人","N5","person","ジン・ニン","ひと","人","ひと","person"],
+  ["年","N5","year, counter for years","ネン","とし","今年","ことし","this year"],
+  ["大","N5","large, big","ダイ・タイ","おお・おお(きい)","大きい","おおきい","big"],
+  ["十","N5","ten","ジュウ・ジッ","とお・と","","",""],
+  ["二","N5","two","ニ・ジ","ふた・ふた(つ)","二つ","ふたつ","two (things)"],
+  ["本","N5","book, present, main","ホン","もと","本","ほん","book"],
+  ["中","N5","in, inside, middle","チュウ","なか・うち","中","なか","inside"],
+  ["長","N5","long, leader, superior","チョウ","なが(い)・おさ","","",""],
+  ["出","N5","exit, leave, go out","シュツ・スイ","で(る)・だ(す)","","",""],
+  ["三","N5","three","サン・ゾウ","み・み(つ)","三つ","みっつ","three (things)"],
+  ["時","N5","time, hour","ジ","とき","時間","じかん","time"],
+  ["行","N5","going, journey, carry out","コウ・ギョウ","い(く)・ゆ(く)","行く","いく","to go"],
+  ["見","N5","see, hopes, chances","ケン","み(る)・み(える)","見る","みる","to see"],
+  ["月","N5","month, moon","ゲツ・ガツ","つき","月","つき","moon"],
+  ["後","N5","behind, back, later","ゴ・コウ","のち・うし(ろ)","","",""],
+  ["前","N5","in front, before","ゼン","まえ","","",""],
+  ["生","N5","life, genuine, birth","セイ・ショウ","い(きる)・い(かす)","学生","がくせい","student"],
+  ["五","N5","five","ゴ","いつ・いつ(つ)","","",""],
+  ["間","N5","interval, space","カン・ケン","あいだ・ま","時間","じかん","time"],
+  ["上","N5","above, up","ジョウ・ショウ","うえ・うわ","上","うえ","above"],
+  ["東","N5","east","トウ","ひがし","","",""],
+  ["四","N5","four","シ","よ・よ(つ)","","",""],
+  ["今","N5","now","コン・キン","いま","","",""],
+  ["金","N5","gold","キン・コン","かね・かな","お金","おかね","money"],
+  ["九","N5","nine","キュウ・ク","ここの・ここの(つ)","","",""],
+  ["入","N5","enter, insert","ニュウ・ジュ","い(る)・い(れる)","","",""],
+  ["学","N5","study, learning, science","ガク","まな(ぶ)","学校","がっこう","school"],
+  ["高","N5","tall, high, expensive","コウ","たか(い)・たか","","",""],
+  ["円","N5","circle, yen, round","エン","まる(い)・まる","","",""],
+  ["子","N5","child, sign of the rat, 11pm-1am","シ・ス","こ・ね","","",""],
+  ["外","N5","outside","ガイ・ゲ","そと・ほか","","",""],
+  ["八","N5","eight","ハチ","や・や(つ)","","",""],
+  ["六","N5","six","ロク・リク","む・む(つ)","","",""],
+  ["下","N5","below, down, descend","カ・ゲ","した・しも","下","した","below"],
+  ["来","N5","come, due, next","ライ・タイ","く(る)・きた(る)","来る","くる","to come"],
+  ["気","N5","spirit, mind, air","キ・ケ","いき","","",""],
+  ["小","N5","little, small","ショウ","ちい(さい)・こ","小さい","ちいさい","small"],
+  ["七","N5","seven","シチ","なな・なな(つ)","","",""],
+  ["山","N5","mountain","サン・セン","やま","山","やま","mountain"],
+  ["話","N5","tale, talk","ワ","はな(す)・はなし","話す","はなす","to speak"],
+  ["女","N5","woman, female","ジョ・ニョ","おんな・め","","",""],
+  ["北","N5","north","ホク","きた","","",""],
+  ["午","N5","noon, sign of the horse, 11am-1pm","ゴ","うま","","",""],
+  ["百","N5","hundred","ヒャク・ビャク","もも","","",""],
+  ["書","N5","write","ショ","か(く)","書く","かく","to write"],
+  ["先","N5","before, ahead, previous","セン","さき・ま(ず)","先生","せんせい","teacher"],
+  ["名","N5","name, noted, distinguished","メイ・ミョウ","な","","",""],
+  ["川","N5","stream, river","セン","かわ","川","かわ","river"],
+  ["千","N5","thousand","セン","ち","","",""],
+  ["水","N5","water","スイ","みず","水","みず","water"],
+  ["半","N5","half, middle, odd number","ハン","なか(ば)","","",""],
+  ["男","N5","male","ダン・ナン","おとこ・お","","",""],
+  ["西","N5","west, spain","セイ・サイ","にし","","",""],
+  ["電","N5","electricity","デン","—","","",""],
+  ["校","N5","exam, school, printing","コウ・キョウ","—","学校","がっこう","school"],
+  ["語","N5","word, speech, language","ゴ","かた(る)・かた(らう)","日本語","にほんご","Japanese language"],
+  ["土","N5","soil, earth, ground","ド・ト","つち","土曜日","どようび","Saturday"],
+  ["木","N5","tree, wood","ボク・モク","き・こ","木","き","tree"],
+  ["聞","N5","hear, ask, listen","ブン・モン","き(く)・き(こえる)","聞く","きく","to listen"],
+  ["食","N5","eat, food","ショク・ジキ","く(う)・く(らう)","食べる","たべる","to eat"],
+  ["車","N5","car","シャ","くるま","","",""],
+  ["何","N5","what","カ","なに・なん","","",""],
+  ["南","N5","south","ナン・ナ","みなみ","","",""],
+  ["万","N5","ten thousand, 10,000","マン・バン","よろず","","",""],
+  ["毎","N5","every","マイ","ごと","","",""],
+  ["白","N5","white","ハク・ビャク","しろ・しら","","",""],
+  ["天","N5","heavens, sky, imperial","テン","あまつ・あめ","","",""],
+  ["母","N5","mother","ボ","はは・も","","",""],
+  ["火","N5","fire","カ","ひ・ほ","火曜日","かようび","Tuesday"],
+  ["右","N5","right","ウ・ユウ","みぎ","","",""],
+  ["読","N5","read","ドク・トク","よ(む)","読む","よむ","to read"],
+  ["友","N5","friend","ユウ","とも","友達","ともだち","friend"],
+  ["左","N5","left","サ・シャ","ひだり","","",""],
+  ["休","N5","rest, day off, retire","キュウ","やす(む)・やす(まる)","","",""],
+  ["父","N5","father","フ","ちち","","",""],
+  ["雨","N5","rain","ウ","あめ・あま","","",""],
+  // ===== N4 =====
+  ["会","N4","meeting, meet, party","カイ・エ","あ(う)・あ(わせる)","会社","かいしゃ","company"],
+  ["同","N4","same, agree, equal","ドウ","おな(じ)","","",""],
+  ["事","N4","matter, thing, fact","ジ・ズ","こと・つか(う)","","",""],
+  ["自","N4","oneself","ジ・シ","みずか(ら)・おの(ずから)","","",""],
+  ["社","N4","company, firm, office","シャ","やしろ","会社","かいしゃ","company"],
+  ["発","N4","departure, discharge, publish","ハツ・ホツ","た(つ)・あば(く)","","",""],
+  ["者","N4","someone, person","シャ","もの","","",""],
+  ["地","N4","ground, earth","チ・ジ","—","","",""],
+  ["業","N4","business, vocation, arts","ギョウ・ゴウ","わざ","","",""],
+  ["方","N4","direction, person, alternative","ホウ","かた","","",""],
+  ["新","N4","new","シン","あたら(しい)・あら(た)","","",""],
+  ["場","N4","location, place","ジョウ・チョウ","ば","","",""],
+  ["員","N4","employee, member, number","イン","—","","",""],
+  ["立","N4","stand up, rise, set up","リツ・リュウ","た(つ)・た(ち)","","",""],
+  ["開","N4","open, unfold, unseal","カイ","ひら(く)・ひら(き)","","",""],
+  ["手","N4","hand","シュ・ズ","て・た","","",""],
+  ["力","N4","power, strength, strong","リョク・リキ","ちから","","",""],
+  ["問","N4","question, ask, problem","モン","と(う)・と(い)","質問","しつもん","question"],
+  ["代","N4","substitute, change, convert","ダイ・タイ","か(わる)・かわ(る)","","",""],
+  ["明","N4","bright, light","メイ・ミョウ","あ(かり)・あか(るい)","","",""],
+  ["動","N4","move, motion, change","ドウ","うご(く)・うご(かす)","","",""],
+  ["京","N4","capital, 10**16","キョウ・ケイ","みやこ","","",""],
+  ["目","N4","eye, class, look","モク・ボク","め・ま","","",""],
+  ["通","N4","traffic, pass through, avenue","ツウ・ツ","とお(る)・とお(り)","","",""],
+  ["言","N4","say, word","ゲン・ゴン","い(う)・こと","","",""],
+  ["理","N4","logic, arrangement, reason","リ","ことわり","理由","りゆう","reason"],
+  ["体","N4","body, substance, object","タイ・テイ","からだ・かたち","","",""],
+  ["田","N4","rice field, rice paddy","デン","た","","",""],
+  ["主","N4","lord, chief, master","シュ・ス","ぬし・おも","","",""],
+  ["題","N4","topic, subject","ダイ","—","","",""],
+  ["意","N4","idea, mind, heart","イ","—","意味","いみ","meaning"],
+  ["不","N4","negative, non-, bad","フ・ブ","—","","",""],
+  ["作","N4","make, production, prepare","サク・サ","つく(る)・つく(り)","","",""],
+  ["用","N4","utilize, business, service","ヨウ","もち(いる)","","",""],
+  ["度","N4","degrees, occurrence, time","ド・ト","たび","","",""],
+  ["強","N4","strong","キョウ・ゴウ","つよ(い)・つよ(まる)","","",""],
+  ["公","N4","public, prince, official","コウ・ク","おおやけ","","",""],
+  ["持","N4","hold, have","ジ","も(つ)・も(てる)","","",""],
+  ["野","N4","plains, field, rustic","ヤ・ショ","の","","",""],
+  ["以","N4","by means of, because, in view of","イ","もっ(て)","","",""],
+  ["思","N4","think","シ","おも(う)・おもえら(く)","","",""],
+  ["家","N4","house, home, family","カ・ケ","いえ・や","家","いえ","house"],
+  ["世","N4","generation, world, society","セイ・セ","よ","","",""],
+  ["多","N4","many, frequent, much","タ","おお(い)・まさ(に)","","",""],
+  ["正","N4","correct, justice, righteous","セイ・ショウ","ただ(しい)・ただ(す)","","",""],
+  ["安","N4","relax, cheap, low","アン","やす(い)・やす(まる)","","",""],
+  ["院","N4","inst., institution, temple","イン","—","病院","びょういん","hospital"],
+  ["心","N4","heart, mind, spirit","シン","こころ","","",""],
+  ["界","N4","world, boundary","カイ","—","","",""],
+  ["教","N4","teach, faith, doctrine","キョウ","おし(える)・おそ(わる)","","",""],
+  ["文","N4","sentence, literature, style","ブン・モン","ふみ・あや","","",""],
+  ["元","N4","beginning, former time, origin","ゲン・ガン","もと","","",""],
+  ["重","N4","heavy, important, esteem","ジュウ・チョウ","え・おも(い)","","",""],
+  ["近","N4","near, early, akin","キン・コン","ちか(い)","","",""],
+  ["考","N4","consider, think over","コウ","かんが(える)・かんが(え)","","",""],
+  ["画","N4","brush-stroke, picture","ガ・カク","えが(く)・かく(する)","","",""],
+  ["海","N4","sea, ocean","カイ","うみ","","",""],
+  ["売","N4","sell","バイ","う(る)・う(れる)","","",""],
+  ["知","N4","know, wisdom","チ","し(る)・し(らせる)","","",""],
+  ["道","N4","road-way, street, district","ドウ・トウ","みち・いう","道","みち","road"],
+  ["集","N4","gather, meet, congregate","シュウ","あつ(まる)・あつ(める)","集める","あつめる","to collect"],
+  ["別","N4","separate, branch off, diverge","ベツ","わか(れる)・わ(ける)","","",""],
+  ["物","N4","thing, object, matter","ブツ・モツ","もの","","",""],
+  ["使","N4","use, send on a mission, order","シ","つか(う)・つか(い)","","",""],
+  ["品","N4","goods, refinement, dignity","ヒン・ホン","しな","","",""],
+  ["計","N4","plot, plan, scheme","ケイ","はか(る)・はか(らう)","時計","とけい","clock"],
+  ["死","N4","death, die","シ","し(ぬ)・し(に)","","",""],
+  ["特","N4","special","トク","—","","",""],
+  ["私","N4","private, i, me","シ","わたくし・わたし","私","わたし","I / me"],
+  ["始","N4","commence, begin","シ","はじ(める)・はじ(まる)","始まる","はじまる","to begin"],
+  ["朝","N4","morning, dynasty, regime","チョウ","あさ","","",""],
+  ["運","N4","carry, luck, destiny","ウン","はこ(ぶ)","","",""],
+  ["終","N4","end, finish","シュウ","お(わる)・おわ(る)","終わる","おわる","to end"],
+  ["台","N4","pedestal, a stand, counter for machines and vehicles","ダイ・タイ","うてな・われ","","",""],
+  ["広","N4","wide, broad, spacious","コウ","ひろ(い)・ひろ(まる)","","",""],
+  ["住","N4","dwell, reside, live","ジュウ・ヂュウ","す(む)・す(まう)","","",""],
+  ["真","N4","true, reality, buddhist sect","シン","ま・まこと","","",""],
+  ["有","N4","possess, have, exist","ユウ・ウ","あ(る)","","",""],
+  ["口","N4","mouth","コウ・ク","くち","","",""],
+  ["少","N4","few, little","ショウ","すく(ない)・すこ(し)","","",""],
+  ["町","N4","town, village, block","チョウ","まち","","",""],
+  ["料","N4","fee, materials","リョウ","—","","",""],
+  ["工","N4","craft, construction","コウ・ク","—","","",""],
+  ["建","N4","build","ケン・コン","た(てる)・た(て)","","",""],
+  ["空","N4","empty, sky, void","クウ","そら・あ(く)","","",""],
+  ["急","N4","hurry, emergency, sudden","キュウ","いそ(ぐ)・いそ(ぎ)","急ぐ","いそぐ","to hurry"],
+  ["止","N4","stop, halt","シ","と(まる)・と(める)","","",""],
+  ["送","N4","escort, send","ソウ","おく(る)","","",""],
+  ["切","N4","cut, cutoff, be sharp","セツ・サイ","き(る)・き(り)","","",""],
+  ["転","N4","revolve, turn around, change","テン","ころ(がる)・ころ(げる)","","",""],
+  ["研","N4","polish, study of, sharpen","ケン","と(ぐ)","","",""],
+  ["足","N4","leg, foot, be sufficient","ソク","あし・た(りる)","","",""],
+  ["究","N4","research, study","キュウ・ク","きわ(める)","","",""],
+  ["楽","N4","music, comfort, ease","ガク・ラク","たの(しい)・たの(しむ)","楽しい","たのしい","fun"],
+  ["起","N4","rouse, wake up, get up","キ","お(きる)・お(こる)","起きる","おきる","to wake up"],
+  ["着","N4","don, arrive, wear","チャク・ジャク","き(る)・き(せる)","","",""],
+  ["店","N4","store, shop","テン","みせ・たな","","",""],
+  ["病","N4","ill, sick","ビョウ・ヘイ","や(む)・やまい","病院","びょういん","hospital"],
+  ["質","N4","substance, quality, matter","シツ・シチ","たち・ただ(す)","質問","しつもん","question"],
+  ["待","N4","wait, depend on","タイ","ま(つ)","待つ","まつ","to wait"],
+  ["試","N4","test, try, attempt","シ","こころ(みる)・ため(す)","","",""],
+  ["族","N4","tribe, family","ゾク","—","","",""],
+  ["銀","N4","silver","ギン","しろがね","","",""],
+  ["早","N4","early, fast","ソウ・サッ","はや(い)・はや","","",""],
+  ["映","N4","reflect, reflection, projection","エイ","うつ(る)・うつ(す)","","",""],
+  ["親","N4","parent, intimacy, relative","シン","おや・した(しい)","","",""],
+  ["験","N4","verification, effect, testing","ケン・ゲン","あかし・しるし","","",""],
+  ["英","N4","england, english, hero","エイ","はなぶさ","","",""],
+  ["医","N4","doctor, medicine","イ","い(やす)・い(する)","","",""],
+  ["仕","N4","attend, doing, official","シ・ジ","つか(える)","","",""],
+  ["去","N4","gone, past, quit","キョ・コ","さ(る)","","",""],
+  ["味","N4","flavor, taste","ミ","あじ・あじ(わう)","意味","いみ","meaning"],
+  ["写","N4","copy, be photographed, describe","シャ・ジャ","うつ(す)・うつ(る)","","",""],
+  ["字","N4","character, letter, word","ジ","あざ・あざな","","",""],
+  ["答","N4","solution, answer","トウ","こた(える)・こた(え)","答える","こたえる","to answer"],
+  ["夜","N4","night, evening","ヤ","よ・よる","","",""],
+  ["音","N4","sound, noise","オン・イン","おと・ね","","",""],
+  ["注","N4","pour, irrigate, shed (tears)","チュウ","そそ(ぐ)・さ(す)","注意","ちゅうい","caution"],
+  ["帰","N4","homecoming, arrive at, lead to","キ","かえ(る)・かえ(す)","","",""],
+  ["古","N4","old","コ","ふる(い)・ふる","","",""],
+  ["歌","N4","song, sing","カ","うた・うた(う)","","",""],
+  ["買","N4","buy","バイ","か(う)","買う","かう","to buy"],
+  ["悪","N4","bad, vice, rascal","アク・オ","わる(い)・わる","","",""],
+  ["図","N4","map, drawing, plan","ズ・ト","え・はか(る)","","",""],
+  ["週","N4","week","シュウ","—","","",""],
+  ["室","N4","room, apartment, chamber","シツ","むろ","","",""],
+  ["歩","N4","walk, counter for steps","ホ・ブ","ある(く)・あゆ(む)","","",""],
+  ["風","N4","wind, air, style","フウ・フ","かぜ・かざ","","",""],
+  ["紙","N4","paper","シ","かみ","","",""],
+  ["黒","N4","black","コク","くろ・くろ(ずむ)","","",""],
+  ["花","N4","flower","カ・ケ","はな","","",""],
+  ["春","N4","springtime, spring (season)","シュン","はる","","",""],
+  ["赤","N4","red","セキ・シャク","あか・あか(い)","","",""],
+  ["青","N4","blue, green","セイ・ショウ","あお・あお(い)","","",""],
+  ["館","N4","building, mansion, large building","カン","やかた・たて","","",""],
+  ["屋","N4","roof, house, shop","オク","や","","",""],
+  ["色","N4","color","ショク・シキ","いろ","","",""],
+  ["走","N4","run","ソウ","はし(る)","","",""],
+  ["秋","N4","autumn","シュウ","あき・とき","","",""],
+  ["夏","N4","summer","カ・ガ","なつ","","",""],
+  ["習","N4","learn","シュウ・ジュ","なら(う)・なら(い)","","",""],
+  ["駅","N4","station","エキ","—","駅","えき","station"],
+  ["洋","N4","ocean, sea, foreign","ヨウ","—","","",""],
+  ["旅","N4","trip, travel","リョ","たび","旅行","りょこう","travel"],
+  ["服","N4","clothing, admit, obey","フク","—","","",""],
+  ["夕","N4","evening","セキ","ゆう","","",""],
+  ["借","N4","borrow, rent","シャク","か(りる)","","",""],
+  ["曜","N4","weekday","ヨウ","—","","",""],
+  ["飲","N4","drink, smoke, take","イン・オン","の(む)","飲む","のむ","to drink"],
+  ["肉","N4","meat","ニク","しし","","",""],
+  ["貸","N4","lend","タイ","か(す)・か(し)","","",""],
+  ["堂","N4","public chamber, hall","ドウ","—","","",""],
+  ["鳥","N4","bird, chicken","チョウ","とり","","",""],
+  ["飯","N4","meal, boiled rice","ハン","めし","","",""],
+  ["勉","N4","exertion, endeavour, encourage","ベン","つと(める)","","",""],
+  ["冬","N4","winter","トウ","ふゆ","","",""],
+  ["昼","N4","daytime, noon","チュウ","ひる","","",""],
+  ["茶","N4","tea","チャ・サ","—","","",""],
+  ["弟","N4","younger brother, faithful service to elders","テイ・ダイ","おとうと","","",""],
+  ["牛","N4","cow","ギュウ","うし","","",""],
+  ["魚","N4","fish","ギョ","うお・さかな","","",""],
+  ["兄","N4","elder brother, big brother","ケイ・キョウ","あに","","",""],
+  ["犬","N4","dog","ケン","いぬ","","",""],
+  ["妹","N4","younger sister","マイ","いもうと","","",""],
+  ["姉","N4","elder sister","シ","あね・はは","","",""],
+  ["漢","N4","sino-, china","カン","—","","",""],
+  // ===== N3 =====
+  ["政","N3","politics, government","セイ・ショウ","まつりごと・まん","政治","せいじ","politics"],
+  ["議","N3","deliberation, consultation, debate","ギ","—","","",""],
+  ["民","N3","people, nation, subjects","ミン","たみ","","",""],
+  ["連","N3","take along, lead, join","レン","つら(なる)・つら(ねる)","","",""],
+  ["対","N3","vis-a-vis, opposite, even","タイ・ツイ","あいて・こた(える)","","",""],
+  ["部","N3","section, bureau, dept","ブ","べ","","",""],
+  ["合","N3","fit, suit, join","ゴウ・ガッ","あ(う)・あ(い)","","",""],
+  ["市","N3","market, city, town","シ","いち","","",""],
+  ["内","N3","inside, within, between","ナイ・ダイ","うち","","",""],
+  ["相","N3","inter-, mutual, together","ソウ・ショウ","あい","","",""],
+  ["定","N3","determine, fix, establish","テイ・ジョウ","さだ(める)・さだ(まる)","","",""],
+  ["回","N3","-times, round, game","カイ・エ","まわ(る)・まわ(す)","","",""],
+  ["選","N3","elect, select, choose","セン","えら(ぶ)","","",""],
+  ["米","N3","rice, usa, metre","ベイ・マイ","こめ・よね","","",""],
+  ["実","N3","reality, truth","ジツ・シツ","み・みの(る)","","",""],
+  ["関","N3","connection, barrier, gateway","カン","せき・かか(わる)","","",""],
+  ["決","N3","decide, fix, agree upon","ケツ","き(める)・き(まる)","","",""],
+  ["全","N3","whole, entire, all","ゼン","まった(く)・すべ(て)","","",""],
+  ["表","N3","surface, table, chart","ヒョウ","おもて・あらわ(す)","","",""],
+  ["戦","N3","war, battle, match","セン","いくさ・たたか(う)","","",""],
+  ["経","N3","sutra, longitude, pass thru","ケイ・キョウ","へ(る)・た(つ)","経済","けいざい","economy"],
+  ["最","N3","utmost, most, extreme","サイ・シュ","もっと(も)・つま","","",""],
+  ["現","N3","present, existing, actual","ゲン","あらわ(れる)・あらわ(す)","","",""],
+  ["調","N3","tune, tone, meter","チョウ","しら(べる)・しら(べ)","","",""],
+  ["化","N3","change, take the form of, influence","カ・ケ","ば(ける)・ば(かす)","文化","ぶんか","culture"],
+  ["当","N3","hit, right, appropriate","トウ","あ(たる)・あ(たり)","","",""],
+  ["約","N3","promise, approximately, shrink","ヤク","つづ(まる)・つづ(める)","","",""],
+  ["首","N3","neck, counter for songs and poems","シュ","くび","","",""],
+  ["法","N3","method, law, rule","ホウ・ハッ","のり","","",""],
+  ["性","N3","sex, gender, nature","セイ・ショウ","さが","","",""],
+  ["要","N3","need, main point, essence","ヨウ","い(る)・かなめ","","",""],
+  ["制","N3","system, law, rule","セイ","—","","",""],
+  ["治","N3","reign, be at peace, calm down","ジ・チ","おさ(める)・おさ(まる)","政治","せいじ","politics"],
+  ["務","N3","task, duties","ム","つと(める)","義務","ぎむ","duty"],
+  ["成","N3","turn into, become, get","セイ・ジョウ","な(る)・な(す)","成功","せいこう","success"],
+  ["期","N3","period, time, date","キ・ゴ","—","","",""],
+  ["取","N3","take, fetch, take up","シュ","と(る)・と(り)","","",""],
+  ["都","N3","metropolis, capital, all","ト・ツ","みやこ","","",""],
+  ["和","N3","harmony, japanese style, peace","ワ・オ","やわ(らぐ)・やわ(らげる)","","",""],
+  ["機","N3","loom, mechanism, machine","キ","はた","","",""],
+  ["平","N3","even, flat, peace","ヘイ・ビョウ","たい(ら)・ひら","","",""],
+  ["加","N3","add, addition, increase","カ","くわ(える)・くわ(わる)","","",""],
+  ["受","N3","accept, undergo, answer (phone)","ジュ","う(ける)・う(かる)","","",""],
+  ["続","N3","continue, series, sequel","ゾク・ショク","つづ(く)・つづ(ける)","","",""],
+  ["進","N3","advance, proceed, progress","シン","すす(む)・すす(める)","","",""],
+  ["数","N3","number, strength, fate","スウ・ス","かず・かぞ(える)","","",""],
+  ["記","N3","scribe, account, narrative","キ","しる(す)","","",""],
+  ["初","N3","first time, beginning","ショ","はじ(め)・はじ(めて)","","",""],
+  ["指","N3","finger, point to, indicate","シ","ゆび・さ(す)","","",""],
+  ["権","N3","authority, power, rights","ケン・ゴン","おもり・かり","権利","けんり","rights"],
+  ["支","N3","branch, support, sustain","シ","ささ(える)・つか(える)","","",""],
+  ["産","N3","products, bear, give birth","サン","う(む)・う(まれる)","","",""],
+  ["点","N3","spot, point, mark","テン","つ(ける)・つ(く)","","",""],
+  ["報","N3","report, news, reward","ホウ","むく(いる)","情報","じょうほう","information"],
+  ["済","N3","settle (debt, etc.), relieve (burden), finish","サイ・セイ","す(む)・す(まない)","経済","けいざい","economy"],
+  ["活","N3","lively, resuscitation, being helped","カツ","い(きる)・い(かす)","","",""],
+  ["原","N3","meadow, original, primitive","ゲン","はら","","",""],
+  ["共","N3","together, both, neither","キョウ","とも・とも(に)","","",""],
+  ["得","N3","gain, get, find","トク","え(る)・う(る)","","",""],
+  ["解","N3","unravel, notes, key","カイ・ゲ","と(く)・と(かす)","理解","りかい","understanding"],
+  ["交","N3","mingle, mixing, association","コウ","まじ(わる)・まじ(える)","","",""],
+  ["資","N3","assets, resources, capital","シ","—","","",""],
+  ["予","N3","beforehand, previous, myself","ヨ・シャ","あらかじ(め)","","",""],
+  ["向","N3","yonder, facing, beyond","コウ","む(く)・む(い)","","",""],
+  ["際","N3","occasion, side, edge","サイ","きわ","","",""],
+  ["勝","N3","victory, win, prevail","ショウ","か(つ)・まさ(る)","","",""],
+  ["面","N3","mask, face, features","メン・ベン","おも・おもて","","",""],
+  ["告","N3","revelation, tell, inform","コク","つ(げる)","","",""],
+  ["反","N3","anti-","ハン・ホン","そ(る)・そ(らす)","","",""],
+  ["判","N3","judgement, signature, stamp","ハン・バン","わか(る)","","",""],
+  ["認","N3","acknowledge, witness, discern","ニン","みと(める)・したた(める)","確認","かくにん","confirmation"],
+  ["参","N3","nonplussed, three (in documents), going","サン・シン","まい(る)・まい","","",""],
+  ["利","N3","profit, advantage, benefit","リ","き(く)","","",""],
+  ["組","N3","association, braid, plait","ソ","く(む)・くみ","","",""],
+  ["信","N3","faith, truth, fidelity","シン","—","","",""],
+  ["在","N3","exist, outskirts, suburbs","ザイ","あ(る)","","",""],
+  ["件","N3","affair, case, matter","ケン","くだん","","",""],
+  ["側","N3","side, lean, oppose","ソク","かわ・がわ","","",""],
+  ["任","N3","responsibility, duty, term","ニン","まか(せる)・まか(す)","","",""],
+  ["引","N3","pull, tug, jerk","イン","ひ(く)・ひ(き)","","",""],
+  ["求","N3","request, want, wish for","キュウ・グ","もと(める)","","",""],
+  ["所","N3","place, extent","ショ","ところ・どころ","","",""],
+  ["次","N3","next, order, sequence","ジ・シ","つ(ぐ)・つぎ","","",""],
+  ["昨","N3","yesterday, previous","サク","—","","",""],
+  ["論","N3","argument, discourse","ロン","—","","",""],
+  ["官","N3","bureaucrat, the government, organ","カン","—","","",""],
+  ["増","N3","increase, add, augment","ゾウ","ま(す)・ま(し)","増える","ふえる","to increase"],
+  ["係","N3","person in charge, connection, duty","ケイ","かか(る)・かかり","","",""],
+  ["感","N3","emotion, feeling, sensation","カン","—","","",""],
+  ["情","N3","feelings, emotion, passion","ジョウ・セイ","なさ(け)","情報","じょうほう","information"],
+  ["投","N3","throw, discard, abandon","トウ","な(げる)","","",""],
+  ["示","N3","show, indicate, point out","ジ・シ","しめ(す)","","",""],
+  ["変","N3","unusual, change, strange","ヘン","か(わる)・か(わり)","","",""],
+  ["打","N3","strike, hit, knock","ダ・ダアス","う(つ)・う(ち)","","",""],
+  ["直","N3","straightaway, honesty, frankness","チョク・ジキ","ただ(ちに)・なお(す)","","",""],
+  ["両","N3","both, old japanese coin, counter for carriages (e.g., in a train)","リョウ","てる・ふたつ","","",""],
+  ["式","N3","style, ceremony, rite","シキ","—","","",""],
+  ["確","N3","assurance, firm, tight","カク・コウ","たし(か)・たし(かめる)","確認","かくにん","confirmation"],
+  ["果","N3","fruit, reward, carry out","カ","は(たす)・はた(す)","","",""],
+  ["容","N3","contain, form, looks","ヨウ","い(れる)","","",""],
+  ["必","N3","invariably, certain, inevitable","ヒツ","かなら(ず)","","",""],
+  ["演","N3","performance, act, play","エン","—","","",""],
+  ["歳","N3","year-end, age, occasion","サイ・セイ","とし・とせ","","",""],
+  ["争","N3","contend, dispute, argue","ソウ","あらそ(う)・いか(でか)","","",""],
+  ["談","N3","discuss, talk","ダン","—","","",""],
+  ["能","N3","ability, talent, skill","ノウ","よ(く)","","",""],
+  ["位","N3","rank, grade, throne","イ","くらい・ぐらい","","",""],
+  ["置","N3","placement, put, set","チ","お(く)","","",""],
+  ["流","N3","current, a sink, flow","リュウ・ル","なが(れる)・なが(れ)","","",""],
+  ["格","N3","status, rank, capacity","カク・コウ","—","","",""],
+  ["疑","N3","doubt, distrust, be suspicious","ギ","うたが(う)","","",""],
+  ["過","N3","overdo, exceed, go beyond","カ","す(ぎる)・す(ごす)","","",""],
+  ["局","N3","bureau, board, office","キョク","つぼね","","",""],
+  ["放","N3","set free, release, fire","ホウ","はな(す)・はな(つ)","","",""],
+  ["常","N3","usual, ordinary, normal","ジョウ","つね・とこ","","",""],
+  ["状","N3","status quo, conditions, circumstances","ジョウ","—","","",""],
+  ["球","N3","ball, sphere","キュウ","たま","","",""],
+  ["職","N3","post, employment, work","ショク・ソク","—","","",""],
+  ["与","N3","bestow, participate in, give","ヨ","あた(える)・あずか(る)","","",""],
+  ["供","N3","submit, offer, present","キョウ・ク","そな(える)・とも","","",""],
+  ["役","N3","duty, war, campaign","ヤク・エキ","—","","",""],
+  ["構","N3","posture, build, pretend","コウ","かま(える)・かま(う)","","",""],
+  ["割","N3","proportion, comparatively, divide","カツ","わ(る)・わり","","",""],
+  ["費","N3","expense, cost, spend","ヒ","つい(やす)・つい(える)","","",""],
+  ["付","N3","adhere, attach, refer to","フ","つ(ける)・つ(け)","","",""],
+  ["由","N3","wherefore, a reason","ユ・ユウ","よし・よ(る)","理由","りゆう","reason"],
+  ["説","N3","opinion, theory, explanation","セツ・ゼイ","と(く)","説明","せつめい","explanation"],
+  ["難","N3","difficult, impossible, trouble","ナン","かた(い)・むずか(しい)","","",""],
+  ["優","N3","tenderness, excel, surpass","ユウ・ウ","やさ(しい)・すぐ(れる)","","",""],
+  ["夫","N3","husband, man","フ・フウ","おっと・それ","","",""],
+  ["収","N3","income, obtain, reap","シュウ","おさ(める)・おさ(まる)","","",""],
+  ["断","N3","severance, decline, refuse","ダン","た(つ)・ことわ(る)","","",""],
+  ["石","N3","stone","セキ・シャク","いし","","",""],
+  ["違","N3","difference, differ","イ","ちが(う)・ちが(い)","","",""],
+  ["消","N3","extinguish, blow out, turn off","ショウ","き(える)・け(す)","","",""],
+  ["神","N3","gods, mind, soul","シン・ジン","かみ・かん","","",""],
+  ["番","N3","turn, number in a series","バン","つが(い)","","",""],
+  ["規","N3","standard, measure","キ","—","","",""],
+  ["術","N3","art, technique, skill","ジュツ","すべ","","",""],
+  ["備","N3","equip, provision, preparation","ビ","そな(える)・そな(わる)","","",""],
+  ["宅","N3","home, house, residence","タク","—","","",""],
+  ["害","N3","harm, injury","ガイ","—","","",""],
+  ["配","N3","distribute, spouse, exile","ハイ","くば(る)","","",""],
+  ["警","N3","admonish, commandment","ケイ","いまし(める)","","",""],
+  ["育","N3","bring up, grow up, raise","イク","そだ(つ)・そだ(ち)","","",""],
+  ["席","N3","seat, mat, occasion","セキ","むしろ","","",""],
+  ["訪","N3","call on, visit, look up","ホウ","おとず(れる)・たず(ねる)","","",""],
+  ["乗","N3","ride, power, multiplication","ジョウ・ショウ","の(る)・の(せる)","","",""],
+  ["残","N3","remainder, leftover, balance","ザン・サン","のこ(る)・のこ(す)","","",""],
+  ["想","N3","concept, think, idea","ソウ・ソ","おも(う)","","",""],
+  ["声","N3","voice","セイ・ショウ","こえ・こわ","","",""],
+  ["念","N3","wish, sense, idea","ネン","—","","",""],
+  ["助","N3","help, rescue, assist","ジョ","たす(ける)・たす(かる)","","",""],
+  ["労","N3","labor, thank for, reward for","ロウ","ろう(する)・いたわ(る)","","",""],
+  ["例","N3","example, custom, usage","レイ","たと(える)","","",""],
+  ["然","N3","sort of thing, so, if so","ゼン・ネン","しか・しか(り)","","",""],
+  ["限","N3","limit, restrict, to best of ability","ゲン","かぎ(る)・かぎ(り)","","",""],
+  ["追","N3","chase, drive away, follow","ツイ","お(う)","","",""],
+  ["商","N3","make a deal, selling, dealing in","ショウ","あきな(う)","","",""],
+  ["葉","N3","leaf, plane, lobe","ヨウ","は","","",""],
+  ["伝","N3","transmit, go along, walk along","デン・テン","つた(わる)・つた(える)","","",""],
+  ["働","N3","work","ドウ","はたら(く)","働く","はたらく","to work"],
+  ["形","N3","shape, form, style","ケイ・ギョウ","かた・かたち","","",""],
+  ["景","N3","scenery, view","ケイ","—","","",""],
+  ["落","N3","fall, drop, come down","ラク","お(ちる)・お(ち)","","",""],
+  ["好","N3","fond, pleasing, like something","コウ","この(む)・す(く)","","",""],
+  ["退","N3","retreat, withdraw, retire","タイ","しりぞ(く)・しりぞ(ける)","","",""],
+  ["頭","N3","head, counter for large animals","トウ・ズ","あたま・かしら","","",""],
+  ["負","N3","defeat, negative, -","フ","ま(ける)・ま(かす)","","",""],
+  ["渡","N3","transit, ford, ferry","ト","わた(る)・わた(す)","","",""],
+  ["失","N3","lose, error, fault","シツ","うしな(う)・う(せる)","","",""],
+  ["差","N3","distinction, difference, variation","サ","さ(す)・さ(し)","","",""],
+  ["末","N3","end, close, tip","マツ・バツ","すえ","","",""],
+  ["守","N3","guard, protect, defend","シュ・ス","まも(る)・まも(り)","","",""],
+  ["若","N3","young, if, perhaps","ジャク・ニャク","わか(い)・わか","","",""],
+  ["種","N3","species, kind, class","シュ","たね","","",""],
+  ["美","N3","beauty, beautiful","ビ・ミ","うつく(しい)","","",""],
+  ["命","N3","fate, command, decree","メイ・ミョウ","いのち","","",""],
+  ["福","N3","blessing, fortune, luck","フク","—","","",""],
+  ["望","N3","ambition, full moon, hope","ボウ・モウ","のぞ(む)・もち","","",""],
+  ["非","N3","un-, mistake, negative","ヒ","あら(ず)","","",""],
+  ["観","N3","outlook, look, appearance","カン","み(る)・しめ(す)","","",""],
+  ["察","N3","guess, presume, surmise","サツ","—","","",""],
+  ["段","N3","grade, steps, stairs","ダン・タン","—","","",""],
+  ["横","N3","sideways, side, horizontal","オウ","よこ","","",""],
+  ["深","N3","deep, heighten, intensify","シン","ふか(い)・ふか(まる)","","",""],
+  ["申","N3","have the honor to, sign of the monkey, 3-5pm","シン","もう(す)・もう(し)","","",""],
+  ["様","N3","esq., way, manner","ヨウ・ショウ","さま・さん","","",""],
+  ["財","N3","property, money, wealth","ザイ・サイ","たから","","",""],
+  ["港","N3","harbor","コウ","みなと","","",""],
+  ["識","N3","discriminating, know, write","シキ","し(る)・しる(す)","","",""],
+  ["呼","N3","call, call out to, invite","コ","よ(ぶ)","","",""],
+  ["達","N3","accomplished, reach, arrive","タツ・ダ","たち","","",""],
+  ["良","N3","good, pleasing, skilled","リョウ","よ(い)・い(い)","","",""],
+  ["候","N3","climate, season, weather","コウ","そうろう","","",""],
+  ["程","N3","extent, degree, law","テイ","ほど","","",""],
+  ["満","N3","full, fullness, enough","マン・バン","み(ちる)・み(つ)","","",""],
+  ["敗","N3","failure, defeat, reversal","ハイ","やぶ(れる)","","",""],
+  ["値","N3","price, cost, value","チ","ね・あたい","","",""],
+  ["突","N3","stab, protruding, thrust","トツ・カ","つ(く)","","",""],
+  ["光","N3","ray, light","コウ","ひか(る)・ひかり","","",""],
+  ["路","N3","path, route, road","ロ・ル","みち","","",""],
+  ["科","N3","department, course, section","カ","—","","",""],
+  ["積","N3","volume, product (x*y), acreage","セキ","つ(む)・つ(もる)","","",""],
+  ["他","N3","other, another, the others","タ","ほか","","",""],
+  ["処","N3","dispose, manage, deal with","ショ","ところ・お(る)","","",""],
+  ["太","N3","plump, thick, big around","タイ・タ","ふと(い)・ふと(る)","","",""],
+  ["客","N3","guest, visitor, customer","キャク・カク","—","","",""],
+  ["否","N3","negate, no, noes","ヒ","いな・いや","","",""],
+  ["師","N3","expert, teacher, master","シ","いくさ","","",""],
+  ["登","N3","ascend, climb up","トウ・ト","のぼ(る)・あ(がる)","","",""],
+  ["易","N3","easy, ready to, simple","エキ・イ","やさ(しい)・やす(い)","","",""],
+  ["速","N3","quick, fast","ソク","はや(い)・はや","","",""],
+  ["存","N3","exist, suppose, be aware of","ソン・ゾン","ながら(える)・あ(る)","","",""],
+  ["飛","N3","fly, skip (pages), scatter","ヒ","と(ぶ)・と(ばす)","","",""],
+  ["殺","N3","kill, murder, butcher","サツ・サイ","ころ(す)・そ(ぐ)","","",""],
+  ["号","N3","nickname, number, item","ゴウ","さけ(ぶ)・よびな","","",""],
+  ["単","N3","simple, one, single","タン","ひとえ","","",""],
+  ["座","N3","squat, seat, cushion","ザ","すわ(る)","","",""],
+  ["破","N3","rend, rip, tear","ハ","やぶ(る)・やぶ(れる)","","",""],
+  ["除","N3","exclude, division (x/3), remove","ジョ・ジ","のぞ(く)","","",""],
+  ["完","N3","perfect, completion, end","カン","—","","",""],
+  ["降","N3","descend, precipitate, fall","コウ・ゴ","お(りる)・お(ろす)","","",""],
+  ["責","N3","blame, condemn, censure","セキ","せ(める)","","",""],
+  ["捕","N3","catch, capture","ホ","と(らえる)・と(らわれる)","","",""],
+  ["危","N3","dangerous, fear, uneasy","キ","あぶ(ない)・あや(うい)","","",""],
+  ["給","N3","salary, wage, gift","キュウ","たま(う)・たも(う)","","",""],
+  ["苦","N3","suffering, trial, worry","ク","くる(しい)・くる(しむ)","","",""],
+  ["迎","N3","welcome, meet, greet","ゲイ","むか(える)","","",""],
+  ["園","N3","park, garden, yard","エン","その","","",""],
+  ["具","N3","tool, utensil, means","グ","そな(える)・つぶさ(に)","","",""],
+  ["辞","N3","resign, word, term","ジ","や(める)・いな(む)","","",""],
+  ["因","N3","cause, factor, be associated with","イン","よ(る)・ちな(む)","","",""],
+  ["馬","N3","horse","バ","うま・ま","","",""],
+  ["愛","N3","love, affection, favourite","アイ","いと(しい)・かな(しい)","","",""],
+  ["富","N3","wealth, enrich, abundant","フ・フウ","と(む)・とみ","","",""],
+  ["彼","N3","he, that, the","ヒ","かれ・かの","","",""],
+  ["未","N3","un-, not yet, hitherto","ミ・ビ","いま(だ)・ま(だ)","","",""],
+  ["舞","N3","dance, flit, circle","ブ","ま(う)・まい","","",""],
+  ["亡","N3","deceased, the late, dying","ボウ・モウ","な(い)・な(き)","","",""],
+  ["冷","N3","cool, cold (beer, person), chill","レイ","つめ(たい)・ひ(える)","","",""],
+  ["適","N3","suitable, occasional, rare","テキ","かな(う)","","",""],
+  ["婦","N3","lady, woman, wife","フ","よめ","","",""],
+  ["寄","N3","draw near, stop in, bring near","キ","よ(る)・よ(せる)","","",""],
+  ["込","N3","crowded, mixture, in bulk","—","こ(む)・こ(み)","","",""],
+  ["顔","N3","face, expression","ガン","かお","","",""],
+  ["類","N3","sort, kind, variety","ルイ","たぐ(い)","","",""],
+  ["余","N3","too much, myself, surplus","ヨ","あま(る)・あま(り)","","",""],
+  ["王","N3","king, rule, magnate","オウ・ノウ","—","","",""],
+  ["返","N3","return, answer, fade","ヘン","かえ(す)・かえ(る)","","",""],
+  ["妻","N3","wife, spouse","サイ","つま","","",""],
+  ["背","N3","stature, height, back","ハイ","せ・せい","","",""],
+  ["熱","N3","heat, temperature, fever","ネツ","あつ(い)","","",""],
+  ["宿","N3","inn, lodging, relay station","シュク","やど・やど(る)","","",""],
+  ["薬","N3","medicine, chemical, enamel","ヤク","くすり","","",""],
+  ["険","N3","precipitous, inaccessible place, impregnable position","ケン","けわ(しい)","","",""],
+  ["頼","N3","trust, request","ライ","たの(む)・たの(もしい)","","",""],
+  ["覚","N3","memorize, learn, remember","カク","おぼ(える)・さ(ます)","","",""],
+  ["船","N3","ship, boat","セン","ふね・ふな","","",""],
+  ["途","N3","route, way, road","ト","みち","","",""],
+  ["許","N3","permit, approve","キョ","ゆる(す)・もと","","",""],
+  ["抜","N3","slip out, extract, pull out","バツ・ハツ","ぬ(く)・ぬ(き)","","",""],
+  ["便","N3","convenience, facility, excrement","ベン・ビン","たよ(り)","","",""],
+  ["留","N3","detain, fasten, halt","リュウ・ル","と(める)・と(まる)","","",""],
+  ["罪","N3","guilt, sin, crime","ザイ","つみ","","",""],
+  ["努","N3","toil, diligent, as much as possible","ド","つと(める)","","",""],
+  ["精","N3","refined, ghost, fairy","セイ・ショウ","しら(げる)・くわ(しい)","","",""],
+  ["散","N3","scatter, disperse, spend","サン","ち(る)・ち(らす)","","",""],
+  ["静","N3","quiet","セイ・ジョウ","しず・しず(か)","","",""],
+  ["婚","N3","marriage","コン","—","","",""],
+  ["喜","N3","rejoice, take pleasure in","キ","よろこ(ぶ)・よろこ(ばす)","","",""],
+  ["浮","N3","floating, float, rise to surface","フ","う(く)・う(かれる)","","",""],
+  ["絶","N3","discontinue, sever, cut off","ゼツ","た(える)・た(やす)","","",""],
+  ["幸","N3","happiness, blessing, fortune","コウ","さいわ(い)・さち","","",""],
+  ["押","N3","push, stop, check","オウ","お(す)・お(し)","","",""],
+  ["倒","N3","overthrow, fall, collapse","トウ","たお(れる)・たお(す)","","",""],
+  ["等","N3","etc., and so forth, class (first)","トウ","ひと(しい)・など","","",""],
+  ["老","N3","old man, old age, grow old","ロウ","お(いる)・ふ(ける)","","",""],
+  ["曲","N3","bend, music, melody","キョク","ま(がる)・ま(げる)","","",""],
+  ["払","N3","pay, clear out, prune","フツ・ヒツ","はら(う)","","",""],
+  ["庭","N3","courtyard, garden, yard","テイ","にわ","","",""],
+  ["徒","N3","on foot, junior, emptiness","ト","いたずら・あだ","","",""],
+  ["勤","N3","diligence, become employed, serve","キン・ゴン","つと(める)・つと(まる)","","",""],
+  ["遅","N3","slow, late, back","チ","おく(れる)・おく(らす)","","",""],
+  ["居","N3","reside, to be, exist","キョ・コ","い(る)・お(る)","","",""],
+  ["雑","N3","miscellaneous","ザツ・ゾウ","まじ(える)・まじ(る)","","",""],
+  ["招","N3","beckon, invite, summon","ショウ","まね(く)","","",""],
+  ["困","N3","quandary, become distressed, annoyed","コン","こま(る)","","",""],
+  ["欠","N3","lack, gap, fail","ケツ・ケン","か(ける)・か(く)","","",""],
+  ["更","N3","grow late, night watch, sit up late","コウ","さら・さら(に)","","",""],
+  ["刻","N3","engrave, cut fine, chop","コク","きざ(む)・きざ(み)","","",""],
+  ["賛","N3","approve, praise, title or inscription on picture","サン","たす(ける)・たた(える)","","",""],
+  ["抱","N3","embrace, hug, hold in arms","ホウ","だ(く)・いだ(く)","","",""],
+  ["犯","N3","crime, sin, offense","ハン・ボン","おか(す)","","",""],
+  ["恐","N3","fear, dread, awe","キョウ","おそ(れる)・おそ(る)","","",""],
+  ["息","N3","breath, respiration, son","ソク","いき","","",""],
+  ["遠","N3","distant, far","エン・オン","とお(い)","","",""],
+  ["戻","N3","re-, return, revert","レイ","もど(す)・もど(る)","","",""],
+  ["願","N3","petition, request, vow","ガン","ねが(う)","","",""],
+  ["絵","N3","picture, drawing, painting","カイ・エ","—","","",""],
+  ["越","N3","surpass, cross over, move to","エツ・オツ","こ(す)・こ(える)","","",""],
+  ["欲","N3","longing, covetousness, greed","ヨク","ほっ(する)・ほ(しい)","","",""],
+  ["痛","N3","pain, hurt, damage","ツウ","いた(い)・いた(む)","","",""],
+  ["笑","N3","laugh","ショウ","わら(う)・え(む)","","",""],
+  ["互","N3","mutually, reciprocally, together","ゴ","たが(い)・かたみ(に)","","",""],
+  ["束","N3","bundle, sheaf, ream","ソク","たば・たば(ねる)","","",""],
+  ["似","N3","becoming, resemble, counterfeit","ジ","に(る)・ひ(る)","","",""],
+  ["列","N3","file, row, rank","レツ・レ","—","","",""],
+  ["探","N3","grope, search, look for","タン","さぐ(る)・さが(す)","","",""],
+  ["逃","N3","escape, flee, shirk","トウ","に(げる)・に(がす)","","",""],
+  ["遊","N3","play","ユウ・ユ","あそ(ぶ)・あそ(ばす)","","",""],
+  ["迷","N3","astray, be perplexed, in doubt","メイ","まよ(う)","","",""],
+  ["夢","N3","dream, vision, illusion","ム・ボウ","ゆめ・ゆめ(みる)","","",""],
+  ["君","N3","mister, you, ruler","クン","きみ","","",""],
+  ["閉","N3","closed, shut","ヘイ","と(じる)・と(ざす)","閉める","しめる","to close"],
+  ["緒","N3","thong, beginning, inception","ショ・チョ","お・いとぐち","","",""],
+  ["折","N3","fold, break, fracture","セツ・シャク","お(る)・おり","","",""],
+  ["草","N3","grass, weeds, herbs","ソウ","くさ","","",""],
+  ["暮","N3","evening, twilight, season's end","ボ","く(れる)・く(らす)","","",""],
+  ["酒","N3","sake, alcohol","シュ","さけ・さか","","",""],
+  ["悲","N3","grieve, sad, deplore","ヒ","かな(しい)・かな(しむ)","","",""],
+  ["晴","N3","clear up","セイ","は(れる)・は(れ)","","",""],
+  ["掛","N3","hang, suspend, depend","カイ・ケイ","か(ける)・か(け)","","",""],
+  ["到","N3","arrival, proceed, reach","トウ","いた(る)","","",""],
+  ["寝","N3","lie down, sleep, rest","シン","ね(る)・ね(かす)","","",""],
+  ["暗","N3","darkness, disappear, shade","アン","くら(い)・くら(む)","","",""],
+  ["盗","N3","steal, rob, pilfer","トウ","ぬす(む)・ぬす(み)","","",""],
+  ["吸","N3","suck, imbibe, inhale","キュウ","す(う)","","",""],
+  ["陽","N3","sunshine, yang principle, positive","ヨウ","ひ","","",""],
+  ["御","N3","honorable, manipulate, govern","ギョ・ゴ","おん・お","","",""],
+  ["歯","N3","tooth, cog","シ","よわい・は","","",""],
+  ["忘","N3","forget","ボウ","わす(れる)","","",""],
+  ["雪","N3","snow","セツ","ゆき","","",""],
+  ["吹","N3","blow, breathe, puff","スイ","ふ(く)","","",""],
+  ["娘","N3","daughter, girl","ジョウ","むすめ・こ","","",""],
+  ["誤","N3","mistake, err, do wrong","ゴ","あやま(る)","","",""],
+  ["洗","N3","wash, inquire into, probe","セン","あら(う)","","",""],
+  ["慣","N3","accustomed, get used to, become experienced","カン","な(れる)・な(らす)","","",""],
+  ["礼","N3","salute, bow, ceremony","レイ・ライ","—","","",""],
+  ["窓","N3","window, pane","ソウ・ス","まど・てんまど","","",""],
+  ["昔","N3","once upon a time, antiquity, old times","セキ・シャク","むかし","","",""],
+  ["貧","N3","poverty, poor","ヒン・ビン","まず(しい)","","",""],
+  ["怒","N3","angry, be offended","ド・ヌ","いか(る)・おこ(る)","","",""],
+  ["泳","N3","swim","エイ","およ(ぐ)","","",""],
+  ["祖","N3","ancestor, pioneer, founder","ソ","—","","",""],
+  ["杯","N3","counter for cupfuls, wine glass, glass","ハイ","さかずき","","",""],
+  ["疲","N3","exhausted, tire, weary","ヒ","つか(れる)・つか(らす)","","",""],
+  ["皆","N3","all, everything","カイ","みな・みんな","","",""],
+  ["鳴","N3","chirp, cry, bark","メイ","な(く)・な(る)","","",""],
+  ["腹","N3","abdomen, belly, stomach","フク","はら","","",""],
+  ["煙","N3","smoke","エン","けむ(る)・けむり","","",""],
+  ["眠","N3","sleep, die, sleepy","ミン","ねむ(る)・ねむ(い)","","",""],
+  ["怖","N3","dreadful, be frightened, fearful","フ・ホ","こわ(い)・こわ(がる)","","",""],
+  ["耳","N3","ear","ジ","みみ","","",""],
+  ["頂","N3","place on the head, receive, top of head","チョウ","いただ(く)・いただき","","",""],
+  ["箱","N3","box, chest, case","ソウ","はこ","","",""],
+  ["晩","N3","nightfall, night","バン","—","","",""],
+  ["寒","N3","cold","カン","さむ(い)","","",""],
+  ["髪","N3","hair of the head","ハツ","かみ","","",""],
+  ["忙","N3","busy, occupied, restless","ボウ・モウ","いそが(しい)・せわ(しい)","","",""],
+  ["才","N3","genius, years old, cubic shaku","サイ","—","","",""],
+  ["靴","N3","shoes","カ","くつ","","",""],
+  ["恥","N3","shame, dishonor","チ","は(じる)・はじ","","",""],
+  ["偶","N3","accidentally, even number, couple","グウ","たま","","",""],
+  ["偉","N3","admirable, greatness, remarkable","イ","えら(い)","","",""],
+  ["猫","N3","cat","ビョウ","ねこ","","",""],
+  ["幾","N3","how many, how much, how far","キ","いく・いく(つ)","","",""],
+  // ===== N2 =====
+  ["経","N2","pass through, manage","ケイ","へ(る)","経済","けいざい","economy"],
+  ["済","N2","finish, settle","サイ","す(む)","経済","けいざい","economy"],
+  ["政","N2","politics, govern","セイ","まつりごと","政治","せいじ","politics"],
+  ["治","N2","govern, cure","ジ・チ","おさ(める)・なお(る)","政治","せいじ","politics"],
+  ["化","N2","change, -ize","カ・ケ","ば(ける)","文化","ぶんか","culture"],
+  ["増","N2","increase","ゾウ","ふ(える)・ま(す)","増える","ふえる","to increase"],
+  ["減","N2","decrease","ゲン","へ(る)","減る","へる","to decrease"],
+  ["比","N2","compare, ratio","ヒ","くら(べる)","比べる","くらべる","to compare"],
+  ["報","N2","report, news","ホウ","むく(いる)","情報","じょうほう","information"],
+  ["情","N2","feeling, emotion","ジョウ","なさ(け)","情報","じょうほう","information"],
+  ["確","N2","certain, confirm","カク","たし(か)","確認","かくにん","confirmation"],
+  ["認","N2","recognize, admit","ニン","みと(める)","確認","かくにん","confirmation"],
+  ["解","N2","solve, untie","カイ・ゲ","と(く)","理解","りかい","understanding"],
+  ["理","N2","reason, logic","リ","—","理由","りゆう","reason"],
+  ["由","N2","reason, cause","ユ・ユウ","よし","理由","りゆう","reason"],
+  ["営","N2","operate, manage","エイ","いとな(む)","営業","えいぎょう","business operation"],
+  ["成","N2","become, accomplish","セイ・ジョウ","な(る)","成功","せいこう","success"],
+  ["績","N2","achievement, results","セキ","—","成績","せいせき","results / grades"],
+  // ===== N1 =====
+  ["憲","N1","constitution","ケン","—","憲法","けんぽう","constitution"],
+  ["律","N1","law, rhythm","リツ・リチ","—","法律","ほうりつ","law"],
+  ["権","N1","authority, rights","ケン・ゴン","—","権利","けんり","rights"],
+  ["義","N1","justice, meaning","ギ","—","義務","ぎむ","duty / obligation"],
+  ["務","N1","duty, serve","ム","つと(める)","義務","ぎむ","duty"],
+  ["範","N1","model, range","ハン","—","範囲","はんい","range / scope"],
+  ["融","N1","melt, finance","ユウ","と(ける)","金融","きんゆう","finance"],
+  ["維","N1","fiber, maintain","イ","—","維持","いじ","maintenance"],
+  ["援","N1","aid, assist","エン","—","援助","えんじょ","assistance"],
+  ["慎","N1","prudence, discreet","シン","つつし(む)","慎重","しんちょう","cautious"],
+  ["雇","N1","employ","コ","やと(う)","雇用","こよう","employment"],
+  ["双","N1","pair, both","ソウ","ふた","双方","そうほう","both parties"],
+  ["縮","N1","shrink, reduce","シュク","ちぢ(む)","短縮","たんしゅく","shortening"],
+  ["抑","N1","restrain, suppress","ヨク","おさ(える)","抑制","よくせい","suppression"],
+  ["鎖","N1","chain","サ","くさり","閉鎖","へいさ","closure"],
+];
+
+const JLPT_LEVELS = ["N5", "N4", "N3", "N2", "N1"];
+const JLPT_DESC = {
+  N5: "First steps — numbers, days, and the most basic everyday kanji.",
+  N4: "Common verbs and nouns you meet in daily conversation.",
+  N3: "Bridging kanji for daily life and more abstract ideas.",
+  N2: "Formal and topical kanji for news, work, and study.",
+  N1: "Advanced kanji used in law, politics, and academic writing.",
+};
+const KANJI = KANJI_RAW.map(([char, jlpt, meaning, on, kun, exJa, exKana, exEn]) => ({
+  char, jlpt, meaning, on, kun, exJa, exKana, exEn,
+}));
+const KANJI_BY_LEVEL = JLPT_LEVELS.reduce((acc, lv) => {
+  acc[lv] = KANJI.filter((k) => k.jlpt === lv);
+  return acc;
+}, {});
+
+/* ---- Time + dates ---- */
+const HOUR = 3600000;
+const DAY = 86400000;
+const todayStr = () => new Date().toISOString().slice(0, 10);
+const shiftDay = (s, n) => {
+  const d = new Date(s + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+};
+
+/* ---- SRS stages (WaniKani-style) ---- */
+const STAGE_MS = { 1:2*HOUR, 2:4*HOUR, 3:8*HOUR, 4:23*HOUR, 5:3*DAY, 6:7*DAY, 7:14*DAY, 8:30*DAY, 9:Infinity };
+function stageMeta(stage) {
+  if (stage >= 9) return { group: "Burned", short: "Burned", color: "#241f1b" };
+  if (stage >= 8) return { group: "Enlightened", short: "Enlightened", color: "#1c2c52" };
+  if (stage >= 7) return { group: "Master", short: "Master", color: "#801d5c" };
+  if (stage >= 5) return { group: "Guru", short: "Guru " + (stage - 4), color: "#c02e80" };
+  if (stage >= 1) return { group: "Apprentice", short: "Apprentice " + stage, color: "#c8453b" };
+  return { group: "Locked", short: "—", color: "#9a8b74" };
+}
+const STAGE_GROUPS = ["Apprentice", "Guru", "Master", "Enlightened", "Burned"];
+function learnItem(now) {
+  return { stage: 1, due: now + STAGE_MS[1], correct: 0, wrong: 0, recentWrong: 0, learnedAt: now };
+}
+function reviewSchedule(prog, correct, now) {
+  let stage = prog ? prog.stage : 1;
+  stage = correct ? Math.min(9, stage + 1) : Math.max(1, stage - (stage >= 5 ? 2 : 1));
+  const ms = STAGE_MS[stage];
+  return {
+    stage,
+    due: ms === Infinity ? Infinity : now + ms,
+    lastReviewed: now,
+    learnedAt: prog ? prog.learnedAt : now,
+    correct: (prog ? prog.correct : 0) + (correct ? 1 : 0),
+    wrong: (prog ? prog.wrong : 0) + (correct ? 0 : 1),
+    recentWrong: correct ? 0 : (prog ? prog.recentWrong || 0 : 0) + 1,
+  };
+}
+function isLeech(prog) { return !!prog && (prog.recentWrong || 0) >= 2; }
+function fmtUntil(due, now) {
+  if (due === Infinity) return "burned";
+  const d = due - now;
+  if (d <= 0) return "now";
+  if (d < HOUR) return Math.max(1, Math.round(d / 60000)) + "m";
+  if (d < DAY) return Math.round(d / HOUR) + "h";
+  return Math.round(d / DAY) + "d";
+}
+
+/* ---- Storage (localStorage) ---- */
+async function loadState(){ try{ const v=localStorage.getItem(STORE_KEY); return v?JSON.parse(v):null; }catch{ return null; } }
+async function saveState(state){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch{} }
+
+const DEFAULT_STATE = {
+  v: 1,
+  currentLevel: 1,
+  progress: {},
+  custom: [],
+  settings: { lessonBatch: 5 },
+  daily: { date: todayStr(), reviews: 0, lessons: 0 },
+  history: {},
+  script: { progress: {}, best: 0, batch: 5, quizDir: "recognize", chart: "hira" },
+  kanji: { level: "N5", learned: {}, best: 0 },
+};
+
+function Bar({ pct, h = 8 }) {
+  return (
+    <div style={{ height: h, background: T.line, borderRadius: h, overflow: "hidden" }}>
+      <div style={{ height: "100%", width: `${Math.round(pct * 100)}%`, background: `linear-gradient(90deg, ${T.gold}, ${T.terra})`, transition: "width .35s ease" }} />
+    </div>
+  );
+}
+
+/* ===================== TYPED QUIZ (romaji, with live kana preview) ===================== */
+function TypedQuiz({ items, mode, onGrade, onExit, title }) {
+  const [queue] = useState(() => items);
+  const [i, setI] = useState(0);
+  const [answer, setAnswer] = useState("");
+  const [feedback, setFeedback] = useState(null);
+  const [score, setScore] = useState({ right: 0, total: 0 });
+  const [leveled, setLeveled] = useState(null);
+  const [done, setDone] = useState(items.length === 0);
+  const inputRef = useRef(null);
+
+  const item = queue[i];
+  const preview = !/[\u3040-\u30ff]/.test(answer) ? romajiToKana(answer) : answer;
+
+  useEffect(() => { if (!feedback && inputRef.current) inputRef.current.focus(); }, [i, feedback]);
+
+  const submit = () => {
+    if (feedback) {
+      setFeedback(null); setAnswer("");
+      if (i + 1 >= queue.length) setDone(true); else setI(i + 1);
+      return;
+    }
+    const ok = answerMatches(answer, item);
+    const lvl = onGrade(item.id, ok, mode);
+    if (lvl) setLeveled(lvl);
+    setFeedback(ok ? "correct" : "wrong");
+    setScore((s) => ({ right: s.right + (ok ? 1 : 0), total: s.total + 1 }));
+  };
+  const giveUp = () => {
+    if (feedback) return;
+    const lvl = onGrade(item.id, false, mode);
+    if (lvl) setLeveled(lvl);
+    setFeedback("wrong");
+    setScore((s) => ({ right: s.right, total: s.total + 1 }));
+  };
+
+  if (done) {
+    const acc = score.total ? Math.round((score.right / score.total) * 100) : 0;
+    return (
+      <div className="fade pop" style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 20, padding: "40px 24px", textAlign: "center" }}>
+        <div style={{ fontSize: 38, marginBottom: 8 }}>{items.length === 0 ? "🌸" : "🎉"}</div>
+        <div style={{ fontFamily: displayFont, fontSize: 22 }}>{items.length === 0 ? "Nothing to quiz right now" : "All done!"}</div>
+        {items.length > 0 && (<div style={{ color: T.textDim, fontSize: 14, marginTop: 8 }}>{score.right}/{score.total} correct · {acc}% accuracy</div>)}
+        {leveled && (
+          <div style={{ marginTop: 14, background: `${T.gold}14`, border: `1px solid ${T.gold}`, borderRadius: 14, padding: "12px 14px", color: T.gold, fontWeight: 700 }}>
+            🎊 Level up! You reached Level {leveled} — new words unlocked.
+          </div>
+        )}
+        <button className="tap" onClick={onExit} style={{ width: "100%", marginTop: 18, padding: 14, borderRadius: 13, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontWeight: 700 }}>Back to home</button>
+      </div>
+    );
+  }
+
+  const correct = feedback === "correct";
+  const wrong = feedback === "wrong";
+
+  return (
+    <div className="fade">
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: T.goldSoft, whiteSpace: "nowrap" }}>{title}</div>
+        <div style={{ flex: 1, height: 4, background: T.line, borderRadius: 4, overflow: "hidden" }}>
+          <div style={{ height: "100%", width: `${(i / queue.length) * 100}%`, background: `linear-gradient(90deg, ${T.gold}, ${T.terra})`, transition: "width .3s ease" }} />
+        </div>
+        <div style={{ fontSize: 12, color: T.textDim }}>{score.right}/{score.total}</div>
+      </div>
+
+      <div style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 20, padding: "22px 18px", textAlign: "center", boxShadow: "0 12px 30px rgba(128,29,92,.08)" }}>
+        <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: 1, color: T.goldSoft }}>Type the reading · {item.type}</div>
+        <div style={{ fontFamily: displayFont, fontSize: 24, color: T.text, marginTop: 8 }}>{item.en}</div>
+      </div>
+
+      <input
+        ref={inputRef}
+        value={answer}
+        onChange={(e) => !feedback && setAnswer(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && submit()}
+        placeholder="type romaji…  e.g. arigatou"
+        autoCapitalize="none" autoCorrect="off" autoComplete="off" spellCheck={false}
+        readOnly={!!feedback}
+        style={{ width: "100%", marginTop: 12, padding: "13px 16px", borderRadius: 14, border: `2px solid ${correct ? T.green : wrong ? T.red : T.line}`, background: correct ? `${T.green}10` : wrong ? `${T.red}10` : T.panel, color: T.text, fontFamily: uiFont, fontSize: 19, outline: "none", textAlign: "center" }}
+      />
+      {!feedback && (
+        <div style={{ textAlign: "center", minHeight: 30, marginTop: 6, fontFamily: jaFont, fontSize: 24, color: answer ? T.gold : T.textDim, letterSpacing: 1 }}>
+          {answer ? preview : "ひらがな"}
+        </div>
+      )}
+
+      {feedback && (
+        <div className="fade" style={{ marginTop: 12, background: T.panel, border: `1px solid ${wrong ? T.red : T.green}`, borderRadius: 14, padding: "12px 14px", textAlign: "center" }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: wrong ? T.red : T.green }}>{correct ? "Correct!" : "Answer:"}</div>
+          <div style={{ fontFamily: jaFont, fontSize: 30, color: T.text, marginTop: 4 }}>{item.ja}</div>
+          {item.kana !== item.ja && (<div style={{ fontFamily: jaFont, fontSize: 17, color: T.textDim }}>{item.kana}</div>)}
+          <div style={{ color: T.goldSoft, fontStyle: "italic", fontSize: 14 }}>{item.romaji}</div>
+          <div style={{ marginTop: 8 }}><Speaker text={item.ja} color={T.terra} /></div>
+        </div>
+      )}
+
+      <button className="tap" onClick={submit} style={{ width: "100%", marginTop: 12, padding: 15, borderRadius: 14, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontSize: 15, fontWeight: 700 }}>
+        {feedback ? (i + 1 >= queue.length ? "Finish" : "Next →") : "Check answer"}
+      </button>
+      {!feedback && (
+        <button className="tap" onClick={giveUp} style={{ width: "100%", marginTop: 8, padding: 11, borderRadius: 12, border: `1px solid ${T.line}`, background: "transparent", color: T.textDim, fontSize: 13, fontWeight: 600 }}>
+          I don't know — show me
+        </button>
+      )}
+      <button className="tap" onClick={onExit} style={{ width: "100%", marginTop: 8, padding: 9, borderRadius: 12, border: "none", background: "transparent", color: T.textDim, fontSize: 12 }}>
+        End session
+      </button>
+      <div style={{ textAlign: "center", fontSize: 11, color: T.textDim, marginTop: 10, lineHeight: 1.6 }}>
+        Type the reading in romaji — it converts to kana as you go. Long vowels like “ou / uu” count, and kana input works too.
+      </div>
+    </div>
+  );
+}
+
+/* ===================== LEARN SESSION (teach N, then quiz them) ===================== */
+function LearnSession({ pool, batch, onLearn, onGrade, onExit }) {
+  const [queue] = useState(() => pool.slice(0, batch));
+  const [phase, setPhase] = useState(queue.length ? "teach" : "empty");
+  const [i, setI] = useState(0);
+
+  if (phase === "empty") {
+    return (
+      <div className="fade pop" style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 20, padding: "44px 24px", textAlign: "center" }}>
+        <div style={{ fontSize: 38, marginBottom: 8 }}>🌱</div>
+        <div style={{ fontFamily: displayFont, fontSize: 22 }}>No new words right now</div>
+        <div style={{ color: T.textDim, fontSize: 13.5, marginTop: 8, lineHeight: 1.6 }}>
+          You've learned everything unlocked so far. Master your current level in Reviews (reach Guru on 90%) to unlock the next set.
+        </div>
+        <button className="tap" onClick={onExit} style={{ width: "100%", marginTop: 18, padding: 13, borderRadius: 12, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontWeight: 700 }}>Home</button>
+      </div>
+    );
+  }
+  if (phase === "quiz") {
+    return (
+      <div>
+        <div style={{ textAlign: "center", fontSize: 12.5, color: T.textDim, margin: "0 0 12px", lineHeight: 1.5 }}>
+          Now type each reading to lock it in 👇
+        </div>
+        <TypedQuiz items={queue} mode="srs" onGrade={onGrade} onExit={onExit} title="Lesson quiz" />
+      </div>
+    );
+  }
+
+  const item = queue[i];
+  return (
+    <div className="fade">
+      <div style={{ height: 4, background: T.line, borderRadius: 4, overflow: "hidden", marginBottom: 14 }}>
+        <div style={{ height: "100%", width: `${(i / queue.length) * 100}%`, background: `linear-gradient(90deg, ${T.gold}, ${T.terra})` }} />
+      </div>
+      <div className="pop" key={item.id} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "30px 22px", textAlign: "center", boxShadow: "0 12px 34px rgba(128,29,92,.10)" }}>
+        <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: 1, color: T.goldSoft }}>New {item.type} · Level {item.level}</div>
+        <div style={{ fontFamily: jaFont, fontSize: item.type === "sentence" ? 30 : 46, color: T.text, margin: "14px 0 4px", lineHeight: 1.35 }}>{item.ja}</div>
+        {item.kana !== item.ja && (<div style={{ fontFamily: jaFont, fontSize: 18, color: T.textDim }}>{item.kana}</div>)}
+        <div style={{ color: T.goldSoft, fontStyle: "italic", fontSize: 16, marginTop: 4 }}>{item.romaji}</div>
+        <div style={{ fontFamily: displayFont, fontSize: 20, marginTop: 6 }}>{item.en}</div>
+        <div style={{ marginTop: 14 }}><Speaker text={item.ja} size={20} color={T.gold} /></div>
+      </div>
+      <button className="tap" onClick={() => { onLearn(item.id); if (i + 1 >= queue.length) setPhase("quiz"); else setI(i + 1); }}
+        style={{ width: "100%", marginTop: 14, padding: 15, borderRadius: 14, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontSize: 15, fontWeight: 700 }}>
+        {i + 1 >= queue.length ? "Got them — start quiz →" : "Learn it ✓"}
+      </button>
+      <div style={{ textAlign: "center", fontSize: 12, color: T.textDim, marginTop: 10 }}>Learning {i + 1} of {queue.length}</div>
+    </div>
+  );
+}
+
+/* ===================== HOME ===================== */
+function HomeView({ state, level, levelPct, lessons, reviews, leeches, stageCounts, streak, onGo, onTrouble, onSetting, onReset }) {
+  const [confirm, setConfirm] = useState(false);
+  const Tile = ({ label, value, sub, color, onClick, dim }) => (
+    <button className="tap" onClick={onClick} disabled={dim} style={{ flex: 1, textAlign: "left", border: `1px solid ${T.line}`, background: T.panel, borderRadius: 16, padding: "14px 15px", opacity: dim ? 0.55 : 1, cursor: dim ? "default" : "pointer" }}>
+      <div style={{ fontSize: 11.5, color: T.textDim, fontWeight: 600 }}>{label}</div>
+      <div style={{ fontSize: 30, fontWeight: 800, color, lineHeight: 1.1, marginTop: 2 }}>{value}</div>
+      <div style={{ fontSize: 11, color: T.textDim, marginTop: 2 }}>{sub}</div>
+    </button>
+  );
+  return (
+    <div className="fade">
+      <div style={{ background: `linear-gradient(150deg, ${T.gold}, ${T.terra})`, borderRadius: 20, padding: "18px 18px 16px", color: "#fff", boxShadow: "0 14px 34px rgba(128,29,92,.22)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+          <div style={{ fontFamily: displayFont, fontSize: 20 }}>Level {level}</div>
+          <div style={{ fontSize: 12, opacity: 0.9 }}>{LEVEL_TITLES[level] || ""}</div>
+        </div>
+        <div style={{ height: 8, background: "rgba(255,255,255,.28)", borderRadius: 8, overflow: "hidden", marginTop: 10 }}>
+          <div style={{ height: "100%", width: `${Math.round(levelPct * 100)}%`, background: "#fff", transition: "width .4s ease" }} />
+        </div>
+        <div style={{ fontSize: 11.5, opacity: 0.92, marginTop: 6 }}>{Math.round(levelPct * 100)}% of this level at Guru — reach 90% to unlock Level {Math.min(level + 1, MAX_LEVEL)}</div>
+      </div>
+
+      <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+        <Tile label="Lessons" value={lessons} sub={lessons ? "new words ready" : "all caught up"} color={T.terra} onClick={() => onGo("lessons")} dim={!lessons} />
+        <Tile label="Reviews" value={reviews} sub={reviews ? "due now" : "nothing due"} color={T.gold} onClick={() => onGo("reviews")} dim={!reviews} />
+      </div>
+
+      {leeches > 0 && (
+        <button className="tap" onClick={onTrouble} style={{ width: "100%", marginTop: 10, textAlign: "left", border: `1px solid ${T.terra}55`, background: `${T.terra}10`, borderRadius: 14, padding: "12px 14px", cursor: "pointer" }}>
+          <span style={{ fontWeight: 700, color: T.terra }}>⚠️ {leeches} tricky {leeches === 1 ? "item" : "items"}</span>
+          <span style={{ color: T.textDim, fontSize: 13 }}> — practice them now</span>
+        </button>
+      )}
+
+      <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+        {STAGE_GROUPS.map((g) => (
+          <div key={g} style={{ flex: 1, textAlign: "center", background: T.panel, border: `1px solid ${T.line}`, borderRadius: 12, padding: "9px 2px" }}>
+            <div style={{ fontSize: 17, fontWeight: 800, color: stageMeta(g === "Apprentice" ? 1 : g === "Guru" ? 5 : g === "Master" ? 7 : g === "Enlightened" ? 8 : 9).color }}>{stageCounts[g] || 0}</div>
+            <div style={{ fontSize: 9.5, color: T.textDim, marginTop: 1 }}>{g}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+        <button className="tap" onClick={() => onGo("script")} style={{ flex: 1, border: `1px solid ${T.line}`, background: T.panel, borderRadius: 14, padding: "13px", fontWeight: 700, color: T.gold }}>あ Script trainer</button>
+        <button className="tap" onClick={() => onGo("items")} style={{ flex: 1, border: `1px solid ${T.line}`, background: T.panel, borderRadius: 14, padding: "13px", fontWeight: 700, color: T.gold }}>All items</button>
+      </div>
+
+      <div style={{ marginTop: 14, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: 13, color: T.textDim }}>Lesson batch size</span>
+          <div style={{ display: "flex", gap: 6 }}>
+            {[3, 5, 10].map((n) => (
+              <button key={n} className="tap" onClick={() => onSetting({ lessonBatch: n })} style={{ width: 38, padding: "6px 0", borderRadius: 9, border: `1px solid ${state.settings.lessonBatch === n ? T.gold : T.line}`, background: state.settings.lessonBatch === n ? `${T.gold}14` : "transparent", color: state.settings.lessonBatch === n ? T.gold : T.textDim, fontWeight: 700, fontSize: 13 }}>{n}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {!confirm ? (
+        <button className="tap" onClick={() => setConfirm(true)} style={{ width: "100%", marginTop: 12, padding: 10, borderRadius: 12, border: "none", background: "transparent", color: T.textDim, fontSize: 12 }}>Reset all progress</button>
+      ) : (
+        <div style={{ marginTop: 12, textAlign: "center" }}>
+          <div style={{ fontSize: 12.5, color: T.red, marginBottom: 8 }}>This erases all progress. Are you sure?</div>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button className="tap" onClick={() => setConfirm(false)} style={{ flex: 1, padding: 10, borderRadius: 11, border: `1px solid ${T.line}`, background: T.panel, color: T.text, fontWeight: 600 }}>Cancel</button>
+            <button className="tap" onClick={() => { onReset(); setConfirm(false); }} style={{ flex: 1, padding: 10, borderRadius: 11, border: "none", background: T.red, color: "#fff", fontWeight: 700 }}>Reset</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ===================== ITEMS BROWSER ===================== */
+function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice }) {
+  const [filter, setFilter] = useState("all");
+  const [selected, setSelected] = useState({});
+  const now = Date.now();
+
+  const shown = allItems.filter((it) => {
+    const p = state.progress[it.id];
+    if (filter === "learned") return !!p;
+    if (filter === "due") return p && p.due !== Infinity && p.due <= now;
+    if (filter === "leech") return isLeech(p);
+    if (filter === "locked") return !p && !it.custom && it.level > level;
+    return it.custom || it.level <= level || !!p;
+  });
+
+  const badge = (it) => {
+    const p = state.progress[it.id];
+    if (!p) return { t: it.level > level ? "Locked" : "New", c: it.level > level ? T.textDim : T.terra };
+    const m = stageMeta(p.stage);
+    return { t: m.short, c: m.color };
+  };
+
+  const toggle = (id) => setSelected((s) => ({ ...s, [id]: !s[id] }));
+  const startSelected = () => {
+    const items = allItems.filter((it) => selected[it.id] && state.progress[it.id]);
+    if (items.length) onStartPractice(items);
+  };
+  const selCount = Object.values(selected).filter(Boolean).length;
+
+  const filters = [["all","All"],["learned","Learned"],["due","Due"],["leech","Tricky"],["locked","Locked"]];
+
+  return (
+    <div className="fade">
+      <div style={{ display: "flex", gap: 6, overflowX: "auto", paddingBottom: 4 }}>
+        {filters.map(([k, label]) => (
+          <button key={k} className="tap" onClick={() => setFilter(k)} style={{ whiteSpace: "nowrap", padding: "7px 13px", borderRadius: 999, border: `1px solid ${filter === k ? T.gold : T.line}`, background: filter === k ? `${T.gold}14` : T.panel, color: filter === k ? T.gold : T.textDim, fontWeight: 600, fontSize: 13 }}>{label}</button>
+        ))}
+      </div>
+
+      {selCount > 0 && (
+        <button className="tap" onClick={startSelected} style={{ width: "100%", margin: "10px 0", padding: 12, borderRadius: 13, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontWeight: 700 }}>
+          Practice {selCount} selected →
+        </button>
+      )}
+
+      <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
+        {shown.map((it) => {
+          const b = badge(it);
+          const p = state.progress[it.id];
+          const sel = !!selected[it.id];
+          return (
+            <div key={it.id} onClick={() => p && toggle(it.id)} style={{ display: "flex", alignItems: "center", gap: 12, background: sel ? `${T.gold}0e` : T.panel, border: `1px solid ${sel ? T.gold : T.line}`, borderRadius: 14, padding: "11px 13px", cursor: p ? "pointer" : "default" }}>
+              <div style={{ fontFamily: jaFont, fontSize: 26, color: T.text, minWidth: 64 }}>{it.ja}</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 14, color: T.text, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{it.en}</div>
+                <div style={{ fontSize: 12, color: T.goldSoft, fontStyle: "italic" }}>{it.romaji}</div>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: b.c }}>{b.t}</div>
+                {p && p.due !== Infinity && (<div style={{ fontSize: 10, color: T.textDim }}>{fmtUntil(p.due, now)}</div>)}
+              </div>
+              <Speaker text={it.ja} size={14} color={T.terra} />
+            </div>
+          );
+        })}
+        {shown.length === 0 && (<div style={{ textAlign: "center", color: T.textDim, padding: "30px 0", fontSize: 14 }}>Nothing here yet.</div>)}
+      </div>
+    </div>
+  );
+}
+
+/* ===================== STATS ===================== */
+function MiniBars({ series, color, unit }) {
+  const max = Math.max(1, ...series.map((s) => s.v));
+  return (
+    <div style={{ display: "flex", alignItems: "flex-end", gap: 4, height: 70 }}>
+      {series.map((s, idx) => (
+        <div key={idx} style={{ flex: 1, textAlign: "center" }}>
+          <div style={{ height: 54, display: "flex", alignItems: "flex-end" }}>
+            <div title={`${s.v} ${unit}`} style={{ width: "100%", height: `${(s.v / max) * 100}%`, minHeight: s.v ? 3 : 0, background: color, borderRadius: 4, transition: "height .3s ease" }} />
+          </div>
+          <div style={{ fontSize: 9, color: T.textDim, marginTop: 3 }}>{s.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+function StatsView({ state, allItems, level, streak }) {
+  const now = Date.now();
+  const learned = allItems.filter((it) => state.progress[it.id]).length;
+  const burned = allItems.filter((it) => (state.progress[it.id]?.stage || 0) >= 9).length;
+  const days = [];
+  for (let k = 6; k >= 0; k--) {
+    const d = shiftDay(todayStr(), -k);
+    days.push({ label: ["S","M","T","W","T","F","S"][new Date(d + "T00:00:00Z").getUTCDay()], v: state.history[d] || 0 });
+  }
+  const stageDist = {};
+  allItems.forEach((it) => { const p = state.progress[it.id]; if (!p) return; const g = stageMeta(p.stage).group; stageDist[g] = (stageDist[g] || 0) + 1; });
+
+  const Stat = ({ v, l, c }) => (
+    <div style={{ flex: 1, textAlign: "center", background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: "13px 4px" }}>
+      <div style={{ fontSize: 24, fontWeight: 800, color: c }}>{v}</div>
+      <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 2 }}>{l}</div>
+    </div>
+  );
+
+  return (
+    <div className="fade">
+      <div style={{ display: "flex", gap: 8 }}>
+        <Stat v={level} l="Level" c={T.gold} />
+        <Stat v={learned} l="Learned" c={T.terra} />
+        <Stat v={burned} l="Burned" c={T.text} />
+        <Stat v={streak + "🔥"} l="Streak" c={T.gold} />
+      </div>
+
+      <div style={{ marginTop: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16, padding: "14px 16px" }}>
+        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>Reviews — last 7 days</div>
+        <MiniBars series={days} color={T.gold} unit="reviews" />
+      </div>
+
+      <div style={{ marginTop: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16, padding: "14px 16px" }}>
+        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>SRS distribution</div>
+        {STAGE_GROUPS.map((g) => {
+          const v = stageDist[g] || 0;
+          const pct = learned ? v / learned : 0;
+          const c = stageMeta(g === "Apprentice" ? 1 : g === "Guru" ? 5 : g === "Master" ? 7 : g === "Enlightened" ? 8 : 9).color;
+          return (
+            <div key={g} style={{ marginBottom: 8 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5, color: T.textDim, marginBottom: 3 }}><span>{g}</span><span>{v}</span></div>
+              <div style={{ height: 7, background: T.line, borderRadius: 7, overflow: "hidden" }}>
+                <div style={{ height: "100%", width: `${pct * 100}%`, background: c, transition: "width .4s ease" }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ marginTop: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16, padding: "14px 16px" }}>
+        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>Level progress</div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {Array.from({ length: MAX_LEVEL }, (_, k) => k + 1).map((l) => {
+            const items = ITEMS.filter((it) => it.level === l);
+            const guru = items.filter((it) => (state.progress[it.id]?.stage || 0) >= 5).length;
+            const done = items.length && guru === items.length;
+            const cur = l === level;
+            return (
+              <div key={l} style={{ width: 30, height: 30, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11.5, fontWeight: 700, background: done ? T.gold : cur ? `${T.terra}22` : T.panelHi, color: done ? "#fff" : cur ? T.terra : (l > level ? T.textDim : T.text), border: `1px solid ${cur ? T.terra : T.line}` }}>{l}</div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ===================== SCRIPT TRAINER (kana) ===================== */
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function Stat({ label, value, color }) {
+  return (
+    <div style={{ flex: 1, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 13, padding: "10px 6px", textAlign: "center" }}>
+      <div style={{ fontSize: 17, fontWeight: 800, color: color || T.text }}>{value}</div>
+      <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 2, textTransform: "uppercase", letterSpacing: 0.4 }}>{label}</div>
+    </div>
+  );
+}
+
+const KANA_SETS = { hira: HIRAGANA, kata: KATAKANA };
+function strokeInfo(glyph, chart) { return chart === "kata" ? STROKES_KATA[glyph] : STROKES[glyph]; }
+
+/* a kana multiple-choice question: compare on romaji (index 1) */
+function makeKanaQ(answer, set) {
+  const pool = shuffle(set.filter((x) => x[1] !== answer[1])).slice(0, 3);
+  const options = shuffle([answer, ...pool]);
+  return { answer, options };
+}
+
+/* type-mode match: accept romaji OR kana typed for a target glyph */
+function kanaTypeMatch(typed, glyph) {
+  const t = (typed || "").trim();
+  if (!t) return false;
+  const g = kataToHira(glyph);
+  if (kataToHira(t) === g) return true;
+  if (romajiToKana(normRomaji(t)) === g) return true;
+  return false;
+}
+
+/* ---- wrapper with mode tabs + hiragana/katakana toggle ---- */
+function ScriptView({ scriptState, setScript }) {
+  const ss = scriptState || {};
+  const chart = ss.chart || "hira";
+  const set = KANA_SETS[chart];
+  const setChart = (c) => setScript({ ...ss, chart: c });
+  const [mode, setMode] = useState("train");
+
+  return (
+    <div className="fade" style={{ paddingTop: 6 }}>
+      {/* mode tabs */}
+      <div style={{ display: "flex", gap: 6, background: T.panelHi, border: `1px solid ${T.line}`, padding: 5, borderRadius: 13, marginBottom: 12 }}>
+        {[["train", "🎓 Train"], ["chart", "📖 Chart"], ["quiz", "✨ Quiz"], ["trace", "✍️ Trace"]].map(([k, label]) => (
+          <button key={k} className="tap" onClick={() => setMode(k)} style={{ flex: 1, border: "none", borderRadius: 9, padding: "9px 2px", fontSize: 12, fontWeight: 600, color: mode === k ? "#fff" : T.textDim, background: mode === k ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : "transparent" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* hiragana / katakana toggle */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 16 }}>
+        {[["hira", "ひらがな Hiragana"], ["kata", "カタカナ Katakana"]].map(([k, label]) => (
+          <button key={k} className="tap" onClick={() => setChart(k)} style={{ flex: 1, border: `1px solid ${chart === k ? T.gold : T.line}`, borderRadius: 11, padding: "9px 4px", fontSize: 12.5, fontWeight: 700, color: chart === k ? T.gold : T.textDim, background: chart === k ? `${T.gold}14` : T.panel }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {mode === "train" && <ScriptTrain scriptState={ss} setScript={setScript} chart={chart} set={set} />}
+      {mode === "chart" && <ScriptChart set={set} chart={chart} />}
+      {mode === "quiz" && <ScriptQuiz set={set} chart={chart} />}
+      {mode === "trace" && <ScriptTrace set={set} chart={chart} />}
+    </div>
+  );
+}
+
+/* ===================== TRAIN: learn a batch, then quiz (SRS-lite) ===================== */
+function ScriptTrain({ scriptState, setScript, chart, set }) {
+  const ss = scriptState || { progress: {}, best: 0, batch: 5 };
+  const prog = ss.progress || {};
+  const batch = ss.batch || 5;
+  const quizDir = ss.quizDir || "recognize"; // recognize | type
+
+  const [mode, setMode] = useState("menu"); // menu | teach | quiz | done
+  const [teachQueue, setTeachQueue] = useState([]);
+  const [tIdx, setTIdx] = useState(0);
+  const [quizSet, setQuizSet] = useState([]);
+  const [qIdx, setQIdx] = useState(0);
+  const [q, setQ] = useState(null);
+  const [picked, setPicked] = useState(null);
+  const [typed, setTyped] = useState("");
+  const [feedback, setFeedback] = useState(null); // null | "correct" | "wrong"
+  const [sess, setSess] = useState({ right: 0, total: 0, streak: 0, best: ss.best || 0 });
+  const timer = useRef(null);
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const learned = set.filter((a) => prog[a[0]] && prog[a[0]].learned);
+  const unlearned = set.filter((a) => !(prog[a[0]] && prog[a[0]].learned));
+  const trouble = set.filter((a) => (prog[a[0]]?.recentWrong || 0) >= 2);
+  const mastered = set.filter((a) => { const p = prog[a[0]]; return p && p.correct >= 4 && (p.recentWrong || 0) === 0; });
+
+  const saveLetter = (key, correct, newStreak) => {
+    const p = prog[key] || { learned: true, correct: 0, wrong: 0, recentWrong: 0 };
+    const np = { learned: true, correct: p.correct + (correct ? 1 : 0), wrong: p.wrong + (correct ? 0 : 1), recentWrong: correct ? 0 : (p.recentWrong || 0) + 1 };
+    setScript({ ...ss, progress: { ...prog, [key]: np }, best: Math.max(ss.best || 0, newStreak || 0) });
+  };
+  const markLearned = (key) => {
+    if (prog[key] && prog[key].learned) return;
+    const p = prog[key] || { correct: 0, wrong: 0, recentWrong: 0 };
+    setScript({ ...ss, progress: { ...prog, [key]: { ...p, learned: true } } });
+  };
+  const setBatch = (n) => setScript({ ...ss, batch: n });
+  const setDir = (d) => setScript({ ...ss, quizDir: d });
+
+  const applyResult = (glyph, correct) => {
+    const newStreak = correct ? sess.streak + 1 : 0;
+    setSess((s) => ({ right: s.right + (correct ? 1 : 0), total: s.total + 1, streak: newStreak, best: Math.max(s.best, newStreak) }));
+    saveLetter(glyph, correct, newStreak);
+  };
+
+  const startLearn = () => {
+    const next = unlearned.slice(0, batch);
+    if (!next.length) return;
+    setTeachQueue(next); setTIdx(0); setMode("teach");
+  };
+  const startQuiz = (list) => {
+    if (!list.length) return;
+    const s = shuffle(list).slice(0, 12);
+    setQuizSet(s); setQIdx(0); setPicked(null); setTyped(""); setFeedback(null);
+    setQ(makeKanaQ(s[0], set));
+    setSess({ right: 0, total: 0, streak: 0, best: ss.best || 0 });
+    setMode("quiz");
+  };
+  const advance = () => {
+    const n = qIdx + 1;
+    if (n >= quizSet.length) { setMode("done"); return; }
+    setQIdx(n); setPicked(null); setTyped(""); setFeedback(null);
+    setQ(makeKanaQ(quizSet[n], set));
+  };
+
+  const choose = (opt) => {
+    if (picked) return;
+    const ans = q.answer;
+    const correct = opt[1] === ans[1];
+    speak(ans[0]); setPicked(opt); applyResult(ans[0], correct);
+    timer.current = setTimeout(advance, 950);
+  };
+  const checkType = () => {
+    const ans = q.answer;
+    if (feedback) { advance(); return; }
+    const correct = kanaTypeMatch(typed, ans[0]);
+    speak(ans[0]); setFeedback(correct ? "correct" : "wrong"); applyResult(ans[0], correct);
+  };
+  const giveUpType = () => {
+    if (feedback) return;
+    const ans = q.answer;
+    speak(ans[0]); setFeedback("wrong"); applyResult(ans[0], false);
+  };
+  const flipDir = () => {
+    clearTimeout(timer.current);
+    setDir(quizDir === "recognize" ? "type" : "recognize");
+    setPicked(null); setTyped(""); setFeedback(null);
+  };
+
+  const chartName = chart === "kata" ? "katakana" : "hiragana";
+
+  /* ---------- MENU ---------- */
+  if (mode === "menu") {
+    return (
+      <div className="fade" style={{ paddingTop: 4 }}>
+        <div style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 20, padding: "18px 18px 16px", marginBottom: 14, boxShadow: "0 12px 30px rgba(128,29,92,.08)" }}>
+          <div style={{ fontFamily: displayFont, fontSize: 21, color: T.gold }}>Master the {chartName}</div>
+          <div style={{ fontSize: 12.5, color: T.textDim, marginTop: 3, lineHeight: 1.5 }}>
+            Learn {batch} kana, then quiz them — same idea as the word lessons. Lock in the script and reading everything else gets far easier.
+          </div>
+          <div style={{ margin: "14px 0 6px" }}><Bar pct={learned.length / set.length} /></div>
+          <div style={{ fontSize: 12, color: T.textDim }}>{learned.length} / {set.length} kana learned · {mastered.length} mastered</div>
+        </div>
+
+        <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+          <Stat label="Best streak" value={`${ss.best || 0}🔥`} color={T.terra} />
+          <Stat label="Learned" value={learned.length} color={T.gold} />
+          <Stat label="Trouble" value={trouble.length} color={trouble.length ? T.red : T.textDim} />
+        </div>
+
+        <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: 12, marginBottom: 14 }}>
+          <div style={{ fontSize: 12.5, color: T.textDim, marginBottom: 8 }}>Quiz style</div>
+          <div style={{ display: "flex", gap: 6 }}>
+            {[["recognize", "👀 See kana → pick sound"], ["type", "⌨️ Hear sound → type kana"]].map(([k, label]) => (
+              <button key={k} className="tap" onClick={() => setDir(k)} style={{ flex: 1, border: "none", borderRadius: 10, padding: "10px 6px", fontSize: 11.5, fontWeight: 600, lineHeight: 1.3, color: quizDir === k ? "#fff" : T.textDim, background: quizDir === k ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : T.panelHi }}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <button className="tap" onClick={startLearn} disabled={!unlearned.length} style={{ width: "100%", padding: 15, borderRadius: 14, marginBottom: 10, background: unlearned.length ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : T.panel, color: unlearned.length ? "#fff" : T.textDim, fontSize: 15, fontWeight: 700, boxShadow: unlearned.length ? "0 8px 20px rgba(128,29,92,.18)" : "none", border: unlearned.length ? "none" : `1px solid ${T.line}` }}>
+          {unlearned.length ? `Learn next ${Math.min(batch, unlearned.length)} kana →` : `All ${set.length} ${chartName} learned 🎉`}
+        </button>
+
+        <button className="tap" onClick={() => startQuiz(learned)} disabled={!learned.length} style={{ width: "100%", padding: 13, borderRadius: 13, marginBottom: 10, border: `1px solid ${learned.length ? T.gold : T.line}`, background: learned.length ? `${T.gold}10` : T.panel, color: learned.length ? T.gold : T.textDim, fontSize: 14, fontWeight: 700 }}>
+          ✨ Quiz learned kana
+        </button>
+
+        <button className="tap" onClick={() => startQuiz(trouble)} disabled={!trouble.length} style={{ width: "100%", padding: 13, borderRadius: 13, border: `1px solid ${trouble.length ? T.red : T.line}`, background: trouble.length ? `${T.red}0f` : T.panel, color: trouble.length ? T.red : T.textDim, fontSize: 14, fontWeight: 700 }}>
+          🔁 Drill trouble kana {trouble.length ? `(${trouble.length})` : ""}
+        </button>
+
+        <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16, padding: 16, marginTop: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <span style={{ fontSize: 14 }}>Kana per quiz</span>
+            <div style={{ display: "flex", gap: 8 }}>
+              {[3, 5, 7, 10].map((n) => (
+                <button key={n} className="tap" onClick={() => setBatch(n)} style={{ border: `1px solid ${batch === n ? T.gold : T.line}`, background: batch === n ? `${T.gold}18` : "transparent", color: batch === n ? T.gold : T.textDim, borderRadius: 9, padding: "6px 11px", fontSize: 13, fontWeight: 600 }}>{n}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {trouble.length > 0 && (
+          <div style={{ marginTop: 14, display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center" }}>
+            {trouble.map((a) => (
+              <span key={a[0]} style={{ fontFamily: jaFont, fontSize: 26, color: T.red, border: `1px solid ${T.red}44`, borderRadius: 9, padding: "2px 10px" }}>{a[0]}</span>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  /* ---------- TEACH ---------- */
+  if (mode === "teach") {
+    const a = teachQueue[tIdx];
+    const sk = strokeInfo(a[0], chart);
+    return (
+      <div className="fade">
+        <div style={{ height: 4, background: T.line, borderRadius: 4, overflow: "hidden", marginBottom: 14 }}>
+          <div style={{ height: "100%", width: `${(tIdx / teachQueue.length) * 100}%`, background: `linear-gradient(90deg, ${T.gold}, ${T.terra})` }} />
+        </div>
+        <div className="pop" key={a[0]} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "26px 22px", textAlign: "center", boxShadow: "0 12px 34px rgba(128,29,92,.10)" }}>
+          <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: 1, color: T.goldSoft }}>New kana</div>
+          <div style={{ fontFamily: jaFont, fontSize: 96, color: T.text, lineHeight: 1.1, margin: "6px 0 4px" }}>{a[0]}</div>
+          <div style={{ fontSize: 22, color: T.gold, fontWeight: 700 }}>{a[1]}</div>
+          {a[2] && <div style={{ fontSize: 13, color: T.textDim, marginTop: 4, lineHeight: 1.5 }}>{a[2]}</div>}
+          {sk && (
+            <div style={{ fontSize: 12.5, color: T.gold, marginTop: 8, lineHeight: 1.5 }}>
+              ✍️ {sk[0]} stroke{sk[0] > 1 ? "s" : ""}{sk[1] ? ` · ${sk[1]}` : ""}
+            </div>
+          )}
+          <div style={{ marginTop: 14 }}><Speaker text={a[0]} size={20} color={T.gold} /></div>
+        </div>
+        <button className="tap" onClick={() => { markLearned(a[0]); if (tIdx + 1 >= teachQueue.length) startQuiz(teachQueue); else setTIdx(tIdx + 1); }}
+          style={{ width: "100%", marginTop: 14, padding: 15, borderRadius: 14, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontSize: 15, fontWeight: 700 }}>
+          {tIdx + 1 >= teachQueue.length ? "Got them — quiz me →" : "Learn it ✓"}
+        </button>
+        <div style={{ textAlign: "center", fontSize: 12, color: T.textDim, marginTop: 10 }}>Learning {tIdx + 1} of {teachQueue.length}</div>
+      </div>
+    );
+  }
+
+  /* ---------- DONE ---------- */
+  if (mode === "done") {
+    const acc = sess.total ? Math.round((sess.right / sess.total) * 100) : 0;
+    return (
+      <div className="fade pop" style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 20, padding: "40px 24px", textAlign: "center" }}>
+        <div style={{ fontSize: 38, marginBottom: 8 }}>🎉</div>
+        <div style={{ fontFamily: displayFont, fontSize: 22 }}>Nice work!</div>
+        <div style={{ color: T.textDim, fontSize: 14, marginTop: 8 }}>{sess.right}/{sess.total} correct · {acc}% · best streak {sess.best}🔥</div>
+        <button className="tap" onClick={() => setMode("menu")} style={{ width: "100%", marginTop: 18, padding: 14, borderRadius: 13, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontWeight: 700 }}>Back</button>
+      </div>
+    );
+  }
+
+  /* ---------- QUIZ ---------- */
+  const ans = q.answer;
+  const isType = quizDir === "type";
+  const correct = feedback === "correct";
+  const wrong = feedback === "wrong";
+  const preview = !/[\u3040-\u30ff]/.test(typed) ? romajiToKana(typed) : typed;
+
+  return (
+    <div className="fade">
+      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+        <Stat label="Score" value={`${sess.right}/${sess.total}`} color={T.gold} />
+        <Stat label="Streak" value={`${sess.streak}🔥`} color={T.terra} />
+        <Stat label="Best" value={sess.best} color={T.green} />
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
+        <button className="tap" onClick={flipDir} style={{ border: `1px solid ${T.line}`, background: T.panelHi, color: T.gold, borderRadius: 20, padding: "7px 14px", fontSize: 12, fontWeight: 600 }}>
+          {isType ? "Hear sound → type kana" : "See kana → pick sound"} ⇄
+        </button>
+      </div>
+
+      {!isType ? (
+        <>
+          <div className="pop" key={ans[0] + qIdx} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "26px 20px", textAlign: "center", boxShadow: "0 12px 30px rgba(128,29,92,.10)", marginBottom: 16 }}>
+            <div style={{ fontSize: 12, color: T.textDim, marginBottom: 10 }}>Which sound is this?</div>
+            <div style={{ fontFamily: jaFont, fontSize: 88, color: T.text, lineHeight: 1 }}>{ans[0]}</div>
+            <div style={{ marginTop: 12 }}><Speaker text={ans[0]} size={18} color={T.terra} /></div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            {q.options.map((opt, i) => {
+              let bg = T.panel, border = T.line, col = T.text;
+              if (picked) {
+                const isCorrect = opt[1] === ans[1];
+                const isPicked = opt[1] === picked[1];
+                if (isCorrect) { bg = `${T.green}1a`; border = T.green; col = T.gold; }
+                else if (isPicked) { bg = `${T.red}1a`; border = T.red; col = T.red; }
+              }
+              return (
+                <button key={i} className="tap" onClick={() => choose(opt)} style={{ background: bg, border: `1.5px solid ${border}`, borderRadius: 14, padding: "14px 8px", cursor: "pointer", minHeight: 58, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontFamily: displayFont, fontSize: 22, color: col, fontWeight: 600 }}>{opt[1]}</span>
+                </button>
+              );
+            })}
+          </div>
+          {picked && (
+            <div className="fade" style={{ textAlign: "center", marginTop: 14, fontSize: 14 }}>
+              <span style={{ fontFamily: jaFont, fontSize: 26, color: T.text }}>{ans[0]}</span>
+              <span style={{ color: T.textDim }}> = </span>
+              <span style={{ color: T.gold, fontWeight: 700 }}>{ans[1]}</span>
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          <div className="pop" key={ans[0] + qIdx} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "22px 20px", textAlign: "center", boxShadow: "0 12px 30px rgba(128,29,92,.10)" }}>
+            <div style={{ fontSize: 12, color: T.textDim, marginBottom: 8 }}>Type the kana for this sound</div>
+            <div style={{ fontFamily: displayFont, fontSize: 40, color: T.gold, fontWeight: 700 }}>{ans[1]}</div>
+            <div style={{ marginTop: 10 }}><Speaker text={ans[0]} size={18} color={T.terra} /></div>
+          </div>
+
+          <div style={{ position: "relative", marginTop: 12 }}>
+            <input value={typed} onChange={(e) => !feedback && setTyped(e.target.value)} onKeyDown={(e) => e.key === "Enter" && checkType()}
+              placeholder="type romaji…  e.g. shi" readOnly={!!feedback} autoCapitalize="off" autoCorrect="off" spellCheck={false}
+              style={{ width: "100%", padding: "12px 16px", borderRadius: 14, border: `2px solid ${correct ? T.green : wrong ? T.red : T.line}`, background: correct ? `${T.green}10` : wrong ? `${T.red}10` : T.panel, color: T.text, fontSize: 18, outline: "none", textAlign: "center" }} />
+            {typed && !feedback && (
+              <div style={{ textAlign: "center", marginTop: 8, fontFamily: jaFont, fontSize: 30, color: T.gold }}>{preview}</div>
+            )}
+          </div>
+
+          {feedback && (
+            <div className="fade" style={{ marginTop: 12, background: T.panel, border: `1px solid ${wrong ? T.red : T.green}`, borderRadius: 14, padding: "12px 14px", textAlign: "center" }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: wrong ? T.red : T.green }}>{correct ? "Correct!" : "Answer:"}</div>
+              <div style={{ fontFamily: jaFont, fontSize: 44, color: T.text, marginTop: 2 }}>{ans[0]}</div>
+              <div style={{ color: T.gold, fontSize: 15, fontWeight: 700 }}>{ans[1]}</div>
+            </div>
+          )}
+
+          <button className="tap" onClick={checkType} style={{ width: "100%", marginTop: 12, padding: 15, borderRadius: 14, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontSize: 15, fontWeight: 700 }}>
+            {feedback ? (qIdx + 1 >= quizSet.length ? "Finish" : "Next →") : "Check answer"}
+          </button>
+          {!feedback && (
+            <button className="tap" onClick={giveUpType} style={{ width: "100%", marginTop: 8, padding: 11, borderRadius: 12, border: `1px solid ${T.line}`, background: "transparent", color: T.textDim, fontSize: 13, fontWeight: 600 }}>
+              I don't know — show me
+            </button>
+          )}
+        </>
+      )}
+
+      <button className="tap" onClick={() => { clearTimeout(timer.current); setMode("menu"); }} style={{ width: "100%", marginTop: 16, padding: 10, borderRadius: 12, border: "none", background: "transparent", color: T.textDim, fontSize: 12 }}>
+        End session
+      </button>
+      <div style={{ fontSize: 11, color: T.textDim, textAlign: "center", marginTop: 6, lineHeight: 1.6 }}>
+        {qIdx + 1} of {quizSet.length} · {isType ? "tap 🔊 to hear the sound, then type romaji — it becomes kana." : "you'll hear each kana as you answer."}
+      </div>
+    </div>
+  );
+}
+
+/* ===================== CHART: full kana reference ===================== */
+function ScriptChart({ set, chart }) {
+  const rows = [];
+  let i = 0;
+  // group into rows of 5, with the small y-/w-/n- groups handled naturally
+  const groups = [];
+  let cur = [];
+  set.forEach((k) => { cur.push(k); if (cur.length === 5) { groups.push(cur); cur = []; } });
+  if (cur.length) groups.push(cur);
+
+  return (
+    <div className="fade" style={{ paddingTop: 4 }}>
+      <div style={{ fontFamily: displayFont, fontSize: 20, marginBottom: 6 }}>The {chart === "kata" ? "katakana" : "hiragana"} chart</div>
+      <p style={{ fontSize: 13.5, color: T.textDim, lineHeight: 1.7, marginTop: 0 }}>
+        Japanese is written left-to-right. Each kana is one syllable. {chart === "kata" ? "Katakana is used for foreign words, names, and emphasis." : "Hiragana is the everyday script for native words and grammar."} Tap any kana to hear it.
+      </p>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 7, marginTop: 14 }}>
+        {set.map((k) => {
+          const sk = strokeInfo(k[0], chart);
+          return (
+            <button key={k[0]} className="tap" onClick={() => speak(k[0])} style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 12, padding: "10px 4px 8px", textAlign: "center", cursor: "pointer", position: "relative" }}>
+              {sk && <span style={{ position: "absolute", top: 4, right: 6, fontSize: 9, color: T.textDim }}>{sk[0]}</span>}
+              <div style={{ fontFamily: jaFont, fontSize: 30, color: T.text, lineHeight: 1.1 }}>{k[0]}</div>
+              <div style={{ fontSize: 11, color: T.gold, fontWeight: 700, marginTop: 2 }}>{k[1]}</div>
+            </button>
+          );
+        })}
+      </div>
+
+      <div style={{ fontFamily: displayFont, fontSize: 16, margin: "22px 0 10px", color: T.gold }}>Watch out for these</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {LEGEND.map(([k, v]) => (
+          <div key={k} style={{ display: "flex", gap: 10, alignItems: "baseline", background: T.panel, border: `1px solid ${T.line}`, borderRadius: 12, padding: "10px 13px" }}>
+            <div style={{ fontFamily: jaFont, fontSize: 15, color: T.terra, fontWeight: 700, minWidth: 64 }}>{k}</div>
+            <div style={{ fontSize: 12.5, color: T.textDim, lineHeight: 1.5 }}>{v}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginTop: 16, lineHeight: 1.6 }}>
+        The small number in each cell is the stroke count. Try the <b style={{ color: T.text }}>Trace</b> tab to practice writing.
+      </div>
+    </div>
+  );
+}
+
+/* ===================== QUIZ: standalone recognition drill ===================== */
+function ScriptQuiz({ set, chart }) {
+  const [dirMode, setDirMode] = useState("k2s"); // k2s: kana→sound · s2k: sound→kana
+  const [q, setQ] = useState(() => makeKanaQ(set[Math.floor(Math.random() * set.length)], set));
+  const [picked, setPicked] = useState(null);
+  const [score, setScore] = useState({ right: 0, total: 0, streak: 0, best: 0 });
+  const timer = useRef(null);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  // reset question when the chart changes
+  useEffect(() => { setQ(makeKanaQ(set[Math.floor(Math.random() * set.length)], set)); setPicked(null); }, [chart]); // eslint-disable-line
+
+  const showKana = dirMode === "k2s";
+  const next = () => { setPicked(null); setQ(makeKanaQ(set[Math.floor(Math.random() * set.length)], set)); };
+  const choose = (opt) => {
+    if (picked) return;
+    const ok = opt[1] === q.answer[1];
+    speak(q.answer[0]); setPicked(opt);
+    setScore((s) => { const streak = ok ? s.streak + 1 : 0; return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: Math.max(s.best, streak) }; });
+    timer.current = setTimeout(next, 950);
+  };
+  const acc = score.total ? Math.round((score.right / score.total) * 100) : 0;
+
+  return (
+    <div className="fade">
+      <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+        <Stat label="Score" value={`${score.right}/${score.total}`} color={T.gold} />
+        <Stat label="Accuracy" value={`${acc}%`} color={T.terra} />
+        <Stat label="Streak" value={`${score.streak}🔥`} color={T.amber} />
+        <Stat label="Best" value={score.best} color={T.green} />
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+        <button className="tap" onClick={() => { setDirMode((d) => (d === "k2s" ? "s2k" : "k2s")); setPicked(null); }} style={{ border: `1px solid ${T.line}`, background: T.panelHi, color: T.gold, borderRadius: 20, padding: "7px 14px", fontSize: 12.5, fontWeight: 600 }}>
+          {showKana ? "See kana → pick sound" : "See sound → pick kana"} ⇄
+        </button>
+      </div>
+
+      <div className="pop" key={q.answer[1] + dirMode} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "30px 20px", textAlign: "center", boxShadow: "0 14px 36px rgba(128,29,92,.10)", marginBottom: 16 }}>
+        <div style={{ fontSize: 12, color: T.textDim, marginBottom: 10 }}>{showKana ? "Which sound is this?" : "Which kana makes this sound?"}</div>
+        {showKana ? (
+          <div style={{ fontFamily: jaFont, fontSize: 84, color: T.text, lineHeight: 1 }}>{q.answer[0]}</div>
+        ) : (
+          <div style={{ fontFamily: displayFont, fontSize: 44, color: T.gold, fontWeight: 700 }}>{q.answer[1]}</div>
+        )}
+        <div style={{ marginTop: 14 }}><Speaker text={q.answer[0]} size={18} color={T.terra} /></div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        {q.options.map((opt, i) => {
+          let bg = T.panel, border = T.line, col = T.text;
+          if (picked) {
+            const isCorrect = opt[1] === q.answer[1];
+            const isPicked = opt[1] === picked[1];
+            if (isCorrect) { bg = `${T.green}1a`; border = T.green; col = T.gold; }
+            else if (isPicked) { bg = `${T.red}1a`; border = T.red; col = T.red; }
+          }
+          return (
+            <button key={i} className="tap" onClick={() => choose(opt)} style={{ background: bg, border: `1.5px solid ${border}`, borderRadius: 14, padding: showKana ? "12px 8px" : "16px 8px", cursor: "pointer", minHeight: 64, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {showKana ? (
+                <span style={{ fontFamily: displayFont, fontSize: 22, color: col, fontWeight: 600 }}>{opt[1]}</span>
+              ) : (
+                <span style={{ fontFamily: jaFont, fontSize: 40, color: col }}>{opt[0]}</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {picked && (
+        <div className="fade" style={{ textAlign: "center", marginTop: 16, fontSize: 14 }}>
+          <span style={{ fontFamily: jaFont, fontSize: 26, color: T.text }}>{q.answer[0]}</span>
+          <span style={{ color: T.textDim }}> = </span>
+          <span style={{ color: T.gold, fontWeight: 700 }}>{q.answer[1]}</span>
+        </div>
+      )}
+
+      <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginTop: 18, lineHeight: 1.6 }}>
+        Tap an answer — you'll hear the kana and the next question loads automatically.
+      </div>
+    </div>
+  );
+}
+
+/* ===================== TRACE: handwriting practice ===================== */
+function ScriptTrace({ set, chart }) {
+  const [tmode, setTmode] = useState("practice"); // practice | quiz
+  const [idx, setIdx] = useState(0);
+  const [showGuide, setShowGuide] = useState(true);
+  const [qIdx, setQIdx] = useState(() => Math.floor(Math.random() * set.length));
+  const [revealed, setRevealed] = useState(false);
+  const [score, setScore] = useState({ right: 0, total: 0, streak: 0, best: 0 });
+  const canvasRef = useRef(null);
+  const drawing = useRef(false);
+  const last = useRef(null);
+  const [, setStrokes] = useState(0);
+
+  const isQuiz = tmode === "quiz";
+  const activeIdx = (isQuiz ? qIdx : idx) % set.length;
+  const kana = set[activeIdx];
+  const sk = strokeInfo(kana[0], chart);
+  const guideOn = isQuiz ? revealed : showGuide;
+  const showDetails = !isQuiz || revealed;
+
+  const setup = useCallback(() => {
+    const c = canvasRef.current; if (!c) return;
+    const rect = c.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    c.width = rect.width * dpr; c.height = rect.height * dpr;
+    const ctx = c.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = 11; ctx.strokeStyle = "#801d5c";
+  }, []);
+  useEffect(() => { setup(); const onR = () => setup(); window.addEventListener("resize", onR); return () => window.removeEventListener("resize", onR); }, [setup]);
+
+  const clear = useCallback(() => { const c = canvasRef.current; if (!c) return; const ctx = c.getContext("2d"); ctx.clearRect(0, 0, c.width, c.height); setStrokes(0); }, []);
+  useEffect(() => { clear(); }, [activeIdx, tmode, chart, clear]);
+
+  const pos = (e) => { const c = canvasRef.current; const rect = c.getBoundingClientRect(); const p = e.touches ? e.touches[0] : e; return { x: p.clientX - rect.left, y: p.clientY - rect.top }; };
+  const start = (e) => { e.preventDefault(); drawing.current = true; last.current = pos(e); setStrokes((s) => s + 1); };
+  const move = (e) => { if (!drawing.current) return; e.preventDefault(); const ctx = canvasRef.current.getContext("2d"); const p = pos(e); ctx.beginPath(); ctx.moveTo(last.current.x, last.current.y); ctx.lineTo(p.x, p.y); ctx.stroke(); last.current = p; };
+  const end = () => { drawing.current = false; };
+
+  const nextQuiz = () => { setRevealed(false); clear(); setQIdx((prev) => { let n; do { n = Math.floor(Math.random() * set.length); } while (n === prev && set.length > 1); return n; }); };
+  const grade = (ok) => { setScore((s) => { const streak = ok ? s.streak + 1 : 0; return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: Math.max(s.best, streak) }; }); nextQuiz(); };
+  const switchMode = (m) => { if (m === tmode) return; setTmode(m); setRevealed(false); clear(); if (m === "quiz") setQIdx(Math.floor(Math.random() * set.length)); };
+  const acc = score.total ? Math.round((score.right / score.total) * 100) : 0;
+
+  return (
+    <div className="fade">
+      <div style={{ display: "flex", gap: 6, background: T.panelHi, border: `1px solid ${T.line}`, padding: 5, borderRadius: 12, marginBottom: 14 }}>
+        {[["practice", "Practice"], ["quiz", "Quiz"]].map(([k, label]) => (
+          <button key={k} className="tap" onClick={() => switchMode(k)} style={{ flex: 1, border: "none", borderRadius: 8, padding: "8px 4px", fontSize: 12.5, fontWeight: 600, color: tmode === k ? "#fff" : T.textDim, background: tmode === k ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : "transparent" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ background: T.panelHi, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px", marginBottom: 14, fontSize: 12.5, lineHeight: 1.7 }}>
+        <b style={{ color: T.gold }}>Golden rules of kana handwriting</b>
+        <div style={{ color: T.textDim, marginTop: 5 }}>
+          1. Write left → right, top → bottom.<br />
+          2. Horizontal strokes go left → right.<br />
+          3. Vertical strokes go top → bottom.<br />
+          4. Follow the printed stroke order — it keeps the shape balanced.
+        </div>
+      </div>
+
+      {isQuiz && (
+        <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+          <Stat label="Score" value={`${score.right}/${score.total}`} color={T.gold} />
+          <Stat label="Accuracy" value={`${acc}%`} color={T.terra} />
+          <Stat label="Streak" value={`${score.streak}🔥`} color={T.amber} />
+          <Stat label="Best" value={score.best} color={T.green} />
+        </div>
+      )}
+
+      <div style={{ display: "flex", alignItems: "center", gap: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px", marginBottom: 14 }}>
+        <div style={{ flex: 1 }}>
+          {isQuiz && !revealed && (
+            <div style={{ fontSize: 11, color: T.terra, fontWeight: 700, letterSpacing: 0.4, marginBottom: 3 }}>WRITE THIS KANA FROM MEMORY</div>
+          )}
+          {showDetails ? (
+            <>
+              <div style={{ fontSize: 16, color: T.text, fontWeight: 600 }}>{kana[1]}</div>
+              {kana[2] && <div style={{ fontSize: 12, color: T.textDim, marginTop: 2 }}>{kana[2]}</div>}
+              {sk && <div style={{ fontSize: 12.5, color: T.gold, marginTop: 5, lineHeight: 1.5 }}>✍️ {sk[0]} stroke{sk[0] > 1 ? "s" : ""}{sk[1] ? ` · ${sk[1]}` : ""}</div>}
+            </>
+          ) : (
+            <div style={{ fontSize: 16, color: T.text, fontWeight: 600 }}>Listen, then write it.</div>
+          )}
+        </div>
+        <Speaker text={kana[0]} color={T.terra} />
+        {!isQuiz && <div style={{ fontSize: 12, color: T.textDim }}>{(idx % set.length) + 1}/{set.length}</div>}
+      </div>
+
+      <div style={{ position: "relative", width: "100%", aspectRatio: "1 / 1", background: T.panel, border: `1px solid ${T.line}`, borderRadius: 20, overflow: "hidden", boxShadow: "0 14px 36px rgba(128,29,92,.10)" }}>
+        {guideOn && (
+          <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: jaFont, fontSize: "min(58vw, 320px)", color: T.terra, opacity: 0.22, pointerEvents: "none", userSelect: "none", lineHeight: 1 }}>
+            {kana[0]}
+          </div>
+        )}
+        <div style={{ position: "absolute", top: "50%", left: 0, right: 0, borderTop: `2px dashed ${T.line}`, pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: 0, bottom: 0, left: "50%", borderLeft: `2px dashed ${T.line}`, pointerEvents: "none" }} />
+        <canvas ref={canvasRef} onMouseDown={start} onMouseMove={move} onMouseUp={end} onMouseLeave={end} onTouchStart={start} onTouchMove={move} onTouchEnd={end}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", touchAction: "none", cursor: "crosshair" }} />
+      </div>
+
+      {!isQuiz ? (
+        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+          <button className="tap" onClick={() => setIdx((i) => (i - 1 + set.length) % set.length)} style={ctrlBtn(false)}>‹ Prev</button>
+          <button className="tap" onClick={clear} style={ctrlBtn(false)}>Clear</button>
+          <button className="tap" onClick={() => setShowGuide((g) => !g)} style={ctrlBtn(showGuide)}>{showGuide ? "Hide guide" : "Show guide"}</button>
+          <button className="tap" onClick={() => setIdx((i) => (i + 1) % set.length)} style={ctrlBtn(true)}>Next ›</button>
+        </div>
+      ) : !revealed ? (
+        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+          <button className="tap" onClick={clear} style={ctrlBtn(false)}>Clear</button>
+          <button className="tap" onClick={nextQuiz} style={ctrlBtn(false)}>Skip</button>
+          <button className="tap" onClick={() => setRevealed(true)} style={{ ...ctrlBtn(true), flex: 2 }}>Reveal answer</button>
+        </div>
+      ) : (
+        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+          <button className="tap" onClick={() => grade(false)} style={{ flex: 1, padding: "12px 4px", borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: "pointer", border: `1.5px solid ${T.red}`, background: `${T.red}14`, color: T.text }}>Practice again</button>
+          <button className="tap" onClick={() => grade(true)} style={{ flex: 1, padding: "12px 4px", borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: "pointer", border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff" }}>Got it ✓</button>
+        </div>
+      )}
+
+      <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginTop: 16, lineHeight: 1.6 }}>
+        {!isQuiz ? (
+          <>Trace over the faint guide following the ✍️ stroke order. Tap “Hide guide” to test yourself from memory.</>
+        ) : !revealed ? (
+          <>Picture the kana, write it from memory, then tap <b style={{ color: T.text }}>Reveal answer</b> to check the shape. Tap 🔊 to hear it.</>
+        ) : (
+          <>Compare your writing to the guide. Be honest — did you get the <b style={{ color: T.text }}>shape and stroke order</b> right?</>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ctrlBtn(active) {
+  return { flex: 1, padding: "11px 4px", borderRadius: 12, fontSize: 12.5, fontWeight: 600, cursor: "pointer", border: active ? "none" : `1px solid ${T.line}`, background: active ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : T.panel, color: active ? "#fff" : T.text };
+}
+
+/* ===================== APP ===================== */
+/* ===================== KANJI VIEW (JLPT N5–N1) ===================== */
+function kanjiSpeak(k) {
+  if (k.exJa) return k.exJa;
+  if (k.kun && k.kun !== "—") { const f = k.kun.split("・")[0].replace(/[()]/g, ""); if (f) return f; }
+  if (k.on && k.on !== "—") return k.on.split("・")[0];
+  return k.char;
+}
+
+function makeKanjiQ(answer, pool) {
+  const others = shuffle(pool.filter((k) => k.char !== answer.char)).slice(0, 3);
+  // if a level is tiny, pad from the global set
+  let distractors = others;
+  if (distractors.length < 3) {
+    const extra = shuffle(KANJI.filter((k) => k.char !== answer.char && !others.includes(k))).slice(0, 3 - distractors.length);
+    distractors = [...distractors, ...extra];
+  }
+  return { answer, options: shuffle([answer, ...distractors]) };
+}
+
+function KanjiView({ kanjiState, setKanji }) {
+  const ks = kanjiState || {};
+  const level = ks.level || "N5";
+  const learned = ks.learned || {};
+  const setLevel = (lv) => setKanji({ ...ks, level: lv });
+  const markLearned = (char, val) => {
+    const next = { ...learned };
+    if (val) next[char] = true; else delete next[char];
+    setKanji({ ...ks, learned: next });
+  };
+
+  const [mode, setMode] = useState("browse"); // browse | study | quiz
+  const list = KANJI_BY_LEVEL[level] || [];
+  const learnedCount = list.filter((k) => learned[k.char]).length;
+
+  return (
+    <div className="fade" style={{ paddingTop: 6 }}>
+      {/* JLPT level selector */}
+      <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
+        {JLPT_LEVELS.map((lv) => (
+          <button key={lv} className="tap" onClick={() => setLevel(lv)} style={{ flex: 1, border: `1px solid ${level === lv ? T.gold : T.line}`, borderRadius: 11, padding: "10px 2px", fontSize: 13, fontWeight: 800, letterSpacing: 0.5, color: level === lv ? "#fff" : T.textDim, background: level === lv ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : T.panel }}>
+            {lv}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 18, padding: "14px 16px", marginBottom: 12 }}>
+        <div style={{ fontSize: 12.5, color: T.textDim, lineHeight: 1.5 }}>{JLPT_DESC[level]}</div>
+        <div style={{ margin: "10px 0 6px" }}><Bar pct={list.length ? learnedCount / list.length : 0} /></div>
+        <div style={{ fontSize: 12, color: T.textDim }}>{learnedCount} / {list.length} kanji marked learned</div>
+      </div>
+
+      {/* mode tabs */}
+      <div style={{ display: "flex", gap: 6, background: T.panelHi, border: `1px solid ${T.line}`, padding: 5, borderRadius: 13, marginBottom: 16 }}>
+        {[["browse", "📖 Browse"], ["study", "🎓 Study"], ["quiz", "✨ Quiz"], ["trace", "✍️ Trace"]].map(([k, label]) => (
+          <button key={k} className="tap" onClick={() => setMode(k)} style={{ flex: 1, border: "none", borderRadius: 9, padding: "9px 1px", fontSize: 11.5, fontWeight: 600, color: mode === k ? "#fff" : T.textDim, background: mode === k ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : "transparent" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {mode === "browse" && <KanjiBrowse list={list} learned={learned} onMark={markLearned} />}
+      {mode === "study" && <KanjiStudy key={level} list={list} learned={learned} onMark={markLearned} />}
+      {mode === "quiz" && <KanjiQuiz key={level} list={list} level={level} best={ks.best || 0} onBest={(b) => setKanji({ ...ks, best: Math.max(ks.best || 0, b) })} />}
+      {mode === "trace" && <KanjiTrace key={level} list={list} />}
+    </div>
+  );
+}
+
+/* ---- Browse: grid + tap for detail ---- */
+function KanjiBrowse({ list, learned, onMark }) {
+  const [sel, setSel] = useState(null);
+  const k = sel != null ? list[sel] : null;
+  return (
+    <div className="fade">
+      {k && (
+        <div className="pop" style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 20, padding: "20px 18px", marginBottom: 14, boxShadow: "0 12px 30px rgba(128,29,92,.10)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div style={{ fontFamily: jaFont, fontSize: 72, color: T.text, lineHeight: 1 }}>{k.char}</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 18, fontWeight: 700, color: T.gold }}>{k.meaning}</div>
+              <div style={{ fontSize: 13, color: T.textDim, marginTop: 6, lineHeight: 1.6 }}>
+                <span style={{ color: T.terra, fontWeight: 700 }}>On</span> {k.on}<br />
+                <span style={{ color: T.goldSoft, fontWeight: 700 }}>Kun</span> {k.kun}
+              </div>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 14, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 12, padding: "10px 12px" }}>
+            <div style={{ flex: 1 }}>
+              {k.exJa ? (
+                <>
+                  <span style={{ fontFamily: jaFont, fontSize: 20, color: T.text }}>{k.exJa}</span>
+                  <span style={{ color: T.goldSoft, fontStyle: "italic", marginLeft: 8 }}>{k.exKana}</span>
+                  <div style={{ fontSize: 12.5, color: T.textDim, marginTop: 2 }}>{k.exEn}</div>
+                </>
+              ) : (
+                <span style={{ fontSize: 12.5, color: T.textDim }}>Tap 🔊 to hear a reading</span>
+              )}
+            </div>
+            <Speaker text={kanjiSpeak(k)} color={T.terra} />
+          </div>
+          <button className="tap" onClick={() => onMark(k.char, !learned[k.char])} style={{ width: "100%", marginTop: 12, padding: 11, borderRadius: 12, border: learned[k.char] ? `1px solid ${T.gold}` : "none", background: learned[k.char] ? `${T.gold}12` : `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: learned[k.char] ? T.gold : "#fff", fontSize: 13.5, fontWeight: 700 }}>
+            {learned[k.char] ? "✓ Learned — tap to unmark" : "Mark as learned"}
+          </button>
+        </div>
+      )}
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
+        {list.map((kj, i) => (
+          <button key={kj.char} className="tap" onClick={() => setSel(i === sel ? null : i)} style={{ position: "relative", background: i === sel ? `${T.gold}14` : T.panel, border: `1.5px solid ${i === sel ? T.gold : T.line}`, borderRadius: 13, padding: "12px 4px 8px", textAlign: "center", cursor: "pointer" }}>
+            {learned[kj.char] && <span style={{ position: "absolute", top: 4, right: 6, fontSize: 10, color: T.green }}>●</span>}
+            <div style={{ fontFamily: jaFont, fontSize: 30, color: T.text, lineHeight: 1.1 }}>{kj.char}</div>
+            <div style={{ fontSize: 9.5, color: T.textDim, marginTop: 3, lineHeight: 1.2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{kj.meaning.split(",")[0]}</div>
+          </button>
+        ))}
+      </div>
+      <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginTop: 14, lineHeight: 1.6 }}>
+        Tap any kanji to see its readings and an example word. The green dot marks kanji you've learned.
+      </div>
+    </div>
+  );
+}
+
+/* ---- Study: flashcards through the level ---- */
+function KanjiStudy({ list, learned, onMark }) {
+  const [idx, setIdx] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+  if (!list.length) return <div style={{ color: T.textDim, textAlign: "center", padding: 30 }}>No kanji in this level yet.</div>;
+  const k = list[idx % list.length];
+  const advance = () => { setRevealed(false); setIdx((i) => (i + 1) % list.length); };
+
+  return (
+    <div className="fade">
+      <div style={{ height: 4, background: T.line, borderRadius: 4, overflow: "hidden", marginBottom: 14 }}>
+        <div style={{ height: "100%", width: `${((idx % list.length) / list.length) * 100}%`, background: `linear-gradient(90deg, ${T.gold}, ${T.terra})` }} />
+      </div>
+
+      <div className="pop" key={k.char} onClick={() => setRevealed(true)} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "30px 22px", textAlign: "center", boxShadow: "0 12px 34px rgba(128,29,92,.10)", cursor: revealed ? "default" : "pointer", minHeight: 240 }}>
+        <div style={{ fontFamily: jaFont, fontSize: 104, color: T.text, lineHeight: 1.05 }}>{k.char}</div>
+        {!revealed ? (
+          <div style={{ fontSize: 13, color: T.textDim, marginTop: 14 }}>Tap to reveal the reading & meaning</div>
+        ) : (
+          <div className="fade">
+            <div style={{ fontSize: 19, fontWeight: 700, color: T.gold }}>{k.meaning}</div>
+            <div style={{ fontSize: 13, color: T.textDim, marginTop: 6, lineHeight: 1.6 }}>
+              <span style={{ color: T.terra, fontWeight: 700 }}>On</span> {k.on}　·　<span style={{ color: T.goldSoft, fontWeight: 700 }}>Kun</span> {k.kun}
+            </div>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 12, padding: "8px 12px" }}>
+              {k.exJa && <span style={{ fontFamily: jaFont, fontSize: 18 }}>{k.exJa}</span>}
+              {k.exJa && <span style={{ color: T.goldSoft, fontStyle: "italic", fontSize: 13 }}>{k.exKana}</span>}
+              <Speaker text={kanjiSpeak(k)} size={16} color={T.terra} />
+            </div>
+            {k.exEn && <div style={{ fontSize: 12.5, color: T.textDim, marginTop: 6 }}>{k.exEn}</div>}
+          </div>
+        )}
+      </div>
+
+      {!revealed ? (
+        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+          <button className="tap" onClick={() => setIdx((i) => (i - 1 + list.length) % list.length)} style={ctrlBtn(false)}>‹ Prev</button>
+          <button className="tap" onClick={() => setRevealed(true)} style={{ ...ctrlBtn(true), flex: 2 }}>Reveal</button>
+          <button className="tap" onClick={advance} style={ctrlBtn(false)}>Next ›</button>
+        </div>
+      ) : (
+        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+          <button className="tap" onClick={advance} style={{ flex: 1, padding: "12px 4px", borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: "pointer", border: `1.5px solid ${T.line}`, background: T.panel, color: T.text }}>Still learning</button>
+          <button className="tap" onClick={() => { onMark(k.char, true); advance(); }} style={{ flex: 1, padding: "12px 4px", borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: "pointer", border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff" }}>Got it ✓</button>
+        </div>
+      )}
+      <div style={{ textAlign: "center", fontSize: 12, color: T.textDim, marginTop: 10 }}>
+        {(idx % list.length) + 1} of {list.length}{learned[k.char] ? " · already learned" : ""}
+      </div>
+    </div>
+  );
+}
+
+/* ---- Quiz: kanji ⇄ meaning multiple choice ---- */
+function KanjiQuiz({ list, level, best, onBest }) {
+  const [dir, setDir] = useState("k2m"); // k2m: kanji→meaning · m2k: meaning→kanji
+  const [q, setQ] = useState(() => (list.length ? makeKanjiQ(list[Math.floor(Math.random() * list.length)], list) : null));
+  const [picked, setPicked] = useState(null);
+  const [score, setScore] = useState({ right: 0, total: 0, streak: 0, best });
+  const timer = useRef(null);
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  if (!list.length || !q) return <div style={{ color: T.textDim, textAlign: "center", padding: 30 }}>No kanji in this level yet.</div>;
+
+  const showKanji = dir === "k2m";
+  const next = () => { setPicked(null); setQ(makeKanjiQ(list[Math.floor(Math.random() * list.length)], list)); };
+  const choose = (opt) => {
+    if (picked) return;
+    const ok = opt.char === q.answer.char;
+    speak(kanjiSpeak(q.answer));
+    setPicked(opt);
+    setScore((s) => {
+      const streak = ok ? s.streak + 1 : 0;
+      const nb = Math.max(s.best, streak);
+      if (nb > s.best) onBest(nb);
+      return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: nb };
+    });
+    timer.current = setTimeout(next, 1000);
+  };
+  const acc = score.total ? Math.round((score.right / score.total) * 100) : 0;
+  const meaning = (k) => k.meaning.split(",")[0];
+
+  return (
+    <div className="fade">
+      <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+        <Stat label="Score" value={`${score.right}/${score.total}`} color={T.gold} />
+        <Stat label="Accuracy" value={`${acc}%`} color={T.terra} />
+        <Stat label="Streak" value={`${score.streak}🔥`} color={T.amber} />
+        <Stat label="Best" value={score.best} color={T.green} />
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+        <button className="tap" onClick={() => { setDir((d) => (d === "k2m" ? "m2k" : "k2m")); setPicked(null); }} style={{ border: `1px solid ${T.line}`, background: T.panelHi, color: T.gold, borderRadius: 20, padding: "7px 14px", fontSize: 12.5, fontWeight: 600 }}>
+          {showKanji ? "See kanji → pick meaning" : "See meaning → pick kanji"} ⇄
+        </button>
+      </div>
+
+      <div className="pop" key={q.answer.char + dir} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "28px 20px", textAlign: "center", boxShadow: "0 14px 36px rgba(128,29,92,.10)", marginBottom: 16 }}>
+        <div style={{ fontSize: 12, color: T.textDim, marginBottom: 10 }}>{showKanji ? "What does this kanji mean?" : "Which kanji means this?"}</div>
+        {showKanji ? (
+          <div style={{ fontFamily: jaFont, fontSize: 88, color: T.text, lineHeight: 1 }}>{q.answer.char}</div>
+        ) : (
+          <div style={{ fontFamily: displayFont, fontSize: 32, color: T.gold, fontWeight: 700 }}>{meaning(q.answer)}</div>
+        )}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        {q.options.map((opt, i) => {
+          let bg = T.panel, border = T.line, col = T.text;
+          if (picked) {
+            const isCorrect = opt.char === q.answer.char;
+            const isPicked = opt.char === picked.char;
+            if (isCorrect) { bg = `${T.green}1a`; border = T.green; col = T.gold; }
+            else if (isPicked) { bg = `${T.red}1a`; border = T.red; col = T.red; }
+          }
+          return (
+            <button key={i} className="tap" onClick={() => choose(opt)} style={{ background: bg, border: `1.5px solid ${border}`, borderRadius: 14, padding: showKanji ? "14px 8px" : "16px 8px", cursor: "pointer", minHeight: 64, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {showKanji ? (
+                <span style={{ fontFamily: displayFont, fontSize: 17, color: col, fontWeight: 600, textAlign: "center" }}>{meaning(opt)}</span>
+              ) : (
+                <span style={{ fontFamily: jaFont, fontSize: 40, color: col }}>{opt.char}</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {picked && (
+        <div className="fade" style={{ textAlign: "center", marginTop: 16, fontSize: 14 }}>
+          <span style={{ fontFamily: jaFont, fontSize: 28, color: T.text }}>{q.answer.char}</span>
+          <span style={{ color: T.textDim }}> = </span>
+          <span style={{ color: T.gold, fontWeight: 700 }}>{q.answer.meaning}</span>
+          {q.answer.exJa && (
+            <div style={{ fontSize: 12.5, color: T.textDim, marginTop: 4 }}>
+              <span style={{ fontFamily: jaFont }}>{q.answer.exJa}</span> · {q.answer.exKana} · {q.answer.exEn}
+            </div>
+          )}
+        </div>
+      )}
+
+      <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginTop: 18, lineHeight: 1.6 }}>
+        Tap an answer — you'll hear an example word and the next question loads automatically.
+      </div>
+    </div>
+  );
+}
+
+/* ---- Kanji handwriting trace (practice + quiz) ---- */
+function KanjiTrace({ list }) {
+  const [tmode, setTmode] = useState("practice"); // practice | quiz
+  const [idx, setIdx] = useState(0);
+  const [showGuide, setShowGuide] = useState(true);
+  const [qIdx, setQIdx] = useState(() => (list.length ? Math.floor(Math.random() * list.length) : 0));
+  const [revealed, setRevealed] = useState(false);
+  const [score, setScore] = useState({ right: 0, total: 0, streak: 0, best: 0 });
+  const canvasRef = useRef(null);
+  const drawing = useRef(false);
+  const lastPt = useRef(null);
+  const [, setStrokes] = useState(0);
+
+  const isQuiz = tmode === "quiz";
+  const activeIdx = list.length ? (isQuiz ? qIdx : idx) % list.length : 0;
+  const k = list[activeIdx];
+  const guideOn = isQuiz ? revealed : showGuide;
+  const showDetails = !isQuiz || revealed;
+
+  const setup = useCallback(() => {
+    const c = canvasRef.current; if (!c) return;
+    const rect = c.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    c.width = rect.width * dpr; c.height = rect.height * dpr;
+    const ctx = c.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = 11; ctx.strokeStyle = "#801d5c";
+  }, []);
+  useEffect(() => { setup(); const onR = () => setup(); window.addEventListener("resize", onR); return () => window.removeEventListener("resize", onR); }, [setup]);
+
+  const clear = useCallback(() => { const c = canvasRef.current; if (!c) return; const ctx = c.getContext("2d"); ctx.clearRect(0, 0, c.width, c.height); setStrokes(0); }, []);
+  useEffect(() => { clear(); }, [activeIdx, tmode, clear]);
+
+  const pos = (e) => { const c = canvasRef.current; const rect = c.getBoundingClientRect(); const p = e.touches ? e.touches[0] : e; return { x: p.clientX - rect.left, y: p.clientY - rect.top }; };
+  const start = (e) => { e.preventDefault(); drawing.current = true; lastPt.current = pos(e); setStrokes((s) => s + 1); };
+  const move = (e) => { if (!drawing.current) return; e.preventDefault(); const ctx = canvasRef.current.getContext("2d"); const p = pos(e); ctx.beginPath(); ctx.moveTo(lastPt.current.x, lastPt.current.y); ctx.lineTo(p.x, p.y); ctx.stroke(); lastPt.current = p; };
+  const end = () => { drawing.current = false; };
+
+  const nextQuiz = () => { setRevealed(false); clear(); setQIdx((prev) => { let n; do { n = Math.floor(Math.random() * list.length); } while (n === prev && list.length > 1); return n; }); };
+  const grade = (ok) => { setScore((s) => { const streak = ok ? s.streak + 1 : 0; return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: Math.max(s.best, streak) }; }); nextQuiz(); };
+  const switchMode = (m) => { if (m === tmode) return; setTmode(m); setRevealed(false); clear(); if (m === "quiz") setQIdx(Math.floor(Math.random() * list.length)); };
+  const acc = score.total ? Math.round((score.right / score.total) * 100) : 0;
+
+  if (!list.length) return <div style={{ color: T.textDim, textAlign: "center", padding: 30 }}>No kanji in this level yet.</div>;
+
+  return (
+    <div className="fade">
+      <div style={{ display: "flex", gap: 6, background: T.panelHi, border: `1px solid ${T.line}`, padding: 5, borderRadius: 12, marginBottom: 14 }}>
+        {[["practice", "Practice"], ["quiz", "Quiz"]].map(([m, label]) => (
+          <button key={m} className="tap" onClick={() => switchMode(m)} style={{ flex: 1, border: "none", borderRadius: 8, padding: "8px 4px", fontSize: 12.5, fontWeight: 600, color: tmode === m ? "#fff" : T.textDim, background: tmode === m ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : "transparent" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ background: T.panelHi, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px", marginBottom: 14, fontSize: 12.5, lineHeight: 1.7 }}>
+        <b style={{ color: T.gold }}>Golden rules of kanji handwriting</b>
+        <div style={{ color: T.textDim, marginTop: 5 }}>
+          1. Write left → right, top → bottom.<br />
+          2. Horizontal strokes before crossing verticals.<br />
+          3. Outer enclosures before what goes inside.<br />
+          4. Keep the character balanced inside the box.
+        </div>
+      </div>
+
+      {isQuiz && (
+        <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+          <Stat label="Score" value={`${score.right}/${score.total}`} color={T.gold} />
+          <Stat label="Accuracy" value={`${acc}%`} color={T.terra} />
+          <Stat label="Streak" value={`${score.streak}🔥`} color={T.amber} />
+          <Stat label="Best" value={score.best} color={T.green} />
+        </div>
+      )}
+
+      <div style={{ display: "flex", alignItems: "center", gap: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px", marginBottom: 14 }}>
+        <div style={{ flex: 1 }}>
+          {isQuiz && !revealed && (
+            <div style={{ fontSize: 11, color: T.terra, fontWeight: 700, letterSpacing: 0.4, marginBottom: 3 }}>WRITE THIS KANJI FROM MEMORY</div>
+          )}
+          {showDetails ? (
+            <>
+              <div style={{ fontSize: 16, color: T.text, fontWeight: 700 }}>{k.meaning}</div>
+              <div style={{ fontSize: 12, color: T.textDim, marginTop: 3, lineHeight: 1.6 }}>
+                <span style={{ color: T.terra, fontWeight: 700 }}>On</span> {k.on}　·　<span style={{ color: T.goldSoft, fontWeight: 700 }}>Kun</span> {k.kun}
+              </div>
+              {k.exJa && (
+                <div style={{ fontSize: 12.5, color: T.gold, marginTop: 5 }}>
+                  <span style={{ fontFamily: jaFont, fontSize: 15 }}>{k.exJa}</span> · {k.exKana} · {k.exEn}
+                </div>
+              )}
+            </>
+          ) : (
+            <div style={{ fontSize: 14, color: T.text, fontWeight: 600 }}>Reading: <span style={{ color: T.gold }}>{k.meaning}</span></div>
+          )}
+        </div>
+        <Speaker text={kanjiSpeak(k)} color={T.terra} />
+        {!isQuiz && <div style={{ fontSize: 12, color: T.textDim }}>{activeIdx + 1}/{list.length}</div>}
+      </div>
+
+      <div style={{ position: "relative", width: "100%", aspectRatio: "1 / 1", background: T.panel, border: `1px solid ${T.line}`, borderRadius: 20, overflow: "hidden", boxShadow: "0 14px 36px rgba(128,29,92,.10)" }}>
+        {guideOn && (
+          <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: jaFont, fontSize: "min(58vw, 320px)", color: T.terra, opacity: 0.2, pointerEvents: "none", userSelect: "none", lineHeight: 1 }}>
+            {k.char}
+          </div>
+        )}
+        <div style={{ position: "absolute", top: "50%", left: 0, right: 0, borderTop: `2px dashed ${T.line}`, pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: 0, bottom: 0, left: "50%", borderLeft: `2px dashed ${T.line}`, pointerEvents: "none" }} />
+        <canvas ref={canvasRef} onMouseDown={start} onMouseMove={move} onMouseUp={end} onMouseLeave={end} onTouchStart={start} onTouchMove={move} onTouchEnd={end}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", touchAction: "none", cursor: "crosshair" }} />
+      </div>
+
+      {!isQuiz ? (
+        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+          <button className="tap" onClick={() => setIdx((i) => (i - 1 + list.length) % list.length)} style={ctrlBtn(false)}>‹ Prev</button>
+          <button className="tap" onClick={clear} style={ctrlBtn(false)}>Clear</button>
+          <button className="tap" onClick={() => setShowGuide((g) => !g)} style={ctrlBtn(showGuide)}>{showGuide ? "Hide guide" : "Show guide"}</button>
+          <button className="tap" onClick={() => setIdx((i) => (i + 1) % list.length)} style={ctrlBtn(true)}>Next ›</button>
+        </div>
+      ) : !revealed ? (
+        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+          <button className="tap" onClick={clear} style={ctrlBtn(false)}>Clear</button>
+          <button className="tap" onClick={nextQuiz} style={ctrlBtn(false)}>Skip</button>
+          <button className="tap" onClick={() => setRevealed(true)} style={{ ...ctrlBtn(true), flex: 2 }}>Reveal answer</button>
+        </div>
+      ) : (
+        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+          <button className="tap" onClick={() => grade(false)} style={{ flex: 1, padding: "12px 4px", borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: "pointer", border: `1.5px solid ${T.red}`, background: `${T.red}14`, color: T.text }}>Practice again</button>
+          <button className="tap" onClick={() => grade(true)} style={{ flex: 1, padding: "12px 4px", borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: "pointer", border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff" }}>Got it ✓</button>
+        </div>
+      )}
+
+      <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginTop: 16, lineHeight: 1.6 }}>
+        {!isQuiz ? (
+          <>Trace over the faint guide and use the centre lines to balance the character. Tap “Hide guide” to test yourself from memory.</>
+        ) : !revealed ? (
+          <>Picture the kanji for the meaning shown, write it from memory, then tap <b style={{ color: T.text }}>Reveal answer</b> to check.</>
+        ) : (
+          <>Compare your writing to the guide. Be honest — did you get the <b style={{ color: T.text }}>shape and proportions</b> right?</>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [state, setState] = useState(null);
+  const [view, setView] = useState("home");
+  const [practiceItems, setPracticeItems] = useState([]);
+  const stateRef = useRef(state);
+  useEffect(() => { stateRef.current = state; }, [state]);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const loaded = await loadState();
+      let s = loaded || DEFAULT_STATE;
+      if (s.daily?.date !== todayStr()) s = { ...s, daily: { date: todayStr(), reviews: 0, lessons: 0 } };
+      s = { ...DEFAULT_STATE, ...s, settings: { ...DEFAULT_STATE.settings, ...(s.settings || {}) }, script: { ...DEFAULT_STATE.script, ...(s.script || {}) }, kanji: { ...DEFAULT_STATE.kanji, ...(s.kanji || {}) } };
+      if (mounted) setState(s);
+    })();
+    return () => { mounted = false; };
+  }, []);
+
+  useEffect(() => {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.getVoices();
+    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    return () => { if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = null; };
+  }, []);
+
+  const persist = useCallback((next) => { setState(next); saveState(next); }, []);
+  const allItems = useMemo(() => [...ITEMS, ...((state && state.custom) || [])], [state]);
+
+  const derived = useMemo(() => {
+    if (!state) return null;
+    const now = Date.now();
+    const lvl = state.currentLevel;
+    const pool = allItems.filter((it) => (it.custom || it.level <= lvl) && !state.progress[it.id]);
+    const due = allItems.filter((it) => { const p = state.progress[it.id]; return p && p.due !== Infinity && p.due <= now; });
+    const leechList = allItems.filter((it) => isLeech(state.progress[it.id]));
+    const levelItems = ITEMS.filter((it) => it.level === lvl);
+    const guru = levelItems.filter((it) => (state.progress[it.id]?.stage || 0) >= 5).length;
+    const levelPct = levelItems.length ? guru / levelItems.length : 0;
+    const stageCounts = {};
+    allItems.forEach((it) => { const p = state.progress[it.id]; if (!p) return; const g = stageMeta(p.stage).group; stageCounts[g] = (stageCounts[g] || 0) + 1; });
+    return { pool, due, leechList, levelPct, stageCounts };
+  }, [state, allItems]);
+
+  const streak = useMemo(() => {
+    if (!state) return 0;
+    let n = 0, day = todayStr();
+    if (!state.history[day]) day = shiftDay(day, -1);
+    while (state.history[day] > 0) { n++; day = shiftDay(day, -1); }
+    return n;
+  }, [state]);
+
+  const commitLearn = useCallback((id) => {
+    setState((s) => {
+      const day = todayStr();
+      const daily = s.daily.date === day ? s.daily : { date: day, reviews: 0, lessons: 0 };
+      const next = { ...s, progress: { ...s.progress, [id]: learnItem(Date.now()) }, daily: { ...daily, lessons: daily.lessons + 1 } };
+      saveState(next);
+      return next;
+    });
+  }, []);
+
+  const grade = useCallback((id, correct, mode) => {
+    const s = stateRef.current;
+    const prog = s.progress[id];
+    if (!prog) return null;
+    const now = Date.now();
+    let cur = s.currentLevel;
+    let leveled = null;
+    let np;
+    if (mode === "practice") {
+      np = { ...prog, correct: prog.correct + (correct ? 1 : 0), wrong: prog.wrong + (correct ? 0 : 1), recentWrong: correct ? 0 : (prog.recentWrong || 0) + 1, lastReviewed: now };
+    } else {
+      np = reviewSchedule(prog, correct, now);
+      const progress0 = { ...s.progress, [id]: np };
+      const levelItems = ITEMS.filter((it) => it.level === cur);
+      const guru = levelItems.filter((it) => (progress0[it.id]?.stage || 0) >= 5).length;
+      if (levelItems.length && guru / levelItems.length >= 0.9 && cur < MAX_LEVEL) { cur += 1; leveled = cur; }
+    }
+    const day = todayStr();
+    const daily = s.daily.date === day ? s.daily : { date: day, reviews: 0, lessons: 0 };
+    const next = {
+      ...s, currentLevel: cur,
+      progress: { ...s.progress, [id]: np },
+      daily: { ...daily, reviews: daily.reviews + (mode === "practice" ? 0 : 1) },
+      history: { ...s.history, [day]: (s.history[day] || 0) + 1 },
+    };
+    persist(next);
+    return leveled;
+  }, [persist]);
+
+  const startPractice = useCallback((itemsOrLeech) => {
+    const items = itemsOrLeech === "leeches" ? (derived ? derived.leechList : []) : itemsOrLeech;
+    if (items && items.length) { setPracticeItems(items); setView("practice"); }
+  }, [derived]);
+
+  if (!state || !derived)
+    return <div style={{ minHeight: "100vh", background: T.bg, color: T.textDim, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: uiFont }}>Loading…</div>;
+
+  const tabs = [
+    ["home", "Home"],
+    ["lessons", "Lessons", derived.pool.length],
+    ["reviews", "Reviews", derived.due.length],
+    ["script", "Script"],
+    ["kanji", "Kanji"],
+    ["items", "Items"],
+    ["stats", "Stats"],
+  ];
+
+  return (
+    <div style={{ minHeight: "100vh", background: `radial-gradient(1100px 560px at 50% -10%, ${T.bg2}, ${T.bg})`, color: T.text, fontFamily: uiFont, paddingBottom: 40 }}>
+      <style>{`
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        @keyframes fadeUp { from { opacity:0; transform: translateY(8px);} to {opacity:1; transform:none;} }
+        @keyframes pop { from { opacity:0; transform: scale(.97);} to {opacity:1; transform:none;} }
+        @keyframes pulse { 0%,100% { transform: translate(-50%,-50%) scale(1); opacity:1; } 50% { transform: translate(-50%,-50%) scale(1.55); opacity:.45; } }
+        .tap { transition: transform .12s ease, background .15s ease, border-color .15s ease; cursor: pointer; }
+        .tap:active { transform: scale(.97); }
+        .fade { animation: fadeUp .35s ease both; }
+        .pop { animation: pop .25s ease both; }
+        input, button, select { font-family: inherit; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-thumb { background: ${T.line}; border-radius: 8px; }
+      `}</style>
+
+      <div style={{ maxWidth: 560, margin: "0 auto", padding: "22px 18px 10px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ width: 38, height: 38, borderRadius: 11, background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: jaFont, fontSize: 22, color: "#fff", fontWeight: 700, boxShadow: "0 4px 14px rgba(128,29,92,.22)" }}>あ</div>
+          <div>
+            <div style={{ fontFamily: displayFont, fontSize: 19 }}>Nihongo <span style={{ color: T.goldSoft }}>SRS</span></div>
+            <div style={{ fontSize: 11.5, color: T.textDim, marginTop: -1 }}>Japanese · level {state.currentLevel}</div>
+          </div>
+          <div style={{ marginLeft: "auto", textAlign: "right" }}>
+            <div style={{ fontSize: 11, color: T.textDim }}>streak</div>
+            <div style={{ fontSize: 16, color: T.gold, fontWeight: 700 }}>{streak}🔥</div>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: 3, marginTop: 16, background: T.panel, padding: 4, borderRadius: 13, border: `1px solid ${T.line}` }}>
+          {tabs.map(([k, label, n]) => (
+            <button key={k} className="tap" onClick={() => setView(k)} style={{ flex: 1, border: "none", borderRadius: 9, padding: "9px 1px", fontSize: 11, fontWeight: 600, position: "relative", color: view === k ? "#fff" : T.textDim, background: view === k ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : "transparent" }}>
+              {label}
+              {n > 0 && view !== k && (<span style={{ position: "absolute", top: 5, right: "50%", marginRight: -16, width: 6, height: 6, borderRadius: 999, background: T.terra }} />)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 560, margin: "0 auto", padding: "8px 18px" }}>
+        {view === "home" && (
+          <HomeView state={state} level={state.currentLevel} levelPct={derived.levelPct}
+            lessons={derived.pool.length} reviews={derived.due.length} leeches={derived.leechList.length}
+            stageCounts={derived.stageCounts} streak={streak} onGo={setView}
+            onTrouble={() => startPractice("leeches")}
+            onSetting={(patch) => persist({ ...state, settings: { ...state.settings, ...patch } })}
+            onReset={() => { persist({ ...DEFAULT_STATE, custom: state.custom, settings: state.settings, script: state.script, kanji: state.kanji, daily: { date: todayStr(), reviews: 0, lessons: 0 } }); setView("home"); }} />
+        )}
+        {view === "lessons" && (<LearnSession pool={derived.pool} batch={state.settings.lessonBatch} onLearn={commitLearn} onGrade={grade} onExit={() => setView("home")} />)}
+        {view === "reviews" && <TypedQuiz items={derived.due} mode="srs" onGrade={grade} onExit={() => setView("home")} title="Reviews" />}
+        {view === "practice" && <TypedQuiz items={practiceItems} mode="practice" onGrade={grade} onExit={() => setView("items")} title="Practice" />}
+        {view === "script" && <ScriptView scriptState={state.script} setScript={(next) => persist({ ...state, script: next })} />}
+        {view === "kanji" && <KanjiView kanjiState={state.kanji} setKanji={(next) => persist({ ...state, kanji: next })} />}
+        {view === "items" && (<ItemsView allItems={allItems} state={state} level={state.currentLevel} leeches={derived.leechList.length} onAdd={(c) => persist({ ...state, custom: [...state.custom, c] })} onStartPractice={startPractice} />)}
+        {view === "stats" && <StatsView state={state} allItems={allItems} level={state.currentLevel} streak={streak} />}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+    </script>
+  </body>
+</html>
