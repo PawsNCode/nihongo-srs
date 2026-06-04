@@ -1,28 +1,29 @@
 # Nihongo SRS 🎌
 
-A small web app for learning **Japanese (日本語)** — spaced-repetition
-flashcards, hiragana & katakana practice, and a handwriting trainer. The whole
-thing is a single self-contained HTML file.
+A web app for learning **Japanese (日本語)** from absolute beginner up to
+roughly college / JLPT N1 level — spaced-repetition vocabulary, the complete
+JLPT kanji set, hiragana & katakana practice, and a stroke-order handwriting
+trainer. The whole thing is a single self-contained HTML file.
 
 🔗 **Live app:** https://pawsncode.github.io/nihongo-srs/  *(update this to your own repo path)*
 
 ## Features
 
-- **Spaced-repetition flashcards** (WaniKani-style stage scheduling) for
-  high-frequency Japanese — each card shows the word in kanji/kana, its reading,
-  the English meaning, and tap-to-hear audio. Reach **Guru** on most of a level
-  to unlock the next one.
+- **Spaced-repetition vocabulary — the full JLPT range (N5 → N1)** — roughly
+  8,000 words organised into bite-size levels (e.g. *N5 · 1*, *N5 · 2* … through
+  N1). Each card shows the word in kanji/kana, its reading, the English meaning,
+  and tap-to-hear audio. WaniKani-style scheduling brings cards back at growing
+  intervals, and reaching **Guru** on most of a level unlocks the next.
 - **Romaji typed answers with a live kana preview** — type the reading in
   romaji and watch it turn into kana as you go. Both romaji and kana input are
   accepted, and long vowels (e.g. *ou / uu*) count.
-- **Kanji by JLPT level (N5–N1)** — a dedicated section with the **complete
-  N5, N4, and N3 kanji lists** (79 + 166 + 367 = 612 characters, following the
-  standard JLPT groupings), plus a representative sample for N2 and N1. Browse a
-  grid and tap any character for its on'yomi / kun'yomi readings and meanings;
-  study them as flashcards and mark what you've learned; quiz yourself in either
-  direction (kanji → meaning or meaning → kanji); and trace each character by
-  hand over a faint guide with practice and from-memory quiz modes. Common kanji
-  also include an example word with audio.
+- **Kanji by JLPT level — the complete set (N5 → N1)** — every kanji in the
+  standard JLPT lists: **2,211 characters** (N5 79, N4 166, N3 367, N2 367,
+  N1 1,232). Browse a grid and tap any character for its on'yomi / kun'yomi
+  readings and meanings; study them as flashcards and mark what you've learned;
+  quiz yourself in either direction (kanji → meaning or meaning → kanji); and
+  trace each character with full stroke-order guidance. Many common kanji also
+  include an example word with audio.
 - **Search** — a search bar in the Kanji browser and the vocabulary list lets
   you find anything instantly by English meaning, the character itself, kana
   reading (hiragana or katakana), or romaji. Kanji search spans all JLPT levels
@@ -59,9 +60,16 @@ thing is a single self-contained HTML file.
 Stroke-order data (the numbers, arrows, and stroke shapes in the handwriting
 trainer) comes from the **[KanjiVG](https://kanjivg.tagaini.net)** project by
 Ulrich Apel, used under the **Creative Commons Attribution-ShareAlike 3.0**
-licence (CC BY-SA 3.0). Because KanjiVG is share-alike, if you redistribute this
-app you should keep this attribution and license any modifications to that data
-under the same terms.
+licence (CC BY-SA 3.0).
+
+Kanji readings, meanings, and JLPT levels are derived from
+**[davidluzgouveia/kanji-data](https://github.com/davidluzgouveia/kanji-data)**,
+which builds on KANJIDIC. Vocabulary lists come from
+**[open-anki-jlpt-decks](https://github.com/jamsinclair/open-anki-jlpt-decks)**,
+which is based on JMdict/EDICT (© the Electronic Dictionary Research and
+Development Group, used under CC BY-SA). Because several of these sources are
+share-alike, if you redistribute this app please keep this attribution and
+license any modifications to that data under the same terms.
 
 ## Hosting on GitHub Pages
 
