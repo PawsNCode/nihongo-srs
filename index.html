@@ -14603,13 +14603,13 @@ function KanjiBrowse({ list, learned, onMark, selChar, setSelChar }) {
           No kanji match “{q}”. Try an English meaning, a reading in kana, or romaji like “mizu”.
         </div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
           {displayList.map((kj) => (
-            <button key={kj.char} className="tap" onClick={() => setSelChar(kj.char === selChar ? null : kj.char)} style={{ position: "relative", background: kj.char === selChar ? `${T.gold}14` : T.panel, border: `1.5px solid ${kj.char === selChar ? T.gold : T.line}`, borderRadius: 13, padding: "12px 4px 8px", textAlign: "center", cursor: "pointer" }}>
+            <button key={kj.char} className="tap" onClick={() => setSelChar(kj.char === selChar ? null : kj.char)} style={{ position: "relative", background: kj.char === selChar ? `${T.gold}14` : T.panel, border: `1.5px solid ${kj.char === selChar ? T.gold : T.line}`, borderRadius: 13, padding: "14px 4px 9px", textAlign: "center", cursor: "pointer" }}>
               {learned[kj.char] && <span style={{ position: "absolute", top: 4, right: 6, fontSize: 10, color: T.green }}>●</span>}
               {searching && <span style={{ position: "absolute", top: 3, left: 5, fontSize: 8, fontWeight: 800, color: T.textDim }}>{kj.jlpt}</span>}
-              <div style={{ fontFamily: jaFont, fontSize: 30, color: T.text, lineHeight: 1.1 }}>{kj.char}</div>
-              <div style={{ fontSize: 9.5, color: T.textDim, marginTop: 3, lineHeight: 1.2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{kj.meaning.split(",")[0]}</div>
+              <div style={{ fontFamily: jaFont, fontSize: 34, color: T.text, lineHeight: 1.1 }}>{kj.char}</div>
+              <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 4, lineHeight: 1.2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{kj.meaning.split(",")[0]}</div>
             </button>
           ))}
         </div>
