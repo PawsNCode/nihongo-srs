@@ -30,9 +30,15 @@ trainer. The whole thing is a single self-contained HTML file.
   (kanji → meaning or meaning → kanji); and trace each character with the same
   stroke-order guidance. Many common kanji also include an example word with
   audio. Kana practice uses the same learn-5-then-quiz lesson rhythm.
-- **Themes** — pick from the Home screen: cute light palettes (Sakura, Lavender,
-  Peach, Matcha, Sky) and dark modes (Midnight, Dark Violet, Dark Forest),
-  including violet options. Your choice is saved and applies across the whole app.
+- **Reviews hub** — the Reviews tab lets you choose what to practice: your due
+  **vocabulary** (spaced-repetition), **kanji** you've learned (meaning quiz),
+  **hiragana**, or **katakana**. Each shows a count, and you can jump back to the
+  chooser anytime. (Phrase decks aren't included yet — the current dataset is
+  single words.)
+- **Themes** — pick from the bottom of the Home screen: cute light palettes
+  (Sakura, Lavender, Peach, Matcha, Sky) and dark modes (Midnight, Dark Violet,
+  Dark Forest), including violet options. The cherry-blossom logo recolors to
+  match. Your choice is saved and applies across the whole app.
 - **Tap any kanji to look it up** — in lessons, reviews, and the vocabulary
   dictionary, the individual kanji inside a word are tappable (shown with a
   dotted underline). Tapping one jumps straight to the Kanji page and opens that
