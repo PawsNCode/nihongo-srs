@@ -14625,6 +14625,7 @@ function KanjiView({ kanjiState, setKanji, focusChar, onFocusDone }) {
 
   const [mode, setMode] = useState("browse"); // browse | study | quiz | trace
   const [selChar, setSelChar] = useState(null); // last-opened kanji (shared by Browse + Trace)
+  const [traceReturn, setTraceReturn] = useState(null); // set when Trace is opened from the Browse diagram
   const list = KANJI_BY_LEVEL[level] || [];
   const learnedCount = list.filter((k) => learned[k.char]).length;
   const batch = ks.batch || 5;
@@ -14659,22 +14660,31 @@ function KanjiView({ kanjiState, setKanji, focusChar, onFocusDone }) {
       {/* mode tabs */}
       <div style={{ display: "flex", gap: 6, background: T.panelHi, border: `1px solid ${T.line}`, padding: 5, borderRadius: 13, marginBottom: 16 }}>
         {[["browse", "📖 Browse"], ["study", "🎓 Study"], ["quiz", "✨ Quiz"], ["trace", "✍️ Trace"]].map(([k, label]) => (
-          <button key={k} className="tap" onClick={() => setMode(k)} style={{ flex: 1, border: "none", borderRadius: 9, padding: "9px 1px", fontSize: 11.5, fontWeight: 600, color: mode === k ? "#fff" : T.textDim, background: mode === k ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : "transparent" }}>
+          <button key={k} className="tap" onClick={() => { setTraceReturn(null); setMode(k); }} style={{ flex: 1, border: "none", borderRadius: 9, padding: "9px 1px", fontSize: 11.5, fontWeight: 600, color: mode === k ? "#fff" : T.textDim, background: mode === k ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : "transparent" }}>
             {label}
           </button>
         ))}
       </div>
 
-      {mode === "browse" && <KanjiBrowse list={list} learned={learned} onMark={markLearned} selChar={selChar} setSelChar={setSelChar} level={level} />}
+      {mode === "browse" && <KanjiBrowse list={list} learned={learned} onMark={markLearned} selChar={selChar} setSelChar={setSelChar} level={level} onTrace={() => { setTraceReturn("browse"); setMode("trace"); }} />}
       {mode === "study" && <KanjiStudy key={level} list={list} learned={learned} onMark={markLearned} batch={batch} setBatch={setBatch} best={ks.best || 0} onBest={onBest} />}
       {mode === "quiz" && <KanjiQuiz key={level} list={list} level={level} learned={learned} best={ks.best || 0} onBest={(b) => setKanji({ ...ks, best: Math.max(ks.best || 0, b) })} />}
-      {mode === "trace" && <KanjiTrace key={level} list={list} initialChar={selChar} />}
+      {mode === "trace" && (
+        <>
+          {traceReturn && (
+            <button className="tap" onClick={() => { setMode(traceReturn); setTraceReturn(null); }} style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 12, padding: "9px 13px", borderRadius: 12, border: `1px solid ${T.line}`, background: T.panel, color: T.gold, fontSize: 13, fontWeight: 700 }}>
+              ‹ Back to {selChar ? selChar + " details" : "browse"}
+            </button>
+          )}
+          <KanjiTrace key={level} list={list} initialChar={selChar} />
+        </>
+      )}
     </div>
   );
 }
 
 /* ---- Browse: grid + tap for detail ---- */
-function KanjiBrowse({ list, learned, onMark, selChar, setSelChar, level }) {
+function KanjiBrowse({ list, learned, onMark, selChar, setSelChar, level, onTrace }) {
   const [q, setQ] = useState("");
   const searching = q.trim().length > 0;
   const displayList = searching ? KANJI.filter((kj) => kanjiMatches(kj, q)) : list;
@@ -14700,12 +14710,13 @@ function KanjiBrowse({ list, learned, onMark, selChar, setSelChar, level }) {
               </div>
             </div>
           </div>
-          <div style={{ position: "relative", width: 150, height: 150, margin: "14px auto 0", border: `1px solid ${T.line}`, borderRadius: 14, background: T.panel, overflow: "hidden" }}>
+          <div className="tap" onClick={() => onTrace && onTrace()} title="Tap to trace this character" style={{ position: "relative", width: 150, height: 150, margin: "14px auto 0", border: `1.5px solid ${T.line}`, borderRadius: 14, background: T.panel, overflow: "hidden", cursor: onTrace ? "pointer" : "default" }}>
             <div style={{ position: "absolute", top: "50%", left: 0, right: 0, borderTop: `1px dashed ${T.line}`, pointerEvents: "none" }} />
             <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, borderLeft: `1px dashed ${T.line}`, pointerEvents: "none" }} />
             <StrokeGuide char={k.char} show diagram />
+            <span style={{ position: "absolute", bottom: 5, right: 6, fontSize: 13, opacity: 0.85, pointerEvents: "none" }}>✍️</span>
           </div>
-          <div style={{ fontSize: 10.5, color: T.textDim, textAlign: "center", marginTop: 6 }}>stroke order — numbered starts, pink direction arrows</div>
+          <button className="tap" onClick={() => onTrace && onTrace()} style={{ display: "block", margin: "8px auto 0", border: "none", background: "transparent", color: T.gold, fontSize: 11.5, fontWeight: 700, cursor: "pointer" }}>stroke order — tap to trace this character ›</button>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 14, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 12, padding: "10px 12px" }}>
             <div style={{ flex: 1 }}>
               {k.exJa ? (
