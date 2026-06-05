@@ -14533,7 +14533,7 @@ function KanjiView({ kanjiState, setKanji, focusChar, onFocusDone }) {
         ))}
       </div>
 
-      {mode === "browse" && <KanjiBrowse list={list} learned={learned} onMark={markLearned} selChar={selChar} setSelChar={setSelChar} />}
+      {mode === "browse" && <KanjiBrowse list={list} learned={learned} onMark={markLearned} selChar={selChar} setSelChar={setSelChar} level={level} />}
       {mode === "study" && <KanjiStudy key={level} list={list} learned={learned} onMark={markLearned} batch={batch} setBatch={setBatch} best={ks.best || 0} onBest={onBest} />}
       {mode === "quiz" && <KanjiQuiz key={level} list={list} level={level} learned={learned} best={ks.best || 0} onBest={(b) => setKanji({ ...ks, best: Math.max(ks.best || 0, b) })} />}
       {mode === "trace" && <KanjiTrace key={level} list={list} initialChar={selChar} />}
@@ -14542,10 +14542,12 @@ function KanjiView({ kanjiState, setKanji, focusChar, onFocusDone }) {
 }
 
 /* ---- Browse: grid + tap for detail ---- */
-function KanjiBrowse({ list, learned, onMark, selChar, setSelChar }) {
+function KanjiBrowse({ list, learned, onMark, selChar, setSelChar, level }) {
   const [q, setQ] = useState("");
   const searching = q.trim().length > 0;
   const displayList = searching ? KANJI.filter((kj) => kanjiMatches(kj, q)) : list;
+  const BROWSE_CAP = 150;
+  const visible = displayList.slice(0, BROWSE_CAP);
   const k = selChar ? KANJI.find((x) => x.char === selChar) : null;
   return (
     <div className="fade">
@@ -14604,7 +14606,7 @@ function KanjiBrowse({ list, learned, onMark, selChar, setSelChar }) {
         </div>
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
-          {displayList.map((kj) => (
+          {visible.map((kj) => (
             <button key={kj.char} className="tap" onClick={() => setSelChar(kj.char === selChar ? null : kj.char)} style={{ position: "relative", background: kj.char === selChar ? `${T.gold}14` : T.panel, border: `1.5px solid ${kj.char === selChar ? T.gold : T.line}`, borderRadius: 13, padding: "14px 4px 9px", textAlign: "center", cursor: "pointer" }}>
               {learned[kj.char] && <span style={{ position: "absolute", top: 4, right: 6, fontSize: 10, color: T.green }}>●</span>}
               {searching && <span style={{ position: "absolute", top: 3, left: 5, fontSize: 8, fontWeight: 800, color: T.textDim }}>{kj.jlpt}</span>}
@@ -14612,6 +14614,11 @@ function KanjiBrowse({ list, learned, onMark, selChar, setSelChar }) {
               <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 4, lineHeight: 1.2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{kj.meaning.split(",")[0]}</div>
             </button>
           ))}
+        </div>
+      )}
+      {displayList.length > BROWSE_CAP && (
+        <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginTop: 12, lineHeight: 1.5 }}>
+          Showing the first {BROWSE_CAP} of {displayList.length.toLocaleString()} kanji in {searching ? "your search" : level} — use the search box to jump to any character.
         </div>
       )}
       <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginTop: 14, lineHeight: 1.6 }}>
