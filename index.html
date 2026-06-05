@@ -13531,21 +13531,23 @@ function LearnSession({ pool, batch, onLearn, onGrade, onExit, onKanji }) {
 function HomeView({ state, level, levelPct, lessons, reviews, leeches, stageCounts, streak, onGo, onTrouble, onSetting, onReset, onUnlock, onImport }) {
   const [confirm, setConfirm] = useState(false);
   const [showBackup, setShowBackup] = useState(false);
+  const [showText, setShowText] = useState(false);
   const [impText, setImpText] = useState("");
   const [bkMsg, setBkMsg] = useState(null);
   const [copied, setCopied] = useState(false);
-  const backupCode = () => { try { return btoa(unescape(encodeURIComponent(JSON.stringify(state)))); } catch (e) { return ""; } };
-  const copyBackup = () => { const code = backupCode(); try { navigator.clipboard.writeText(code); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch (e) { setBkMsg({ ok: false, msg: "Couldn't copy automatically — select the code and copy it." }); } };
+  const backupText = () => { try { return JSON.stringify(state); } catch (e) { return ""; } };
+  const showBackupText = () => { setImpText(backupText()); setShowText(true); setBkMsg(null); };
+  const copyBackup = () => { try { navigator.clipboard.writeText(backupText()); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch (e) { showBackupText(); setBkMsg({ ok: false, msg: "Couldn't copy automatically — here's the text, select and copy it." }); } };
   const downloadBackup = () => {
     try {
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const blob = new Blob([backupText()], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a"); a.href = url; a.download = `nihongo-progress-${todayStr()}.json`;
       document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
-    } catch (e) { setBkMsg({ ok: false, msg: "Download failed on this device — use the code instead." }); }
+    } catch (e) { showBackupText(); setBkMsg({ ok: false, msg: "Download failed here — copy the text instead." }); }
   };
   const doImport = (text) => { const res = onImport(text); setBkMsg(res); };
-  const onFile = (e) => { const f = e.target.files && e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => doImport(String(r.result || "")); r.readAsText(f); };
+  const onFile = (e) => { const f = e.target.files && e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { setImpText(String(r.result || "")); setShowText(true); setBkMsg({ ok: true, msg: "File loaded — review it, then tap Restore this backup." }); }; r.readAsText(f); e.target.value = ""; };
   const Tile = ({ label, value, sub, color, onClick, dim }) => (
     <button className="tap" onClick={onClick} disabled={dim} style={{ flex: 1, textAlign: "left", border: `1px solid ${T.line}`, background: T.panel, borderRadius: 16, padding: "14px 15px", opacity: dim ? 0.55 : 1, cursor: dim ? "default" : "pointer" }}>
       <div style={{ fontSize: 11.5, color: T.textDim, fontWeight: 600 }}>{label}</div>
@@ -13620,35 +13622,36 @@ function HomeView({ state, level, levelPct, lessons, reviews, leeches, stageCoun
         </div>
       )}
 
-      <div style={{ marginTop: 14, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px" }}>
+      <div style={{ marginTop: 14, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16, padding: "14px 16px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div>
-            <div style={{ fontSize: 13, color: T.text, fontWeight: 700 }}>Backup &amp; restore progress</div>
-            <div style={{ fontSize: 11.5, color: T.textDim, marginTop: 2, lineHeight: 1.5 }}>Save a copy of everything you've learned, or move it to another device.</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 16 }}>📋</span>
+            <span style={{ fontSize: 15, fontWeight: 800, color: T.text }}>Backup &amp; restore</span>
           </div>
-          <button className="tap" onClick={() => { setShowBackup((v) => !v); setBkMsg(null); }} style={{ flexShrink: 0, marginLeft: 10, padding: "8px 12px", borderRadius: 10, border: `1px solid ${T.line}`, background: T.panel, color: T.gold, fontWeight: 700, fontSize: 12.5 }}>{showBackup ? "Close" : "Open"}</button>
+          <button className="tap" onClick={() => { setShowBackup((v) => !v); setBkMsg(null); }} style={{ border: "none", background: "transparent", color: T.gold, fontWeight: 700, fontSize: 13, cursor: "pointer", padding: 4 }}>{showBackup ? "Hide" : "Show"}</button>
         </div>
 
         {showBackup && (
-          <div className="fade" style={{ marginTop: 12 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: T.gold, marginBottom: 6 }}>Back up</div>
-            <div style={{ display: "flex", gap: 8 }}>
-              <button className="tap" onClick={downloadBackup} style={{ flex: 1, padding: 11, borderRadius: 11, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontWeight: 700, fontSize: 13 }}>⬇ Download file</button>
-              <button className="tap" onClick={copyBackup} style={{ flex: 1, padding: 11, borderRadius: 11, border: `1px solid ${T.gold}`, background: `${T.gold}10`, color: T.gold, fontWeight: 700, fontSize: 13 }}>{copied ? "Copied ✓" : "Copy code"}</button>
-            </div>
-            <textarea readOnly value={backupCode()} onClick={(e) => e.target.select()} style={{ width: "100%", boxSizing: "border-box", height: 56, marginTop: 8, resize: "none", borderRadius: 10, border: `1px solid ${T.line}`, background: T.panelHi, color: T.textDim, fontSize: 10, padding: "8px 10px", fontFamily: "monospace" }} />
+          <div className="fade" style={{ marginTop: 10 }}>
+            <div style={{ fontSize: 12.5, color: T.textDim, lineHeight: 1.6 }}>Save a copy of all your progress (levels, SRS, custom quizzes, settings). Keep the file or text somewhere safe, then restore it any time — even on a new phone.</div>
 
-            <div style={{ fontSize: 12, fontWeight: 700, color: T.gold, margin: "14px 0 6px" }}>Restore</div>
-            <textarea value={impText} onChange={(e) => setImpText(e.target.value)} placeholder="Paste a backup code here…" style={{ width: "100%", boxSizing: "border-box", height: 56, resize: "none", borderRadius: 10, border: `1px solid ${T.line}`, background: T.panel, color: T.text, fontSize: 11, padding: "8px 10px", fontFamily: "monospace" }} />
-            <div style={{ display: "flex", gap: 8, marginTop: 8, alignItems: "center" }}>
-              <button className="tap" onClick={() => doImport(impText)} style={{ flex: 1, padding: 11, borderRadius: 11, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontWeight: 700, fontSize: 13 }}>Restore from code</button>
-              <label className="tap" style={{ flex: 1, textAlign: "center", padding: 11, borderRadius: 11, border: `1px solid ${T.line}`, background: T.panel, color: T.gold, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
-                Restore from file
-                <input type="file" accept="application/json,.json,.txt" onChange={onFile} style={{ display: "none" }} />
-              </label>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: 0.6, color: T.gold, margin: "16px 0 8px" }}>EXPORT</div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button className="tap" onClick={downloadBackup} style={{ flex: 1, padding: "12px 6px", borderRadius: 12, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontWeight: 700, fontSize: 13 }}>Download file</button>
+              <button className="tap" onClick={copyBackup} style={{ flex: 1, padding: "12px 6px", borderRadius: 12, border: `1px solid ${T.line}`, background: T.panel, color: T.text, fontWeight: 700, fontSize: 13 }}>{copied ? "Copied ✓" : "Copy"}</button>
+              <button className="tap" onClick={showBackupText} style={{ flex: 1, padding: "12px 6px", borderRadius: 12, border: `1px solid ${T.line}`, background: T.panel, color: T.text, fontWeight: 700, fontSize: 13 }}>Show text</button>
             </div>
-            {bkMsg && <div style={{ marginTop: 10, fontSize: 12, color: bkMsg.ok ? T.green : T.red, fontWeight: 600 }}>{bkMsg.msg}</div>}
-            <div style={{ fontSize: 11, color: T.textDim, marginTop: 10, lineHeight: 1.5 }}>Restoring replaces what's currently on this device. Keep your backup file somewhere safe — it's the only copy.</div>
+
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: 0.6, color: T.gold, margin: "16px 0 8px" }}>IMPORT</div>
+            <label className="tap" style={{ display: "block", textAlign: "center", padding: "14px 10px", borderRadius: 12, border: `1.5px dashed ${T.line}`, background: T.panelHi, color: T.gold, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
+              Choose backup file…
+              <input type="file" accept="application/json,.json,.txt" onChange={onFile} style={{ display: "none" }} />
+            </label>
+            <textarea value={impText} onChange={(e) => setImpText(e.target.value)} placeholder="…or paste a backup code here" spellCheck={false} style={{ width: "100%", boxSizing: "border-box", height: 84, marginTop: 10, resize: "vertical", borderRadius: 10, border: `1px solid ${T.line}`, background: T.panelHi, color: T.text, fontSize: 10.5, padding: "8px 10px", fontFamily: "monospace", lineHeight: 1.5 }} />
+            <button className="tap" onClick={() => doImport(impText)} style={{ width: "100%", marginTop: 10, padding: 14, borderRadius: 13, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontWeight: 800, fontSize: 14 }}>Restore this backup</button>
+            <div style={{ fontSize: 11.5, color: T.textDim, marginTop: 8, lineHeight: 1.5 }}>Restoring replaces your current progress with the backup.</div>
+            {showText && <div style={{ fontSize: 11.5, color: T.gold, fontWeight: 700, marginTop: 6 }}>Here's your backup text — copy and keep it safe.</div>}
+            {bkMsg && <div style={{ marginTop: 8, fontSize: 12, color: bkMsg.ok ? T.green : T.red, fontWeight: 600 }}>{bkMsg.msg}</div>}
           </div>
         )}
       </div>
