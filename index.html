@@ -12953,6 +12953,20 @@ const T = {
   pink: "#cd81a9",
 };
 
+/* Selectable themes — cute light palettes + dark modes (incl. violet). */
+const THEME_LIST = [
+  { key: "rose", label: "Sakura", dark: false, colors: { bg: "#fff4fb", bg2: "#ffffff", panel: "#ffffff", panelHi: "#fdeef5", line: "#f1dce7", gold: "#801d5c", goldSoft: "#c02e80", terra: "#c02e80", text: "#34232d", textDim: "#9c8a93", green: "#801d5c", amber: "#af8a8f", red: "#b23a5e", blue: "#c02e80", pink: "#cd81a9" } },
+  { key: "lavender", label: "Lavender", dark: false, colors: { bg: "#f7f4ff", bg2: "#ffffff", panel: "#ffffff", panelHi: "#f0eafe", line: "#e6ddfb", gold: "#5a2da0", goldSoft: "#7c4dd6", terra: "#8b5cf6", text: "#2b2440", textDim: "#948ba6", green: "#5a2da0", amber: "#a98fc0", red: "#c2466b", blue: "#7c4dd6", pink: "#c4a3f0" } },
+  { key: "peach", label: "Peach", dark: false, colors: { bg: "#fff5f0", bg2: "#ffffff", panel: "#ffffff", panelHi: "#ffece2", line: "#fadbcd", gold: "#c4562a", goldSoft: "#e2723f", terra: "#f2854b", text: "#3a2820", textDim: "#a4908a", green: "#1f9d6b", amber: "#c98a3c", red: "#d8504a", blue: "#e2723f", pink: "#f3b59a" } },
+  { key: "matcha", label: "Matcha", dark: false, colors: { bg: "#f1faf3", bg2: "#ffffff", panel: "#ffffff", panelHi: "#e7f6ea", line: "#d6ecda", gold: "#1f7a4d", goldSoft: "#2e9e63", terra: "#34b06f", text: "#1e3327", textDim: "#869b8d", green: "#1f7a4d", amber: "#a59060", red: "#c2553e", blue: "#2e9e63", pink: "#9bd3ad" } },
+  { key: "sky", label: "Sky", dark: false, colors: { bg: "#eef6ff", bg2: "#ffffff", panel: "#ffffff", panelHi: "#e5f1fe", line: "#d3e5f7", gold: "#1f5fa8", goldSoft: "#2e7fd6", terra: "#3b9be6", text: "#1e2b3a", textDim: "#8593a0", green: "#2e9e8a", amber: "#a5915f", red: "#c24668", blue: "#2e7fd6", pink: "#9bc3f0" } },
+  { key: "midnight", label: "Midnight", dark: true, colors: { bg: "#15101b", bg2: "#1d1626", panel: "#221a2c", panelHi: "#2b2136", line: "#392c46", gold: "#ff86c8", goldSoft: "#ff9bd2", terra: "#ff6fb5", text: "#f3e9f0", textDim: "#a596ac", green: "#5fe0a0", amber: "#e6c07a", red: "#ff7a93", blue: "#8fb8ff", pink: "#ff9fd0" } },
+  { key: "grape", label: "Dark Violet", dark: true, colors: { bg: "#120f1e", bg2: "#191428", panel: "#1e1830", panelHi: "#28203c", line: "#372c50", gold: "#b794f6", goldSoft: "#c4a7f8", terra: "#9b6bf0", text: "#ece7f7", textDim: "#9a8fb0", green: "#6fe0b4", amber: "#e3c178", red: "#ff7a9c", blue: "#8fb0ff", pink: "#c9a8f5" } },
+  { key: "forest", label: "Dark Forest", dark: true, colors: { bg: "#0f1714", bg2: "#15201b", panel: "#182420", panelHi: "#1f2e28", line: "#2b3d36", gold: "#5fd6a0", goldSoft: "#7ee3b6", terra: "#3fc78d", text: "#e7f1ec", textDim: "#8ba59a", green: "#5fd6a0", amber: "#e0c47c", red: "#ff8a93", blue: "#7fc6ff", pink: "#9be0c2" } },
+];
+const THEMES = Object.fromEntries(THEME_LIST.map((t) => [t.key, t.colors]));
+function applyTheme(key) { Object.assign(T, THEMES[key] || THEMES.rose); }
+
 const jaFont =
   '"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","Shippori Mincho","Songti SC",serif';
 const displayFont = '"Hiragino Mincho ProN","Iowan Old Style",Georgia,"Times New Roman",serif';
@@ -13292,7 +13306,7 @@ const DEFAULT_STATE = {
   currentLevel: 1,
   progress: {},
   custom: [],
-  settings: { lessonBatch: 5 },
+  settings: { lessonBatch: 5, theme: "rose" },
   daily: { date: todayStr(), reviews: 0, lessons: 0 },
   history: {},
   script: { progress: {}, best: 0, batch: 5, quizDir: "recognize", chart: "hira" },
@@ -13529,6 +13543,25 @@ function HomeView({ state, level, levelPct, lessons, reviews, leeches, stageCoun
       </div>
 
       <div style={{ marginTop: 14, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px" }}>
+        <div style={{ fontSize: 13, color: T.textDim, marginBottom: 10 }}>Theme</div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "space-between" }}>
+          {THEME_LIST.map((t) => {
+            const on = (state.settings.theme || "rose") === t.key;
+            return (
+              <button key={t.key} className="tap" onClick={() => onSetting({ theme: t.key })} style={{ width: 58, border: "none", background: "transparent", cursor: "pointer", textAlign: "center", padding: 0 }}>
+                <div style={{ width: 46, height: 46, margin: "0 auto", borderRadius: 13, background: `linear-gradient(135deg, ${t.colors.gold}, ${t.colors.terra})`, position: "relative", boxShadow: on ? `0 0 0 2px ${T.panel}, 0 0 0 4px ${t.colors.terra}` : `inset 0 0 0 2px ${t.colors.line}` }}>
+                  <span style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontFamily: jaFont, fontSize: 18 }}>{on ? "✓" : "あ"}</span>
+                  {t.dark && <span style={{ position: "absolute", bottom: 3, right: 4, width: 7, height: 7, borderRadius: 999, background: t.colors.bg, border: "1px solid rgba(255,255,255,.5)" }} />}
+                </div>
+                <div style={{ fontSize: 10, color: on ? T.text : T.textDim, marginTop: 4, fontWeight: on ? 700 : 500, lineHeight: 1.2 }}>{t.label}</div>
+              </button>
+            );
+          })}
+        </div>
+        <div style={{ fontSize: 11, color: T.textDim, marginTop: 10, lineHeight: 1.5 }}>Cute light palettes and dark modes — the small dot marks a dark theme.</div>
+      </div>
+
+      <div style={{ marginTop: 14, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontSize: 13, color: T.textDim }}>Lesson batch size</span>
           <div style={{ display: "flex", gap: 6 }}>
@@ -13689,55 +13722,127 @@ function MiniBars({ series, color, unit }) {
 }
 function StatsView({ state, allItems, level, streak }) {
   const now = Date.now();
+  const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
+
+  // vocabulary
+  const total = allItems.length;
   const learned = allItems.filter((it) => state.progress[it.id]).length;
   const burned = allItems.filter((it) => (state.progress[it.id]?.stage || 0) >= 9).length;
+  const dueNow = allItems.filter((it) => { const p = state.progress[it.id]; return p && p.due !== Infinity && p.due <= now; }).length;
+  const tricky = allItems.filter((it) => isLeech(state.progress[it.id])).length;
+
+  // kanji
+  const kMap = (state.kanji && state.kanji.learned) || {};
+  const kanjiTotal = KANJI.length;
+  const kanjiLearned = KANJI.reduce((n, k) => n + (kMap[k.char] ? 1 : 0), 0);
+  const kanjiBands = JLPT_LEVELS.map((b) => { const list = KANJI_BY_LEVEL[b] || []; const l = list.reduce((n, k) => n + (kMap[k.char] ? 1 : 0), 0); return { b, l, t: list.length }; });
+
+  // kana
+  const sp = (state.script && state.script.progress) || {};
+  const kana = (set) => set.reduce((n, a) => n + (sp[a[0]] && sp[a[0]].learned ? 1 : 0), 0);
+  const hira = kana(HIRAGANA), kata = kana(KATAKANA);
+
+  // history
   const days = [];
   for (let k = 6; k >= 0; k--) {
     const d = shiftDay(todayStr(), -k);
     days.push({ label: ["S","M","T","W","T","F","S"][new Date(d + "T00:00:00Z").getUTCDay()], v: state.history[d] || 0 });
   }
+  const totalReviews = Object.values(state.history || {}).reduce((a, b) => a + (b || 0), 0);
+
   const stageDist = {};
   allItems.forEach((it) => { const p = state.progress[it.id]; if (!p) return; const g = stageMeta(p.stage).group; stageDist[g] = (stageDist[g] || 0) + 1; });
 
-  const Stat = ({ v, l, c }) => (
+  const Tile = ({ v, l, c, sub }) => (
     <div style={{ flex: 1, textAlign: "center", background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: "13px 4px" }}>
-      <div style={{ fontSize: 24, fontWeight: 800, color: c }}>{v}</div>
+      <div style={{ fontSize: 23, fontWeight: 800, color: c }}>{v}</div>
       <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 2 }}>{l}</div>
+      {sub != null && <div style={{ fontSize: 10, color: T.goldSoft, marginTop: 1 }}>{sub}</div>}
+    </div>
+  );
+  const Card = ({ children }) => (
+    <div style={{ marginTop: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16, padding: "14px 16px" }}>{children}</div>
+  );
+  const MasteryHeader = ({ title, a, b, color }) => (
+    <>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+        <span style={{ fontSize: 13, fontWeight: 700 }}>{title}</span>
+        <span style={{ fontSize: 13, fontWeight: 800, color }}>{pct(a, b)}%</span>
+      </div>
+      <div style={{ height: 9, background: T.line, borderRadius: 9, overflow: "hidden" }}>
+        <div style={{ height: "100%", width: `${pct(a, b)}%`, background: `linear-gradient(90deg, ${T.gold}, ${T.terra})`, transition: "width .4s ease" }} />
+      </div>
+      <div style={{ fontSize: 11.5, color: T.textDim, marginTop: 5 }}>{a.toLocaleString()} of {b.toLocaleString()} learned</div>
+    </>
+  );
+  const MiniRow = ({ label, l, t }) => (
+    <div style={{ marginBottom: 8 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5, color: T.textDim, marginBottom: 3 }}>
+        <span>{label}</span><span>{l}/{t} · {pct(l, t)}%</span>
+      </div>
+      <div style={{ height: 6, background: T.line, borderRadius: 6, overflow: "hidden" }}>
+        <div style={{ height: "100%", width: `${pct(l, t)}%`, background: T.terra, transition: "width .4s ease" }} />
+      </div>
     </div>
   );
 
   return (
     <div className="fade">
       <div style={{ display: "flex", gap: 8 }}>
-        <Stat v={level} l="Level" c={T.gold} />
-        <Stat v={learned} l="Learned" c={T.terra} />
-        <Stat v={burned} l="Burned" c={T.text} />
-        <Stat v={streak + "🔥"} l="Streak" c={T.gold} />
+        <Tile v={level} l="Level" c={T.gold} sub={`of ${MAX_LEVEL}`} />
+        <Tile v={learned.toLocaleString()} l="Words" c={T.terra} sub={`${pct(learned, total)}%`} />
+        <Tile v={kanjiLearned.toLocaleString()} l="Kanji" c={T.terra} sub={`${pct(kanjiLearned, kanjiTotal)}%`} />
+        <Tile v={streak + "🔥"} l="Streak" c={T.gold} />
       </div>
 
-      <div style={{ marginTop: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16, padding: "14px 16px" }}>
-        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>Reviews — last 7 days</div>
+      <Card>
+        <MasteryHeader title="Vocabulary mastery" a={learned} b={total} color={T.gold} />
+        <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+          <Tile v={burned.toLocaleString()} l="Burned" c={T.text} />
+          <Tile v={dueNow.toLocaleString()} l="Due now" c={dueNow ? T.terra : T.textDim} />
+          <Tile v={tricky.toLocaleString()} l="Tricky" c={tricky ? T.red : T.textDim} />
+        </div>
+      </Card>
+
+      <Card>
+        <MasteryHeader title="Kanji mastery" a={kanjiLearned} b={kanjiTotal} color={T.gold} />
+        <div style={{ marginTop: 12 }}>
+          {kanjiBands.map((k) => <MiniRow key={k.b} label={k.b} l={k.l} t={k.t} />)}
+        </div>
+      </Card>
+
+      <Card>
+        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>Kana script</div>
+        <MiniRow label="Hiragana ひらがな" l={hira} t={HIRAGANA.length} />
+        <MiniRow label="Katakana カタカナ" l={kata} t={KATAKANA.length} />
+      </Card>
+
+      <Card>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
+          <span style={{ fontSize: 13, fontWeight: 700 }}>Reviews — last 7 days</span>
+          <span style={{ fontSize: 11.5, color: T.textDim }}>{totalReviews.toLocaleString()} all-time</span>
+        </div>
         <MiniBars series={days} color={T.gold} unit="reviews" />
-      </div>
+      </Card>
 
-      <div style={{ marginTop: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16, padding: "14px 16px" }}>
+      <Card>
         <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>SRS distribution</div>
         {STAGE_GROUPS.map((g) => {
           const v = stageDist[g] || 0;
-          const pct = learned ? v / learned : 0;
+          const p = learned ? v / learned : 0;
           const c = stageMeta(g === "Apprentice" ? 1 : g === "Guru" ? 5 : g === "Master" ? 7 : g === "Enlightened" ? 8 : 9).color;
           return (
             <div key={g} style={{ marginBottom: 8 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5, color: T.textDim, marginBottom: 3 }}><span>{g}</span><span>{v}</span></div>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5, color: T.textDim, marginBottom: 3 }}><span>{g}</span><span>{v} · {Math.round(p * 100)}%</span></div>
               <div style={{ height: 7, background: T.line, borderRadius: 7, overflow: "hidden" }}>
-                <div style={{ height: "100%", width: `${pct * 100}%`, background: c, transition: "width .4s ease" }} />
+                <div style={{ height: "100%", width: `${p * 100}%`, background: c, transition: "width .4s ease" }} />
               </div>
             </div>
           );
         })}
-      </div>
+      </Card>
 
-      <div style={{ marginTop: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16, padding: "14px 16px" }}>
+      <Card>
         <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>Level progress</div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
           {Array.from({ length: MAX_LEVEL }, (_, k) => k + 1).map((l) => {
@@ -13750,7 +13855,7 @@ function StatsView({ state, allItems, level, streak }) {
             );
           })}
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
@@ -15110,7 +15215,15 @@ function App() {
   const [view, setView] = useState("home");
   const [practiceItems, setPracticeItems] = useState([]);
   const [kanjiFocus, setKanjiFocus] = useState(null);
-  const openKanji = useCallback((ch) => { setKanjiFocus(ch); setView("kanji"); }, []);
+  const [cameFrom, setCameFrom] = useState(null);
+  const viewRef = useRef(view); viewRef.current = view;
+  const openKanji = useCallback((ch) => { const from = viewRef.current; if (from !== "kanji") setCameFrom(from); setKanjiFocus(ch); setView("kanji"); }, []);
+  const goTab = useCallback((k) => { setCameFrom(null); setView(k); }, []);
+  useEffect(() => {
+    const key = (state && state.settings && state.settings.theme) || "rose";
+    applyTheme(key);
+    try { document.body.style.background = T.bg; document.documentElement.style.background = T.bg; } catch (e) { /* ignore */ }
+  }, [state && state.settings && state.settings.theme]);
   const stateRef = useRef(state);
   useEffect(() => { stateRef.current = state; }, [state]);
 
@@ -15206,6 +15319,9 @@ function App() {
   if (!state || !derived)
     return <div style={{ minHeight: "100vh", background: T.bg, color: T.textDim, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: uiFont }}>Loading…</div>;
 
+  applyTheme(state.settings.theme);
+  const VIEW_LABELS = { home: "Home", lessons: "Lessons", reviews: "Reviews", script: "Script", kanji: "Kanji", items: "Vocab", stats: "Stats", practice: "Practice" };
+
   const tabs = [
     ["home", "Home"],
     ["lessons", "Lessons", derived.pool.length],
@@ -15247,7 +15363,7 @@ function App() {
 
         <div style={{ display: "flex", gap: 3, marginTop: 16, background: T.panel, padding: 4, borderRadius: 13, border: `1px solid ${T.line}` }}>
           {tabs.map(([k, label, n]) => (
-            <button key={k} className="tap" onClick={() => setView(k)} style={{ flex: 1, border: "none", borderRadius: 9, padding: "9px 1px", fontSize: 11, fontWeight: 600, position: "relative", color: view === k ? "#fff" : T.textDim, background: view === k ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : "transparent" }}>
+            <button key={k} className="tap" onClick={() => goTab(k)} style={{ flex: 1, border: "none", borderRadius: 9, padding: "9px 1px", fontSize: 11, fontWeight: 600, position: "relative", color: view === k ? "#fff" : T.textDim, background: view === k ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : "transparent" }}>
               {label}
               {n > 0 && view !== k && (<span style={{ position: "absolute", top: 5, right: "50%", marginRight: -16, width: 6, height: 6, borderRadius: 999, background: T.terra }} />)}
             </button>
@@ -15269,7 +15385,16 @@ function App() {
         {view === "reviews" && <TypedQuiz items={derived.due} mode="srs" onGrade={grade} onExit={() => setView("home")} title="Reviews" onKanji={openKanji} />}
         {view === "practice" && <TypedQuiz items={practiceItems} mode="practice" onGrade={grade} onExit={() => setView("items")} title="Practice" onKanji={openKanji} />}
         {view === "script" && <ScriptView scriptState={state.script} setScript={(next) => persist({ ...state, script: next })} />}
-        {view === "kanji" && <KanjiView kanjiState={state.kanji} setKanji={(next) => persist({ ...state, kanji: next })} focusChar={kanjiFocus} onFocusDone={() => setKanjiFocus(null)} />}
+        {view === "kanji" && (
+          <>
+            {cameFrom && (
+              <button className="tap" onClick={() => { const f = cameFrom; setCameFrom(null); setKanjiFocus(null); setView(f); }} style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 12, padding: "9px 13px", borderRadius: 12, border: `1px solid ${T.line}`, background: T.panel, color: T.gold, fontSize: 13, fontWeight: 700 }}>
+                ‹ Back to {VIEW_LABELS[cameFrom] || "where I was"}
+              </button>
+            )}
+            <KanjiView kanjiState={state.kanji} setKanji={(next) => persist({ ...state, kanji: next })} focusChar={kanjiFocus} onFocusDone={() => setKanjiFocus(null)} />
+          </>
+        )}
         {view === "items" && (<ItemsView allItems={allItems} state={state} level={state.currentLevel} leeches={derived.leechList.length} onAdd={(c) => persist({ ...state, custom: [...state.custom, c] })} onStartPractice={startPractice} onKanji={openKanji} />)}
         {view === "stats" && <StatsView state={state} allItems={allItems} level={state.currentLevel} streak={streak} />}
       </div>

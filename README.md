@@ -30,10 +30,14 @@ trainer. The whole thing is a single self-contained HTML file.
   (kanji → meaning or meaning → kanji); and trace each character with the same
   stroke-order guidance. Many common kanji also include an example word with
   audio. Kana practice uses the same learn-5-then-quiz lesson rhythm.
+- **Themes** — pick from the Home screen: cute light palettes (Sakura, Lavender,
+  Peach, Matcha, Sky) and dark modes (Midnight, Dark Violet, Dark Forest),
+  including violet options. Your choice is saved and applies across the whole app.
 - **Tap any kanji to look it up** — in lessons, reviews, and the vocabulary
   dictionary, the individual kanji inside a word are tappable (shown with a
   dotted underline). Tapping one jumps straight to the Kanji page and opens that
-  character's full entry — readings, meaning, example, and stroke order.
+  character's full entry — readings, meaning, example, and stroke order — and a
+  **"‹ Back to …"** button returns you to exactly where you tapped it.
 - **Trace remembers the last kanji you opened** — open a character anywhere on
   the Kanji page, then switch to **Trace** and it starts on that same character.
   The Trace tab also has its own **search**, so you can pull up any kanji to
@@ -62,6 +66,10 @@ trainer. The whole thing is a single self-contained HTML file.
   guide that shows the real stroke order: numbered start points, direction
   arrows on each stroke, and the exact stroke shapes (from the KanjiVG project).
   A Quiz mode hides the guide and asks you to write the character from memory.
+- **Stats dashboard** — a progress view with percentages throughout: overall
+  vocabulary and kanji mastery bars, a per-JLPT kanji breakdown (N5 → N1 + Jōyō),
+  hiragana/katakana coverage, your SRS stage distribution, a 7-day review chart
+  with an all-time total, and a level-progress grid.
 - **Progress saves on your device** and the app installs to your home screen.
 
 ## How to use
