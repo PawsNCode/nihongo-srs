@@ -88,6 +88,9 @@ trainer. The whole thing is a single self-contained HTML file.
   vocabulary and kanji mastery bars, a per-JLPT kanji breakdown (N5 → N1 + Jōyō),
   hiragana/katakana coverage, your SRS stage distribution, a 7-day review chart
   with an all-time total, and a level-progress grid.
+- **Backup & restore** — from the Home screen you can download your whole
+  progress as a file (or copy it as a code), and restore it on another device or
+  after clearing data. No account needed; the backup lives wherever you save it.
 - **Progress saves on your device** and the app installs to your home screen.
 
 ## How to use
