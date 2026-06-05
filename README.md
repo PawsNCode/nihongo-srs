@@ -31,9 +31,11 @@ trainer. The whole thing is a single self-contained HTML file.
   stroke-order guidance. Many common kanji also include an example word with
   audio. Kana practice uses the same learn-5-then-quiz lesson rhythm.
 - **Custom quiz** — tap the **✚** on any word (in the Vocab list) or any kanji
-  (in Kanji → Browse) to add it to your own collection, then drill exactly those
-  items from the Reviews tab — words and kanji each get their own quiz, and you
-  can clear the set anytime. Your collection is saved on your device.
+  (in Kanji → Browse) to add it to your own collection — or select several at
+  once (tap multiple Vocab rows, or use "Select multiple to add" in the kanji
+  grid) and add them in one go. Then drill exactly those items from the Reviews
+  tab — words and kanji each get their own quiz, and you can clear the set
+  anytime. Your collection is saved on your device.
 - **Reviews hub** — the Reviews tab lets you choose what to practice: your due
   **vocabulary** (spaced-repetition), **kanji** you've learned (meaning quiz),
   **hiragana**, or **katakana**. Each shows a count, and you can jump back to the
@@ -75,7 +77,13 @@ trainer. The whole thing is a single self-contained HTML file.
 - **Handwriting trainer with stroke order** — trace any kana *or kanji* over a
   guide that shows the real stroke order: numbered start points, direction
   arrows on each stroke, and the exact stroke shapes (from the KanjiVG project).
-  A Quiz mode hides the guide and asks you to write the character from memory.
+  The **Test (SRS)** mode is a spaced-repetition writing test: you write the
+  character from memory, self-grade, and each character is then scheduled for
+  review (due characters come first, with the usual SRS stages). Works for
+  hiragana, katakana, and kanji.
+- **Script chart lookups** — in the Script → Chart, tap any kana to see its
+  details (reading, note, stroke count) and a stroke-order diagram; tap the
+  diagram to jump into tracing it, with a back button to return to the details.
 - **Stats dashboard** — a progress view with percentages throughout: overall
   vocabulary and kanji mastery bars, a per-JLPT kanji breakdown (N5 → N1 + Jōyō),
   hiragana/katakana coverage, your SRS stage distribution, a 7-day review chart
