@@ -13229,6 +13229,9 @@ function normRomaji(s) {
 function answerMatches(input, item) {
   const raw = (input || "").trim();
   if (!raw) return false;
+  // accept the word itself — e.g. the iOS IME converted the reading to kanji (会う)
+  if (item.ja && raw === item.ja) return true;
+  if (item.ja && raw.replace(/\s/g, "") === item.ja.replace(/\s/g, "")) return true;
   const r = normRomaji(raw);
   if (r) {
     if (r === normRomaji(item.romaji)) return true;
@@ -13469,7 +13472,7 @@ function TypedQuiz({ items, mode, onGrade, onExit, title, onKanji }) {
         End session
       </button>
       <div style={{ textAlign: "center", fontSize: 11, color: T.textDim, marginTop: 10, lineHeight: 1.6 }}>
-        Type the reading in romaji — it converts to kana as you go. Long vowels like “ou / uu” count, and kana input works too.
+        Type the reading in romaji — it converts to kana as you go. Long vowels like “ou / uu” count, and typing kana (or the kanji itself) works too.
       </div>
     </div>
   );
