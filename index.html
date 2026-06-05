@@ -12994,6 +12994,16 @@ function Logo({ size = 40 }) {
   );
 }
 
+/* Small toggle to add/remove an item from the persistent custom quiz. */
+function CustomBtn({ active, onClick, label }) {
+  return (
+    <button className="tap" onClick={(e) => { e.stopPropagation(); onClick(); }} title={active ? "In custom quiz — tap to remove" : "Add to custom quiz"}
+      style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, border: `1px solid ${active ? T.gold : T.line}`, background: active ? `${T.gold}16` : T.panel, color: active ? T.gold : T.textDim, borderRadius: 999, padding: label ? "9px 14px" : 0, width: label ? "auto" : 30, height: label ? "auto" : 30, fontSize: label ? 13 : 12, fontWeight: 700, cursor: "pointer", flexShrink: 0 }}>
+      <span style={{ fontSize: 14, lineHeight: 1 }}>{active ? "★" : "✚"}</span>{label && <span>{active ? "In custom quiz" : "Add to custom quiz"}</span>}
+    </button>
+  );
+}
+
 const jaFont =
   '"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","Shippori Mincho","Songti SC",serif';
 const displayFont = '"Hiragino Mincho ProN","Iowan Old Style",Georgia,"Times New Roman",serif';
@@ -13338,6 +13348,7 @@ const DEFAULT_STATE = {
   history: {},
   script: { progress: {}, best: 0, batch: 5, quizDir: "recognize", chart: "hira" },
   kanji: { level: "N5", learned: {}, best: 0, batch: 5 },
+  customQuiz: { words: {}, kanji: {} },
 };
 
 function Bar({ pct, h = 8 }) {
@@ -13615,7 +13626,7 @@ function HomeView({ state, level, levelPct, lessons, reviews, leeches, stageCoun
 }
 
 /* ===================== ITEMS BROWSER ===================== */
-function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice, onKanji }) {
+function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice, onKanji, customWords, onToggleCustom }) {
   const [q, setQ] = useState("");
   const [band, setBand] = useState("All");
   const [filter, setFilter] = useState("all");
@@ -13716,6 +13727,7 @@ function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice, on
                 {p && p.due !== Infinity && (<div style={{ fontSize: 10, color: T.textDim }}>{fmtUntil(p.due, now)}</div>)}
               </div>
               <Speaker text={it.ja} size={14} color={T.terra} />
+              <CustomBtn active={!!(customWords && customWords[it.id])} onClick={() => onToggleCustom(it.id)} />
             </div>
           );
         })}
@@ -14612,7 +14624,7 @@ function makeKanjiQ(answer, pool) {
   return { answer, options: shuffle([answer, ...distractors]) };
 }
 
-function KanjiView({ kanjiState, setKanji, focusChar, onFocusDone }) {
+function KanjiView({ kanjiState, setKanji, focusChar, onFocusDone, customKanji, onToggleCustomKanji }) {
   const ks = kanjiState || {};
   const level = ks.level || "N5";
   const learned = ks.learned || {};
@@ -14666,7 +14678,7 @@ function KanjiView({ kanjiState, setKanji, focusChar, onFocusDone }) {
         ))}
       </div>
 
-      {mode === "browse" && <KanjiBrowse list={list} learned={learned} onMark={markLearned} selChar={selChar} setSelChar={setSelChar} level={level} onTrace={() => { setTraceReturn("browse"); setMode("trace"); }} />}
+      {mode === "browse" && <KanjiBrowse list={list} learned={learned} onMark={markLearned} selChar={selChar} setSelChar={setSelChar} level={level} onTrace={() => { setTraceReturn("browse"); setMode("trace"); }} customKanji={customKanji} onToggleCustomKanji={onToggleCustomKanji} />}
       {mode === "study" && <KanjiStudy key={level} list={list} learned={learned} onMark={markLearned} batch={batch} setBatch={setBatch} best={ks.best || 0} onBest={onBest} />}
       {mode === "quiz" && <KanjiQuiz key={level} list={list} level={level} learned={learned} best={ks.best || 0} onBest={(b) => setKanji({ ...ks, best: Math.max(ks.best || 0, b) })} />}
       {mode === "trace" && (
@@ -14684,7 +14696,7 @@ function KanjiView({ kanjiState, setKanji, focusChar, onFocusDone }) {
 }
 
 /* ---- Browse: grid + tap for detail ---- */
-function KanjiBrowse({ list, learned, onMark, selChar, setSelChar, level, onTrace }) {
+function KanjiBrowse({ list, learned, onMark, selChar, setSelChar, level, onTrace, customKanji, onToggleCustomKanji }) {
   const [q, setQ] = useState("");
   const searching = q.trim().length > 0;
   const displayList = searching ? KANJI.filter((kj) => kanjiMatches(kj, q)) : list;
@@ -14734,6 +14746,11 @@ function KanjiBrowse({ list, learned, onMark, selChar, setSelChar, level, onTrac
           <button className="tap" onClick={() => onMark(k.char, !learned[k.char])} style={{ width: "100%", marginTop: 12, padding: 11, borderRadius: 12, border: learned[k.char] ? `1px solid ${T.gold}` : "none", background: learned[k.char] ? `${T.gold}12` : `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: learned[k.char] ? T.gold : "#fff", fontSize: 13.5, fontWeight: 700 }}>
             {learned[k.char] ? "✓ Learned — tap to unmark" : "Mark as learned"}
           </button>
+          {onToggleCustomKanji && (
+            <div style={{ marginTop: 8, display: "flex", justifyContent: "center" }}>
+              <CustomBtn active={!!(customKanji && customKanji[k.char])} onClick={() => onToggleCustomKanji(k.char)} label />
+            </div>
+          )}
         </div>
       )}
 
@@ -14935,13 +14952,14 @@ function KanjiStudy({ list, learned, onMark, batch, setBatch, best, onBest }) {
 }
 
 /* ---- Quiz: kanji ⇄ meaning multiple choice ---- */
-function KanjiQuiz({ list, level, learned, best, onBest }) {
-  const [phase, setPhase] = useState("setup"); // setup | quiz
+function KanjiQuiz({ list, level, learned, best, onBest, autoPool }) {
+  const auto = autoPool && autoPool.length ? autoPool : null;
+  const [phase, setPhase] = useState(auto ? "quiz" : "setup"); // setup | quiz
   const [sel, setSel] = useState({});          // char -> true (selection)
   const [search, setSearch] = useState("");
-  const [pool, setPool] = useState([]);         // chosen kanji for this quiz
+  const [pool, setPool] = useState(auto || []);         // chosen kanji for this quiz
   const [dir, setDir] = useState("k2m");
-  const [q, setQ] = useState(null);
+  const [q, setQ] = useState(() => (auto ? makeKanjiQ(auto[Math.floor(Math.random() * auto.length)], auto.length >= 4 ? auto : KANJI) : null));
   const [picked, setPicked] = useState(null);
   const [score, setScore] = useState({ right: 0, total: 0, streak: 0, best });
   const timer = useRef(null);
@@ -15250,10 +15268,11 @@ function KanjiTrace({ list, initialChar }) {
 }
 
 /* ===================== REVIEWS HUB (choose what to review) ===================== */
-function ReviewsView({ due, grade, onKanji, kanjiState, setKanji }) {
-  const [pick, setPick] = useState(null); // null | vocab | kanji | hira | kata
+function ReviewsView({ due, grade, onKanji, kanjiState, setKanji, customWordItems, customKanjiItems, onClearCustom }) {
+  const [pick, setPick] = useState(null); // null | vocab | kanji | hira | kata | cwords | ckanji
   const learnedKanji = KANJI.filter((k) => (kanjiState && kanjiState.learned && kanjiState.learned[k.char]));
-  const sp = {}; // (kana progress is in script state, not needed for counts here)
+  const cw = customWordItems || [], ck = customKanjiItems || [];
+  const customTotal = cw.length + ck.length;
 
   const cats = [
     { key: "vocab", label: "Vocabulary", jp: "単語", desc: "Type the reading of your due words (SRS).", count: due.length, unit: "due now", color: T.gold, ready: true },
@@ -15263,7 +15282,6 @@ function ReviewsView({ due, grade, onKanji, kanjiState, setKanji }) {
   ];
 
   if (pick) {
-    const cat = cats.find((c) => c.key === pick);
     return (
       <div className="fade">
         <button className="tap" onClick={() => setPick(null)} style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 12, padding: "9px 13px", borderRadius: 12, border: `1px solid ${T.line}`, background: T.panel, color: T.gold, fontSize: 13, fontWeight: 700 }}>
@@ -15273,6 +15291,8 @@ function ReviewsView({ due, grade, onKanji, kanjiState, setKanji }) {
         {pick === "kanji" && <KanjiQuiz list={learnedKanji} level="all levels" learned={(kanjiState && kanjiState.learned) || {}} best={(kanjiState && kanjiState.best) || 0} onBest={(b) => setKanji({ ...kanjiState, best: Math.max((kanjiState && kanjiState.best) || 0, b) })} />}
         {pick === "hira" && <ScriptQuiz set={HIRAGANA} chart="hira" />}
         {pick === "kata" && <ScriptQuiz set={KATAKANA} chart="kata" />}
+        {pick === "cwords" && <TypedQuiz items={cw} mode="practice" onGrade={grade} onExit={() => setPick(null)} title="Custom quiz · words" onKanji={onKanji} />}
+        {pick === "ckanji" && <KanjiQuiz list={ck} level="your custom set" learned={(kanjiState && kanjiState.learned) || {}} best={(kanjiState && kanjiState.best) || 0} onBest={(b) => setKanji({ ...kanjiState, best: Math.max((kanjiState && kanjiState.best) || 0, b) })} autoPool={ck} />}
       </div>
     );
   }
@@ -15301,6 +15321,25 @@ function ReviewsView({ due, grade, onKanji, kanjiState, setKanji }) {
             <span style={{ color: T.textDim, fontSize: 20 }}>›</span>
           </button>
         ))}
+      </div>
+
+      <div style={{ marginTop: 14, background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${customTotal ? T.gold : T.line}`, borderRadius: 16, padding: "14px 16px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: 16 }}>★</span>
+          <span style={{ fontSize: 15, fontWeight: 700, color: T.text }}>Custom quiz</span>
+          <span style={{ fontSize: 11.5, color: T.textDim, marginLeft: "auto" }}>{customTotal} item{customTotal === 1 ? "" : "s"}</span>
+        </div>
+        {customTotal === 0 ? (
+          <div style={{ fontSize: 12, color: T.textDim, marginTop: 6, lineHeight: 1.5 }}>Tap the <b style={{ color: T.gold }}>✚</b> on any word (in Vocab) or any kanji (in Kanji → Browse) to add it here, then quiz yourself on exactly what you choose.</div>
+        ) : (
+          <>
+            <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+              <button className="tap" disabled={!cw.length} onClick={() => cw.length && setPick("cwords")} style={{ flex: 1, padding: 12, borderRadius: 12, border: "none", background: cw.length ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : T.panel, color: cw.length ? "#fff" : T.textDim, fontWeight: 700, fontSize: 13 }}>Quiz words ({cw.length})</button>
+              <button className="tap" disabled={!ck.length} onClick={() => ck.length && setPick("ckanji")} style={{ flex: 1, padding: 12, borderRadius: 12, border: "none", background: ck.length ? `linear-gradient(135deg, ${T.terra}, ${T.gold})` : T.panel, color: ck.length ? "#fff" : T.textDim, fontWeight: 700, fontSize: 13 }}>Quiz kanji ({ck.length})</button>
+            </div>
+            <button className="tap" onClick={() => onClearCustom && onClearCustom()} style={{ width: "100%", marginTop: 8, padding: 9, borderRadius: 11, border: `1px solid ${T.line}`, background: "transparent", color: T.textDim, fontSize: 12 }}>Clear custom quiz</button>
+          </>
+        )}
       </div>
 
       <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginTop: 14, lineHeight: 1.6 }}>
@@ -15333,7 +15372,7 @@ function App() {
       const loaded = await loadState();
       let s = loaded || DEFAULT_STATE;
       if (s.daily?.date !== todayStr()) s = { ...s, daily: { date: todayStr(), reviews: 0, lessons: 0 } };
-      s = { ...DEFAULT_STATE, ...s, settings: { ...DEFAULT_STATE.settings, ...(s.settings || {}) }, script: { ...DEFAULT_STATE.script, ...(s.script || {}) }, kanji: { ...DEFAULT_STATE.kanji, ...(s.kanji || {}) } };
+      s = { ...DEFAULT_STATE, ...s, settings: { ...DEFAULT_STATE.settings, ...(s.settings || {}) }, script: { ...DEFAULT_STATE.script, ...(s.script || {}) }, kanji: { ...DEFAULT_STATE.kanji, ...(s.kanji || {}) }, customQuiz: { words: {}, kanji: {}, ...(s.customQuiz || {}) } };
       if (mounted) setState(s);
     })();
     return () => { mounted = false; };
@@ -15348,6 +15387,14 @@ function App() {
 
   const persist = useCallback((next) => { setState(next); saveState(next); }, []);
   const allItems = useMemo(() => [...ITEMS, ...((state && state.custom) || [])], [state]);
+
+  const cq = (state && state.customQuiz) || { words: {}, kanji: {} };
+  const itemsById = useMemo(() => Object.fromEntries(allItems.map((it) => [it.id, it])), [allItems]);
+  const customWordItems = useMemo(() => Object.keys(cq.words || {}).map((id) => itemsById[id]).filter(Boolean), [cq.words, itemsById]);
+  const customKanjiItems = useMemo(() => Object.keys(cq.kanji || {}).map((c) => KANJI_INDEX[c]).filter(Boolean), [cq.kanji]);
+  const toggleCustomWord = useCallback((id) => { setState((s) => { const w = { ...(s.customQuiz?.words || {}) }; if (w[id]) delete w[id]; else w[id] = true; const next = { ...s, customQuiz: { words: w, kanji: { ...(s.customQuiz?.kanji || {}) } } }; saveState(next); return next; }); }, []);
+  const toggleCustomKanji = useCallback((ch) => { setState((s) => { const k = { ...(s.customQuiz?.kanji || {}) }; if (k[ch]) delete k[ch]; else k[ch] = true; const next = { ...s, customQuiz: { kanji: k, words: { ...(s.customQuiz?.words || {}) } } }; saveState(next); return next; }); }, []);
+  const clearCustomQuiz = useCallback(() => { setState((s) => { const next = { ...s, customQuiz: { words: {}, kanji: {} } }; saveState(next); return next; }); }, []);
 
   const derived = useMemo(() => {
     if (!state) return null;
@@ -15482,7 +15529,7 @@ function App() {
             onReset={() => { persist({ ...DEFAULT_STATE, custom: state.custom, settings: state.settings, script: state.script, kanji: state.kanji, daily: { date: todayStr(), reviews: 0, lessons: 0 } }); setView("home"); }} />
         )}
         {view === "lessons" && (<LearnSession pool={derived.pool} batch={state.settings.lessonBatch} onLearn={commitLearn} onGrade={grade} onExit={() => setView("home")} onKanji={openKanji} />)}
-        {view === "reviews" && <ReviewsView due={derived.due} grade={grade} onKanji={openKanji} kanjiState={state.kanji} setKanji={(next) => persist({ ...state, kanji: next })} />}
+        {view === "reviews" && <ReviewsView due={derived.due} grade={grade} onKanji={openKanji} kanjiState={state.kanji} setKanji={(next) => persist({ ...state, kanji: next })} customWordItems={customWordItems} customKanjiItems={customKanjiItems} onClearCustom={clearCustomQuiz} />}
         {view === "practice" && <TypedQuiz items={practiceItems} mode="practice" onGrade={grade} onExit={() => setView("items")} title="Practice" onKanji={openKanji} />}
         {view === "script" && <ScriptView scriptState={state.script} setScript={(next) => persist({ ...state, script: next })} />}
         {view === "kanji" && (
@@ -15492,10 +15539,10 @@ function App() {
                 ‹ Back to {VIEW_LABELS[cameFrom] || "where I was"}
               </button>
             )}
-            <KanjiView kanjiState={state.kanji} setKanji={(next) => persist({ ...state, kanji: next })} focusChar={kanjiFocus} onFocusDone={() => setKanjiFocus(null)} />
+            <KanjiView kanjiState={state.kanji} setKanji={(next) => persist({ ...state, kanji: next })} focusChar={kanjiFocus} onFocusDone={() => setKanjiFocus(null)} customKanji={cq.kanji} onToggleCustomKanji={toggleCustomKanji} />
           </>
         )}
-        {view === "items" && (<ItemsView allItems={allItems} state={state} level={state.currentLevel} leeches={derived.leechList.length} onAdd={(c) => persist({ ...state, custom: [...state.custom, c] })} onStartPractice={startPractice} onKanji={openKanji} />)}
+        {view === "items" && (<ItemsView allItems={allItems} state={state} level={state.currentLevel} leeches={derived.leechList.length} onAdd={(c) => persist({ ...state, custom: [...state.custom, c] })} onStartPractice={startPractice} onKanji={openKanji} customWords={cq.words} onToggleCustom={toggleCustomWord} />)}
         {view === "stats" && <StatsView state={state} allItems={allItems} level={state.currentLevel} streak={streak} />}
       </div>
     </div>

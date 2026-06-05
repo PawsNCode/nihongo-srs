@@ -30,6 +30,10 @@ trainer. The whole thing is a single self-contained HTML file.
   (kanji → meaning or meaning → kanji); and trace each character with the same
   stroke-order guidance. Many common kanji also include an example word with
   audio. Kana practice uses the same learn-5-then-quiz lesson rhythm.
+- **Custom quiz** — tap the **✚** on any word (in the Vocab list) or any kanji
+  (in Kanji → Browse) to add it to your own collection, then drill exactly those
+  items from the Reviews tab — words and kanji each get their own quiz, and you
+  can clear the set anytime. Your collection is saved on your device.
 - **Reviews hub** — the Reviews tab lets you choose what to practice: your due
   **vocabulary** (spaced-repetition), **kanji** you've learned (meaning quiz),
   **hiragana**, or **katakana**. Each shows a count, and you can jump back to the
