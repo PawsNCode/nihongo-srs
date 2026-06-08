@@ -88,6 +88,12 @@ trainer. The whole thing is a single self-contained HTML file.
   vocabulary and kanji mastery bars, a per-JLPT kanji breakdown (N5 → N1 + Jōyō),
   hiragana/katakana coverage, your SRS stage distribution, a 7-day review chart
   with an all-time total, and a level-progress grid.
+- **Missed items come back** — in a typed quiz, anything you get wrong is
+  re-asked again later in the same session (a couple more times), and at the end
+  you can retake just the items you missed so they actually stick.
+- **At-a-glance accuracy** — words (Vocab list), kanji (Kanji → Browse), and kana
+  (Script → Chart) show a colored border: green = solid, amber = shaky, red =
+  needs review. One look tells you what to focus on.
 - **Backup & restore** — from the Home screen you can download your whole
   progress as a file (or copy it as a code), and restore it on another device or
   after clearing data. No account needed; the backup lives wherever you save it.
