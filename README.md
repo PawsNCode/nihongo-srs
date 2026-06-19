@@ -3,7 +3,7 @@
 A web app for learning **Japanese (日本語)** from absolute beginner up to
 roughly college / JLPT N1 level — spaced-repetition vocabulary, the complete
 JLPT kanji set, hiragana & katakana practice, and a stroke-order handwriting
-trainer. The whole thing is a single self-contained HTML file.
+trainer. The whole thing is a single self-contained HTML file..
 
 🔗 **Live app:** https://pawsncode.github.io/nihongo-srs/  *(update this to your own repo path)*
 
