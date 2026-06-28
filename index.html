@@ -13669,6 +13669,8 @@ function LearnSession({ pool, batch, onLearn, onGrade, onExit, onKanji }) {
         <div style={{ fontFamily: displayFont, fontSize: 20, marginTop: 6 }}>{item.en}</div>
         <div style={{ marginTop: 14 }}><Speaker text={item.ja} size={20} color={T.gold} /></div>
       </div>
+      {item.type !== "sentence" && <ExampleSentences word={item} />}
+      <PracticePad char={item.ja} typeCheck={(s) => vocabTypeMatch(s, item)} typePlaceholder={`type it — e.g. ${item.romaji || item.kana}`} typeHint="…or type the word (kana / kanji) or its romaji on your own keyboard:" label="Try writing & typing it" />
       <button className="tap" onClick={() => { onLearn(item.id); if (i + 1 >= queue.length) setPhase("quiz"); else setI(i + 1); }}
         style={{ width: "100%", marginTop: 14, padding: 15, borderRadius: 14, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontSize: 15, fontWeight: 700 }}>
         {i + 1 >= queue.length ? "Got them — start quiz →" : "Learn it ✓"}
@@ -13889,6 +13891,7 @@ function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice, on
   const [band, setBand] = useState("All");
   const [filter, setFilter] = useState("all");
   const [selected, setSelected] = useState({});
+  const [openId, setOpenId] = useState(null);
   const now = Date.now();
   const CAP = 200;
   const bandOf = (lvl) => (LEVEL_TITLES[lvl] || "").split(" ")[0];
@@ -13974,7 +13977,7 @@ function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice, on
         </button>
       ) : null}
       {selCount === 0 && (
-        <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", margin: "0 4px 4px", lineHeight: 1.5 }}>Tip: tap rows to select several at once — then add them to your custom quiz (or practice the learned ones).</div>
+        <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", margin: "0 4px 4px", lineHeight: 1.5 }}>Tip: tap a row to select it for a custom quiz, or tap 📝 to see example sentences.</div>
       )}
 
       <MasteryLegend />
@@ -13987,7 +13990,8 @@ function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice, on
           const _m = mastery(p); const tc = _m == null ? null : masteryColor(_m);
           const bnd = it.custom ? "Custom" : bandOf(it.level);
           return (
-            <div key={it.id} onClick={() => toggle(it.id)} style={{ display: "flex", alignItems: "center", gap: 12, background: sel ? `${T.gold}0e` : T.panel, border: `${sel || tc ? 2 : 1}px solid ${sel ? T.gold : (tc || T.line)}`, borderRadius: 14, padding: "11px 13px", cursor: "pointer" }}>
+            <div key={it.id}>
+            <div onClick={() => toggle(it.id)} style={{ display: "flex", alignItems: "center", gap: 12, background: sel ? `${T.gold}0e` : T.panel, border: `${sel || tc ? 2 : 1}px solid ${sel ? T.gold : (tc || T.line)}`, borderRadius: 14, borderBottomLeftRadius: openId === it.id ? 0 : 14, borderBottomRightRadius: openId === it.id ? 0 : 14, padding: "11px 13px", cursor: "pointer" }}>
               <div style={{ fontFamily: jaFont, fontSize: 26, color: T.text, minWidth: 64 }}><JaText text={it.ja} onKanji={onKanji} /></div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 14, color: T.text, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{it.en}</div>
@@ -14000,7 +14004,14 @@ function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice, on
                 {_m != null && (<div style={{ marginTop: 3 }}><MasteryDot m={_m} size={9.5} /></div>)}
               </div>
               <Speaker text={it.ja} size={14} color={T.terra} />
+              <button className="tap" title="Example sentences" onClick={(e) => { e.stopPropagation(); setOpenId(openId === it.id ? null : it.id); }} style={{ border: `1px solid ${openId === it.id ? T.gold : T.line}`, background: openId === it.id ? `${T.gold}14` : "transparent", color: openId === it.id ? T.gold : T.textDim, borderRadius: 9, padding: "4px 8px", fontSize: 13, cursor: "pointer", lineHeight: 1 }}>📝</button>
               <CustomBtn active={!!(customWords && customWords[it.id])} onClick={() => onToggleCustom(it.id)} />
+            </div>
+            {openId === it.id && (
+              <div style={{ border: `1px solid ${T.line}`, borderTop: "none", borderBottomLeftRadius: 14, borderBottomRightRadius: 14, padding: "2px 13px 12px", background: T.panel }}>
+                <ExampleSentences word={it} />
+              </div>
+            )}
             </div>
           );
         })}
@@ -14632,6 +14643,127 @@ function MonthCalendar({ history }) {
 }
 
 
+/* ===================== EXAMPLE SENTENCES (auto, grammatically-safe frames) ===================== */
+/* These are simple, deliberately-safe sentence patterns generated for any word so
+   the learner sees it used in context. They are auto-generated templates (clearly
+   labelled "auto"), not hand-curated native sentences — the frames chosen are ones
+   that stay grammatical for nouns, adjectives, verbs and set phrases alike. */
+function firstForm(s) { return String(s || "").split(/[;,、・\/]|\s\u00b7\s/)[0].trim(); }
+
+function jpExamples(word) {
+  if (!word) return [];
+  var ja = firstForm(word.ja || word.kana || "");
+  var kana = firstForm(word.kana || word.ja || "");
+  if (!ja) return [];
+  var en = String(word.en || "").trim();
+  var enClean = en.split(/[;]/)[0].trim() || en;
+  var isVerb = /^to\s/i.test(en);
+  var isExclaim = /[!]/.test(en) || /\b(int\.|interjection|greeting|expression)\b/i.test(en);
+  var out = [];
+  if (isVerb) {
+    var base = enClean.replace(/^to\s+/i, "").split(/[,]/)[0].trim();
+    out.push({ ja: "\u6bce\u65e5" + ja + "\u3002", kana: "\u307e\u3044\u306b\u3061" + kana + "\u3002", en: "I " + base + " every day." });
+    out.push({ ja: "\u3042\u3057\u305f" + ja + "\u3002", kana: "\u3042\u3057\u305f" + kana + "\u3002", en: "I'll " + base + " tomorrow." });
+  } else if (isExclaim) {
+    out.push({ ja: "\u300c" + ja + "\u300d\u3068\u3044\u3044\u307e\u3059\u3002", kana: "\u300c" + kana + "\u300d\u3068\u3044\u3044\u307e\u3059\u3002", en: "We say \u201c" + ja + "\u201d (" + enClean + ")." });
+    out.push({ ja: "\u3068\u3082\u3060\u3061\u306b\u300c" + ja + "\u300d\u3068\u3044\u3044\u307e\u3057\u305f\u3002", kana: "\u3068\u3082\u3060\u3061\u306b\u300c" + kana + "\u300d\u3068\u3044\u3044\u307e\u3057\u305f\u3002", en: "I said \u201c" + ja + "\u201d to my friend." });
+  } else {
+    out.push({ ja: "\u3053\u308c\u306f" + ja + "\u3067\u3059\u3002", kana: "\u3053\u308c\u306f" + kana + "\u3067\u3059\u3002", en: "This is " + enClean + "." });
+    out.push({ ja: "\u300c" + ja + "\u300d\u3068\u3044\u3044\u307e\u3059\u3002", kana: "\u300c" + kana + "\u300d\u3068\u3044\u3044\u307e\u3059\u3002", en: "We say \u201c" + ja + "\u201d (" + enClean + ")." });
+  }
+  return out;
+}
+
+function kanjiExampleWord(k) {
+  if (!k || !k.exJa) return null;
+  return { ja: k.exJa, kana: k.exKana || k.exJa, en: k.exEn || (k.meaning || "") };
+}
+
+function ExampleSentences({ word, label }) {
+  const ex = jpExamples(word);
+  if (!ex.length) return null;
+  return (
+    <div style={{ background: T.panelHi, border: `1px solid ${T.line}`, borderRadius: 16, padding: "12px 14px", marginTop: 14, textAlign: "left" }}>
+      <div style={{ fontSize: 12.5, fontWeight: 800, color: T.gold, marginBottom: 9, display: "flex", alignItems: "center", gap: 7 }}>
+        <span>📝 {label || "Example sentences"}</span>
+        <span style={{ fontSize: 9.5, fontWeight: 800, color: T.textDim, border: `1px solid ${T.line}`, borderRadius: 6, padding: "1px 5px" }}>auto</span>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {ex.map((s, i) => (
+          <div key={i} style={{ borderLeft: `2px solid ${T.gold}55`, paddingLeft: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontFamily: jaFont, fontSize: 17, color: T.text, lineHeight: 1.5 }}>{s.ja}</span>
+              <Speaker text={s.ja} size={13} color={T.terra} />
+            </div>
+            <div style={{ fontSize: 12, color: T.goldSoft, fontStyle: "italic", marginTop: 1 }}>{s.kana}</div>
+            <div style={{ fontSize: 12, color: T.textDim, marginTop: 1 }}>{s.en}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 9, fontStyle: "italic", lineHeight: 1.5 }}>Simple auto-built patterns that put the word in a sentence — handy for reading practice.</div>
+    </div>
+  );
+}
+
+/* ---- Example WORDS that use a given kana (for the script lessons/details) ---- */
+var KANA_EX_CACHE = {};
+function kanaExampleWords(glyph) {
+  if (!glyph) return [];
+  var g = kataToHira(glyph);
+  if (KANA_EX_CACHE[g]) return KANA_EX_CACHE[g];
+  var starts = [], contains = [];
+  for (var i = 0; i < RAW.length; i++) {
+    var r = RAW[i];
+    var kana = r[4] || "";
+    if (!kana || kana.length > 5) continue;
+    var hk = kataToHira(kana);
+    if (hk === g) continue; // skip the bare kana itself
+    if (hk.charAt(0) === g) { if (starts.length < 4) starts.push({ ja: r[3], kana: r[4], romaji: r[5], en: r[6] }); }
+    else if (hk.indexOf(g) >= 0) { if (contains.length < 4) contains.push({ ja: r[3], kana: r[4], romaji: r[5], en: r[6] }); }
+    if (starts.length >= 2) break;
+  }
+  var res = starts.concat(contains).slice(0, 2);
+  KANA_EX_CACHE[g] = res;
+  return res;
+}
+
+function KanaExamples({ glyph }) {
+  const words = kanaExampleWords(glyph);
+  if (!words.length) return null;
+  return (
+    <div style={{ background: T.panelHi, border: `1px solid ${T.line}`, borderRadius: 16, padding: "12px 14px", marginTop: 14, textAlign: "left" }}>
+      <div style={{ fontSize: 12.5, fontWeight: 800, color: T.gold, marginBottom: 9 }}>📝 Words using {glyph}</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
+        {words.map((w, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, borderLeft: `2px solid ${T.gold}55`, paddingLeft: 10 }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <span style={{ fontFamily: jaFont, fontSize: 18, color: T.text }}>{w.ja}</span>
+              {w.kana && w.kana !== w.ja && <span style={{ fontSize: 12, color: T.goldSoft, fontStyle: "italic", marginLeft: 7 }}>{w.kana}</span>}
+              <div style={{ fontSize: 12, color: T.textDim, marginTop: 1 }}>{w.romaji ? w.romaji + " \u00b7 " : ""}{w.en}</div>
+            </div>
+            <Speaker text={w.ja} size={13} color={T.terra} />
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 9, fontStyle: "italic", lineHeight: 1.5 }}>Real words from the dictionary that use this kana — read them aloud to hear it in context.</div>
+    </div>
+  );
+}
+
+/* ---- Type-to-check matcher for whole vocabulary words ---- */
+function vocabTypeMatch(typed, item) {
+  var t = (typed || "").trim();
+  if (!t || !item) return false;
+  if (t === item.ja || t === item.kana) return true;
+  var norm = function (s) { return kataToHira(String(s).replace(/[\u30fc.\-\s]/g, "").trim()); };
+  var th = norm(t);
+  var tr = kataToHira(romajiToKana(normRomaji(t)));
+  var targets = [item.kana, item.ja, firstForm(item.kana), firstForm(item.ja)];
+  return targets.some(function (x) { var n = norm(x); return n && (n === th || n === tr); });
+}
+
+
+
 function ScriptView({ scriptState, setScript, traceState, gradeTrace }) {
   const ss = scriptState || {};
   const chart = ss.chart || "hira";
@@ -14859,6 +14991,7 @@ function ScriptTrain({ scriptState, setScript, chart, set }) {
           <div style={{ marginTop: 14 }}><Speaker text={a[0]} size={20} color={T.gold} /></div>
         </div>
         <PracticePad char={a[0]} typeCheck={(s) => kanaTypeMatch(s, a[0])} typePlaceholder={`type the romaji, e.g. ${a[1]}`} typeHint="…or type its romaji / kana on your own keyboard:" />
+        <KanaExamples glyph={a[0]} />
         <button className="tap" onClick={() => { markLearned(a[0]); if (tIdx + 1 >= teachQueue.length) startQuiz(teachQueue); else setTIdx(tIdx + 1); }}
           style={{ width: "100%", marginTop: 14, padding: 15, borderRadius: 14, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontSize: 15, fontWeight: 700 }}>
           {tIdx + 1 >= teachQueue.length ? "Got them — quiz me →" : "Learn it ✓"}
@@ -15008,6 +15141,7 @@ function ScriptChart({ set, chart, selGlyph, setSelGlyph, onTrace, prog, traceMa
             <span style={{ position: "absolute", bottom: 5, right: 6, fontSize: 13, opacity: 0.85, pointerEvents: "none" }}>✍️</span>
           </div>
           <button className="tap" onClick={() => onTrace && onTrace()} style={{ display: "block", margin: "8px auto 0", border: "none", background: "transparent", color: T.gold, fontSize: 11.5, fontWeight: 700, cursor: "pointer" }}>stroke order — tap to trace this character ›</button>
+          <KanaExamples glyph={sel[0]} />
         </div>
       )}
 
@@ -15472,6 +15606,7 @@ function KanjiBrowse({ list, learned, onMark, selChar, setSelChar, level, onTrac
             <Speaker text={kanjiSpeak(k)} color={T.terra} />
           </div>
           <MnemonicCard k={k} />
+          {k.exJa && <ExampleSentences word={kanjiExampleWord(k)} label="Example sentences" />}
           <button className="tap" onClick={() => onMark(k.char, !learned[k.char])} style={{ width: "100%", marginTop: 12, padding: 11, borderRadius: 12, border: learned[k.char] ? `1px solid ${T.gold}` : "none", background: learned[k.char] ? `${T.gold}12` : `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: learned[k.char] ? T.gold : "#fff", fontSize: 13.5, fontWeight: 700 }}>
             {learned[k.char] ? "✓ Learned — tap to unmark" : "Mark as learned"}
           </button>
@@ -15638,6 +15773,7 @@ function KanjiStudy({ list, learned, onMark, batch, setBatch, best, onBest, onRe
         </div>
         <MnemonicCard k={k} />
         <PracticePad char={k.char} typeCheck={(s) => kanjiTypeMatch(s, k)} typePlaceholder="type 漢字 or a reading" typeHint="…or type the kanji (with a Japanese keyboard) or one of its readings:" />
+        {k.exJa && <ExampleSentences word={kanjiExampleWord(k)} label="Example sentences" />}
         <button className="tap" onClick={() => { onMark(k.char, true); if (tIdx + 1 >= teach.length) startQuiz(teach); else setTIdx(tIdx + 1); }}
           style={{ width: "100%", marginTop: 14, padding: 15, borderRadius: 14, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontSize: 15, fontWeight: 700 }}>
           {tIdx + 1 >= teach.length ? "Got them — quiz me →" : "Learn it ✓"}

@@ -96,15 +96,29 @@ trainer. The whole thing is a single self-contained HTML file..
   ("write the kanji that means …"). The 🔊 speaker is still there if you want to
   hear it, but you're no longer relying on a synthesized voice that can mispronounce
   some characters.
-- **Practice before you commit** — in both the kana and kanji lessons, before you
-  tap **Learn it** you get a practice pad right on the teaching card: trace the
-  character over the stroke-order guide (with a *Hide guide* toggle so you can test
-  yourself), and/or type it on your own keyboard to check you've got it. Nothing
-  is graded — it's a no-pressure warm-up so the character sticks before it enters
-  your review schedule.
+- **Practice before you commit (words, kana & kanji)** — in every lesson — kana,
+  kanji, *and now vocabulary words* — before you tap **Learn it** you get a
+  practice pad right on the teaching card. **Try writing it:** draw the character
+  or word over the stroke-order guide (with a *Hide guide* toggle so you can test
+  yourself from memory). **Try typing it:** type it on your own keyboard —
+  hiragana, katakana, kanji, or romaji — and hit **Check** to verify you got it
+  right. Nothing here is graded; it's a no-pressure warm-up so it sticks before it
+  enters your review schedule.
+- **Example sentences everywhere** — every word, kanji, and kana now shows it used
+  in context, both while you're learning it and when you look it up:
+  - **Words & kanji** get at least two short example sentences (with audio, a kana
+    reading, and an English gloss). They appear on the lesson card and — for vocab
+    — when you tap the 📝 button on any row in the Vocab dictionary, and for kanji
+    in the Kanji Browse detail card. These are **auto-generated example patterns**
+    (clearly labelled *auto*): the sentence frames were chosen to stay grammatical
+    across nouns, adjectives, verbs, and set phrases, so they're reliable reading
+    practice rather than hand-curated native sentences.
+  - **Kana** can't form a sentence on their own, so each kana instead shows two
+    real dictionary words that use it (with reading, romaji, meaning, and audio) —
+    on the kana lesson card and in the Script → Chart detail view.
 - **Script chart lookups** — in the Script → Chart, tap any kana to see its
-  details (reading, note, stroke count) and a stroke-order diagram; tap the
-  diagram to jump into tracing it, with a back button to return to the details.
+  details (reading, note, stroke count), a stroke-order diagram, and example
+  words; tap the diagram to jump into tracing it, with a back button to return.
 - **Stats dashboard** — a progress view with percentages throughout: overall
   vocabulary and kanji mastery bars, a per-JLPT kanji breakdown (N5 → N1 + Jōyō),
   hiragana/katakana coverage, your SRS stage distribution, a 7-day review chart
