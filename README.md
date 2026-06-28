@@ -97,6 +97,11 @@ trainer. The whole thing is a single self-contained HTML file..
 - **Backup & restore** — from the Home screen you can download your whole
   progress as a file (or copy it as a code), and restore it on another device or
   after clearing data. No account needed; the backup lives wherever you save it.
+- **Refresh & version info** — a **Refresh** button on the Home screen pulls the
+  latest version of the app without touching your progress — handy when the app
+  is installed to your iPhone home screen and an update isn't showing up yet.
+  Just below it, the app shows its **version number** and the **exact date and
+  time it was last updated** (detected automatically from the deployed file).
 - **Progress saves on your device** and the app installs to your home screen.
 
 ## How to use
@@ -137,3 +142,7 @@ license any modifications to that data under the same terms.
 2. In **Settings → Pages**, set the source to your default branch, root folder.
 3. Your app will be live at `https://<your-username>.github.io/<repo>/` —
    update the **Live app** link above to match.
+
+---
+
+Made by Niza.
