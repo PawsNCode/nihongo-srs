@@ -102,6 +102,23 @@ trainer. The whole thing is a single self-contained HTML file..
   is installed to your iPhone home screen and an update isn't showing up yet.
   Just below it, the app shows its **version number** and the **exact date and
   time it was last updated** (detected automatically from the deployed file).
+- **Auto-play pronunciation toggle** — a switch on the Home screen turns the
+  automatic read-aloud on or off. The 🔊 button always plays even when it's off.
+- **Mastery system (0–100%)** — every item carries a single mastery percentage.
+  A correct review raises it (with diminishing returns near 100%); **a miss cuts
+  it in half**. The percentage and a color band show up on vocab, kanji, kana,
+  the trace tests, and the Stats screen. Color bands: **Learning** (red, 0–19%),
+  **Shaky** (orange, 20–44%), **Familiar** (gold, 45–69%), **Strong** (light
+  green, 70–89%), **Mastered** (green, 90–100%).
+- **Master-it quizzes** — a quiz or review session now ends only once **every
+  item has been answered correctly twice in a row**. Miss one and it goes back in
+  the pile (and its mastery halves). On-screen instructions explain the rule, and
+  there's no false "well done" when you've been struggling.
+- **Stroke order while learning** — the kana lesson card now shows a numbered
+  stroke-order diagram so you can see how each character is written.
+- **Trace test = SRS with retake** — the ✍️ Trace test feeds the same spaced-
+  repetition schedule; a miss halves mastery and immediately asks you to rewrite
+  that same character.
 - **Progress saves on your device** and the app installs to your home screen.
 
 ## How to use

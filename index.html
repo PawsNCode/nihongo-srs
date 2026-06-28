@@ -12940,7 +12940,7 @@ const STORE_KEY = "nihongo-wk-v1";
    "Last updated" on the Home screen is detected automatically from the
    deployed file's Last-Modified time; BUILD_DATE is only a fallback shown
    when that can't be read (e.g. when opening the file locally). */
-const APP_VERSION = "1.0.0";
+const APP_VERSION = "1.1.0";
 const BUILD_DATE = "June 29, 2026";
 
 /* ---- Theme: sumi ink + indigo (藍) + vermilion (朱) on washi paper ---- */
@@ -13019,6 +13019,11 @@ const uiFont =
   '"Hiragino Sans","Yu Gothic",ui-sans-serif,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif';
 
 /* ---- Pronunciation (Web Speech API — uses the device's Japanese voice) ---- */
+/* Auto-play pronunciation toggle. Manual 🔊 taps always play via speak();
+   automatic playback (when an answer is revealed) goes through autoSpeak()
+   and is gated by this flag, which App syncs from settings.autoSpeak. */
+var AUTO_SPEAK = true;
+function autoSpeak(text) { if (AUTO_SPEAK) speak(text); }
 function speak(text) {
   try {
     if (!window.speechSynthesis) return;
@@ -13319,12 +13324,13 @@ function stageMeta(stage) {
 }
 const STAGE_GROUPS = ["Apprentice", "Guru", "Master", "Enlightened", "Burned"];
 function learnItem(now) {
-  return { stage: 1, due: now + STAGE_MS[1], correct: 0, wrong: 0, recentWrong: 0, learnedAt: now };
+  return { stage: 1, due: now + STAGE_MS[1], correct: 0, wrong: 0, recentWrong: 0, learnedAt: now, m: 0 };
 }
 function reviewSchedule(prog, correct, now) {
   let stage = prog ? prog.stage : 1;
   stage = correct ? Math.min(9, stage + 1) : Math.max(1, stage - (stage >= 5 ? 2 : 1));
   const ms = STAGE_MS[stage];
+  const prevM = prog ? (typeof prog.m === "number" ? prog.m : mastery(prog)) : 0;
   return {
     stage,
     due: ms === Infinity ? Infinity : now + ms,
@@ -13333,6 +13339,7 @@ function reviewSchedule(prog, correct, now) {
     correct: (prog ? prog.correct : 0) + (correct ? 1 : 0),
     wrong: (prog ? prog.wrong : 0) + (correct ? 0 : 1),
     recentWrong: correct ? 0 : (prog ? prog.recentWrong || 0 : 0) + 1,
+    m: masteryNext(prevM, correct),
   };
 }
 function isLeech(prog) { return !!prog && (prog.recentWrong || 0) >= 2; }
@@ -13356,6 +13363,67 @@ function accTier(st) {
   return null; // 1–2 corrects, no misses yet → still warming up
 }
 function tierColor(t) { return t === "good" ? T.green : t === "mixed" ? T.amber : t === "bad" ? T.red : null; }
+
+/* ===================== MASTERY (single 0–100% per item) =====================
+   One number drives the color everywhere. A correct review climbs it (with
+   diminishing returns toward 100); a miss HALVES it (the "-50% on a mistake"
+   rule). Colors are fixed (theme-independent) so red always reads as "weak"
+   and green as "mastered". */
+function masteryNext(m, ok) {
+  if (m == null || isNaN(m)) m = 0;
+  if (ok) return Math.min(100, Math.round(m + (100 - m) * 0.34));
+  return Math.round(m * 0.5);
+}
+/* Read a 0–100 mastery from any progress shape we store (vocab/trace carry an
+   explicit .m; kanji/kana stores are derived from stage or correct/wrong). */
+function mastery(prog) {
+  if (!prog) return null;
+  if (typeof prog.m === "number") return Math.max(0, Math.min(100, Math.round(prog.m)));
+  if (typeof prog.stage === "number") {
+    let base = Math.round(((Math.max(1, prog.stage) - 1) / 8) * 100);
+    if ((prog.recentWrong || 0) >= 1) base = Math.round(base * 0.5);
+    return base;
+  }
+  const c = prog.correct || 0, w = prog.wrong || 0;
+  if (c + w === 0) return null;
+  let est = Math.round((c / (c + w)) * 100);
+  if ((prog.recentWrong || 0) >= 1) est = Math.round(est * 0.5);
+  return est;
+}
+const MASTERY_BANDS = [
+  { min: 90, color: "#34a35a", label: "Mastered" },
+  { min: 70, color: "#7cc24e", label: "Strong" },
+  { min: 45, color: "#e0b53a", label: "Familiar" },
+  { min: 20, color: "#e08a3a", label: "Shaky" },
+  { min: 0,  color: "#e0564f", label: "Learning" },
+];
+function masteryBand(m) {
+  if (m == null) return { color: "#b9a48f", label: "New" };
+  for (const b of MASTERY_BANDS) if (m >= b.min) return b;
+  return MASTERY_BANDS[MASTERY_BANDS.length - 1];
+}
+function masteryColor(m) { return masteryBand(m).color; }
+function masteryLabel(m) { return masteryBand(m).label; }
+/* small "63%" pill colored by band, used in lists/cards */
+function MasteryDot({ m, size = 11 }) {
+  if (m == null) return null;
+  const c = masteryColor(m);
+  return <span style={{ display: "inline-block", fontSize: size, fontWeight: 800, color: c, background: `${c}1f`, border: `1px solid ${c}`, borderRadius: 999, padding: "1px 6px", lineHeight: 1.4 }}>{m}%</span>;
+}
+function MasteryLegend({ compact }) {
+  return (
+    <div style={{ margin: compact ? 0 : "8px 2px 0" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", fontSize: 10.5, color: T.textDim }}>
+        {[...MASTERY_BANDS].reverse().map((b, i) => {
+          const next = [...MASTERY_BANDS].reverse()[i + 1];
+          const range = b.min === 90 ? "90–100%" : `${b.min}–${(next ? next.min : 101) - 1}%`;
+          return <span key={b.label}><i style={{ display: "inline-block", width: 9, height: 9, borderRadius: 3, background: b.color, marginRight: 4, verticalAlign: "middle" }} />{b.label} <span style={{ opacity: 0.7 }}>{range}</span></span>;
+        })}
+      </div>
+      {!compact && <div style={{ textAlign: "center", fontSize: 10.5, color: T.textDim, marginTop: 6, lineHeight: 1.6 }}>Each correct review raises an item's mastery; a miss cuts it in half. The color is its current mastery.</div>}
+    </div>
+  );
+}
 function AccLegend({ compact }) {
   const dot = (c) => ({ display: "inline-block", width: 9, height: 9, borderRadius: 3, border: `2px solid ${c}`, marginRight: 4, verticalAlign: "middle" });
   return (
@@ -13384,7 +13452,7 @@ const DEFAULT_STATE = {
   currentLevel: 1,
   progress: {},
   custom: [],
-  settings: { lessonBatch: 5, theme: "rose" },
+  settings: { lessonBatch: 5, theme: "rose", autoSpeak: true },
   daily: { date: todayStr(), reviews: 0, lessons: 0 },
   history: {},
   script: { progress: {}, best: 0, batch: 5, quizDir: "recognize", chart: "hira" },
@@ -13402,94 +13470,116 @@ function Bar({ pct, h = 8 }) {
 }
 
 /* ===================== TYPED QUIZ (romaji, with live kana preview) ===================== */
+/* ---- Twice-in-a-row session: an item only clears after 2 consecutive corrects.
+   A miss resets that item's streak (and, via onGrade, halves its mastery). The
+   session ends only when every item has been cleared. (Logic unit-tested.) ---- */
+function sInit(ids) { return { q: ids.slice(), streak: {}, done: {}, total: ids.length }; }
+function sCur(st) { return st.q[0]; }
+function sGrade(st, ok) {
+  const id = st.q[0];
+  const streak = { ...st.streak }, done = { ...st.done };
+  let q = st.q.slice(1);
+  if (ok) { streak[id] = (streak[id] || 0) + 1; if (streak[id] >= 2) done[id] = true; else q.push(id); }
+  else { streak[id] = 0; q.push(id); }
+  return { ...st, q, streak, done };
+}
+function sMastered(st) { return Object.keys(st.done).length; }
+function sDone(st) { return st.q.length === 0; }
+function SessionRule({ note }) {
+  return (
+    <div style={{ background: `${T.gold}10`, border: `1px solid ${T.gold}55`, borderRadius: 12, padding: "9px 12px", fontSize: 11.5, color: T.text, lineHeight: 1.6, margin: "0 0 12px" }}>
+      <b style={{ color: T.gold }}>How this session works:</b> each item must be answered correctly <b>twice in a row</b> to clear it. Miss one and it goes back in the pile and its mastery drops by half. {note || "The session ends only when everything is cleared."}
+    </div>
+  );
+}
+
 function TypedQuiz({ items, mode, onGrade, onExit, title, onKanji }) {
-  const [queue, setQueue] = useState(() => items);
-  const [i, setI] = useState(0);
+  const byId = useMemo(() => Object.fromEntries(items.map((it) => [it.id, it])), [items]);
+  const [sess, setSess] = useState(() => sInit(items.map((it) => it.id)));
   const [answer, setAnswer] = useState("");
-  const [feedback, setFeedback] = useState(null);
-  const [score, setScore] = useState({ right: 0, total: 0 });
+  const [feedback, setFeedback] = useState(null); // { ok }
   const [leveled, setLeveled] = useState(null);
-  const [missed, setMissed] = useState(() => ({}));
-  const reqRef = useRef({});
+  const [graded, setGraded] = useState(0);
+  const [stumbled, setStumbled] = useState(false);
   const [done, setDone] = useState(items.length === 0);
   const inputRef = useRef(null);
 
-  const item = queue[i];
+  const item = byId[sCur(sess)];
   const preview = !/[\u3040-\u30ff]/.test(answer) ? romajiToKana(answer) : answer;
+  useEffect(() => { if (!feedback && inputRef.current && item) inputRef.current.focus(); }, [sess, feedback, item]);
 
-  useEffect(() => { if (!feedback && inputRef.current) inputRef.current.focus(); }, [i, feedback]);
-
-  const registerMiss = (it) => {
-    setMissed((m) => ({ ...m, [it.id]: true }));
-    const used = reqRef.current[it.id] || 0;
-    if (used < 4) { reqRef.current[it.id] = used + 2; setQueue((q) => { const c = q.slice(); c.push(it, it); return c; }); } // re-quiz a missed item twice more
+  const advance = () => {
+    const ns = sGrade(sess, feedback.ok);
+    setSess(ns); setFeedback(null); setAnswer("");
+    if (sDone(ns)) setDone(true);
   };
-  const restart = (list) => {
-    reqRef.current = {};
-    setQueue(list); setI(0); setAnswer(""); setFeedback(null);
-    setScore({ right: 0, total: 0 }); setMissed({}); setLeveled(null); setDone(false);
-  };
-
-  const submit = () => {
-    if (feedback) {
-      setFeedback(null); setAnswer("");
-      if (i + 1 >= queue.length) setDone(true); else setI(i + 1);
-      return;
-    }
+  const check = () => {
+    if (!item) return;
     const ok = answerMatches(answer, item);
     const lvl = onGrade(item.id, ok, mode);
     if (lvl) setLeveled(lvl);
-    if (!ok) registerMiss(item);
-    setFeedback(ok ? "correct" : "wrong");
-    setScore((s) => ({ right: s.right + (ok ? 1 : 0), total: s.total + 1 }));
+    if (!ok) setStumbled(true);
+    setGraded((g) => g + 1);
+    setFeedback({ ok });
   };
   const giveUp = () => {
-    if (feedback) return;
+    if (feedback || !item) return;
     const lvl = onGrade(item.id, false, mode);
     if (lvl) setLeveled(lvl);
-    registerMiss(item);
-    setFeedback("wrong");
-    setScore((s) => ({ right: s.right, total: s.total + 1 }));
+    setStumbled(true);
+    setGraded((g) => g + 1);
+    setFeedback({ ok: false });
   };
+  const submit = () => { if (feedback) advance(); else check(); };
+  const restart = () => { setSess(sInit(items.map((it) => it.id))); setAnswer(""); setFeedback(null); setLeveled(null); setGraded(0); setStumbled(false); setDone(false); };
+
+  const masteredN = sMastered(sess);
+  const total = sess.total;
 
   if (done) {
-    const acc = score.total ? Math.round((score.right / score.total) * 100) : 0;
-    const missedList = items.filter((it) => missed[it.id]);
     return (
       <div className="fade pop" style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 20, padding: "40px 24px", textAlign: "center" }}>
-        <div style={{ fontSize: 38, marginBottom: 8 }}>{items.length === 0 ? "🌸" : missedList.length ? "🌱" : "🎉"}</div>
-        <div style={{ fontFamily: displayFont, fontSize: 22 }}>{items.length === 0 ? "Nothing to quiz right now" : "All done!"}</div>
-        {items.length > 0 && (<div style={{ color: T.textDim, fontSize: 14, marginTop: 8 }}>{score.right}/{score.total} answered correctly · {acc}%</div>)}
-        {missedList.length > 0 && (<div style={{ color: T.amber, fontSize: 12.5, marginTop: 6 }}>You stumbled on {missedList.length} {missedList.length === 1 ? "item" : "items"} — a quick retake helps them stick.</div>)}
+        <div style={{ fontSize: 38, marginBottom: 8 }}>{items.length === 0 ? "🌸" : "✓"}</div>
+        <div style={{ fontFamily: displayFont, fontSize: 22 }}>{items.length === 0 ? "Nothing to quiz right now" : "Session complete"}</div>
+        {items.length > 0 && (
+          <div style={{ color: T.textDim, fontSize: 13.5, marginTop: 8, lineHeight: 1.6 }}>
+            You cleared all {total} {total === 1 ? "item" : "items"} — each answered correctly twice in a row.
+            {stumbled && " A few took a couple of tries; running it again locks them in."}
+          </div>
+        )}
         {leveled && (
           <div style={{ marginTop: 14, background: `${T.gold}14`, border: `1px solid ${T.gold}`, borderRadius: 14, padding: "12px 14px", color: T.gold, fontWeight: 700 }}>
             🎊 Level up! You reached Level {leveled} — new words unlocked.
           </div>
         )}
-        {missedList.length > 0 && (
-          <button className="tap" onClick={() => restart(missedList)} style={{ width: "100%", marginTop: 18, padding: 14, borderRadius: 13, border: "none", background: `linear-gradient(135deg, ${T.amber}, ${T.terra})`, color: "#fff", fontWeight: 700 }}>↻ Retake the {missedList.length} I missed</button>
+        {items.length > 0 && (
+          <button className="tap" onClick={restart} style={{ width: "100%", marginTop: 18, padding: 14, borderRadius: 13, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontWeight: 700 }}>↻ Practice again</button>
         )}
-        <button className="tap" onClick={onExit} style={{ width: "100%", marginTop: missedList.length ? 8 : 18, padding: 14, borderRadius: 13, border: missedList.length ? `1px solid ${T.line}` : "none", background: missedList.length ? "transparent" : `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: missedList.length ? T.textDim : "#fff", fontWeight: 700 }}>Back to home</button>
+        <button className="tap" onClick={onExit} style={{ width: "100%", marginTop: items.length ? 8 : 18, padding: 14, borderRadius: 13, border: items.length ? `1px solid ${T.line}` : "none", background: items.length ? "transparent" : `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: items.length ? T.textDim : "#fff", fontWeight: 700 }}>Done</button>
       </div>
     );
   }
 
-  const correct = feedback === "correct";
-  const wrong = feedback === "wrong";
+  const correct = feedback && feedback.ok;
+  const wrong = feedback && !feedback.ok;
+  const curStreak = (sess.streak[item && item.id] || 0);
 
   return (
     <div className="fade">
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
         <div style={{ fontSize: 12, fontWeight: 700, color: T.goldSoft, whiteSpace: "nowrap" }}>{title}</div>
         <div style={{ flex: 1, height: 4, background: T.line, borderRadius: 4, overflow: "hidden" }}>
-          <div style={{ height: "100%", width: `${(i / queue.length) * 100}%`, background: `linear-gradient(90deg, ${T.gold}, ${T.terra})`, transition: "width .3s ease" }} />
+          <div style={{ height: "100%", width: `${total ? (masteredN / total) * 100 : 0}%`, background: `linear-gradient(90deg, ${T.gold}, ${T.terra})`, transition: "width .3s ease" }} />
         </div>
-        <div style={{ fontSize: 12, color: T.textDim }}>{score.right}/{score.total}</div>
+        <div style={{ fontSize: 12, color: T.textDim, whiteSpace: "nowrap" }}>{masteredN}/{total} cleared</div>
       </div>
+
+      <SessionRule />
 
       <div style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 20, padding: "22px 18px", textAlign: "center", boxShadow: "0 12px 30px rgba(128,29,92,.08)" }}>
         <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: 1, color: T.goldSoft }}>Type the reading · {item.type}</div>
         <div style={{ fontFamily: displayFont, fontSize: 24, color: T.text, marginTop: 8 }}>{item.en}</div>
+        <div style={{ marginTop: 8, fontSize: 11, color: curStreak >= 1 ? T.green : T.textDim }}>{curStreak >= 1 ? "✓ 1 in a row — one more clears it" : "needs 2 correct in a row"}</div>
       </div>
 
       <input
@@ -13510,7 +13600,7 @@ function TypedQuiz({ items, mode, onGrade, onExit, title, onKanji }) {
 
       {feedback && (
         <div className="fade" style={{ marginTop: 12, background: T.panel, border: `1px solid ${wrong ? T.red : T.green}`, borderRadius: 14, padding: "12px 14px", textAlign: "center" }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: wrong ? T.red : T.green }}>{correct ? "Correct!" : "Answer:"}</div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: wrong ? T.red : T.green }}>{correct ? (curStreak + 1 >= 2 ? "Correct! Cleared ✓" : "Correct! One more in a row") : "Not quite — it'll come back"}</div>
           <JaText text={item.ja} onKanji={onKanji} style={{ fontFamily: jaFont, fontSize: 30, color: T.text, marginTop: 4, display: "inline-block" }} />
           {item.kana !== item.ja && (<div style={{ fontFamily: jaFont, fontSize: 17, color: T.textDim }}>{item.kana}</div>)}
           <div style={{ color: T.goldSoft, fontStyle: "italic", fontSize: 14 }}>{item.romaji}</div>
@@ -13519,7 +13609,7 @@ function TypedQuiz({ items, mode, onGrade, onExit, title, onKanji }) {
       )}
 
       <button className="tap" onClick={submit} style={{ width: "100%", marginTop: 12, padding: 15, borderRadius: 14, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontSize: 15, fontWeight: 700 }}>
-        {feedback ? (i + 1 >= queue.length ? "Finish" : "Next →") : "Check answer"}
+        {feedback ? "Next →" : "Check answer"}
       </button>
       {!feedback && (
         <button className="tap" onClick={giveUp} style={{ width: "100%", marginTop: 8, padding: 11, borderRadius: 12, border: `1px solid ${T.line}`, background: "transparent", color: T.textDim, fontSize: 13, fontWeight: 600 }}>
@@ -13732,6 +13822,22 @@ function HomeView({ state, level, levelPct, lessons, reviews, leeches, stageCoun
       </div>
 
       <div style={{ marginTop: 14, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16, padding: "14px 16px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+            <span style={{ fontSize: 16, marginTop: 1 }}>🔊</span>
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 800, color: T.text }}>Auto-play pronunciation</div>
+              <div style={{ fontSize: 11.5, color: T.textDim, marginTop: 2, lineHeight: 1.5 }}>Speak words aloud automatically when an answer is revealed. The 🔊 button always plays even when this is off.</div>
+            </div>
+          </div>
+          <button className="tap" aria-label="Toggle auto-play pronunciation" onClick={() => onSetting({ autoSpeak: !(state.settings.autoSpeak !== false) })}
+            style={{ flexShrink: 0, width: 52, height: 30, borderRadius: 999, border: "none", cursor: "pointer", position: "relative", background: (state.settings.autoSpeak !== false) ? `linear-gradient(135deg, ${T.gold}, ${T.terra})` : T.line, transition: "background .2s" }}>
+            <span style={{ position: "absolute", top: 3, left: (state.settings.autoSpeak !== false) ? 25 : 3, width: 24, height: 24, borderRadius: 999, background: "#fff", transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.3)" }} />
+          </button>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 14, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16, padding: "14px 16px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ fontSize: 16 }}>🔄</span>
           <span style={{ fontSize: 15, fontWeight: 800, color: T.text }}>Refresh app</span>
@@ -13871,14 +13977,14 @@ function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice, on
         <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", margin: "0 4px 4px", lineHeight: 1.5 }}>Tip: tap rows to select several at once — then add them to your custom quiz (or practice the learned ones).</div>
       )}
 
-      <AccLegend />
+      <MasteryLegend />
 
       <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
         {shown.map((it) => {
           const b = badge(it);
           const p = state.progress[it.id];
           const sel = !!selected[it.id];
-          const tc = tierColor(accTier(p));
+          const _m = mastery(p); const tc = _m == null ? null : masteryColor(_m);
           const bnd = it.custom ? "Custom" : bandOf(it.level);
           return (
             <div key={it.id} onClick={() => toggle(it.id)} style={{ display: "flex", alignItems: "center", gap: 12, background: sel ? `${T.gold}0e` : T.panel, border: `${sel || tc ? 2 : 1}px solid ${sel ? T.gold : (tc || T.line)}`, borderRadius: 14, padding: "11px 13px", cursor: "pointer" }}>
@@ -13891,6 +13997,7 @@ function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice, on
                 <div style={{ fontSize: 9, fontWeight: 800, color: T.textDim }}>{bnd}</div>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: b.c }}>{b.t}</div>
                 {p && p.due !== Infinity && (<div style={{ fontSize: 10, color: T.textDim }}>{fmtUntil(p.due, now)}</div>)}
+                {_m != null && (<div style={{ marginTop: 3 }}><MasteryDot m={_m} size={9.5} /></div>)}
               </div>
               <Speaker text={it.ja} size={14} color={T.terra} />
               <CustomBtn active={!!(customWords && customWords[it.id])} onClick={() => onToggleCustom(it.id)} />
@@ -13968,6 +14075,12 @@ function StatsView({ state, allItems, level, streak }) {
   let kGood = 0, kMixed = 0, kBad = 0;
   KANJI.forEach((k) => { const t = accTier(mergeStats(kStats[k.char], trK[k.char])); if (t === "good") kGood++; else if (t === "mixed") kMixed++; else if (t === "bad") kBad++; });
 
+  // average mastery (the per-item 0–100 metric)
+  const vMs = allItems.map((it) => mastery(state.progress[it.id])).filter((x) => x != null);
+  const avgVocabM = vMs.length ? Math.round(vMs.reduce((a, b) => a + b, 0) / vMs.length) : null;
+  const kMs = KANJI.map((k) => mastery(mergeStats(kStats[k.char], trK[k.char]))).filter((x) => x != null);
+  const avgKanjiM = kMs.length ? Math.round(kMs.reduce((a, b) => a + b, 0) / kMs.length) : null;
+
   // history
   const days = [];
   for (let k = 6; k >= 0; k--) {
@@ -14039,6 +14152,26 @@ function StatsView({ state, allItems, level, streak }) {
         <Tile v={kanjiLearned.toLocaleString()} l="Kanji" c={T.terra} sub={`${pct(kanjiLearned, kanjiTotal)}%`} />
         <Tile v={streak + "🔥"} l="Streak" c={T.gold} />
       </div>
+
+      <Card>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+          <span style={{ fontSize: 16 }}>🎯</span>
+          <span style={{ fontSize: 14, fontWeight: 800 }}>Average mastery</span>
+        </div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <div style={{ flex: 1, textAlign: "center", background: T.panelHi, border: `1px solid ${T.line}`, borderRadius: 14, padding: "13px 4px" }}>
+            <div style={{ fontSize: 23, fontWeight: 800, color: avgVocabM == null ? T.textDim : masteryColor(avgVocabM) }}>{avgVocabM == null ? "—" : avgVocabM + "%"}</div>
+            <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 2 }}>Vocabulary</div>
+            {avgVocabM != null && <div style={{ fontSize: 10, color: masteryColor(avgVocabM), marginTop: 1, fontWeight: 700 }}>{masteryLabel(avgVocabM)}</div>}
+          </div>
+          <div style={{ flex: 1, textAlign: "center", background: T.panelHi, border: `1px solid ${T.line}`, borderRadius: 14, padding: "13px 4px" }}>
+            <div style={{ fontSize: 23, fontWeight: 800, color: avgKanjiM == null ? T.textDim : masteryColor(avgKanjiM) }}>{avgKanjiM == null ? "—" : avgKanjiM + "%"}</div>
+            <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 2 }}>Kanji</div>
+            {avgKanjiM != null && <div style={{ fontSize: 10, color: masteryColor(avgKanjiM), marginTop: 1, fontWeight: 700 }}>{masteryLabel(avgKanjiM)}</div>}
+          </div>
+        </div>
+        <div style={{ marginTop: 12 }}><MasteryLegend /></div>
+      </Card>
 
       <Card>
         <MasteryHeader title="Vocabulary mastery" a={learned} b={total} color={T.gold} />
@@ -14291,19 +14424,19 @@ function ScriptTrain({ scriptState, setScript, chart, set }) {
     if (picked) return;
     const ans = q.answer;
     const correct = opt[1] === ans[1];
-    speak(ans[0]); setPicked(opt); applyResult(ans[0], correct);
+    autoSpeak(ans[0]); setPicked(opt); applyResult(ans[0], correct);
     timer.current = setTimeout(advance, 950);
   };
   const checkType = () => {
     const ans = q.answer;
     if (feedback) { advance(); return; }
     const correct = kanaTypeMatch(typed, ans[0]);
-    speak(ans[0]); setFeedback(correct ? "correct" : "wrong"); applyResult(ans[0], correct);
+    autoSpeak(ans[0]); setFeedback(correct ? "correct" : "wrong"); applyResult(ans[0], correct);
   };
   const giveUpType = () => {
     if (feedback) return;
     const ans = q.answer;
-    speak(ans[0]); setFeedback("wrong"); applyResult(ans[0], false);
+    autoSpeak(ans[0]); setFeedback("wrong"); applyResult(ans[0], false);
   };
   const flipDir = () => {
     clearTimeout(timer.current);
@@ -14396,6 +14529,10 @@ function ScriptTrain({ scriptState, setScript, chart, set }) {
               ✍️ {sk[0]} stroke{sk[0] > 1 ? "s" : ""}{sk[1] ? ` · ${sk[1]}` : ""}
             </div>
           )}
+          <div style={{ margin: "12px auto 0", position: "relative", width: 156, height: 156, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16 }}>
+            <StrokeGuide char={a[0]} show diagram />
+          </div>
+          <div style={{ fontSize: 11, color: T.textDim, marginTop: 6, lineHeight: 1.5 }}>How it's written — numbers show where each stroke starts. Practice it for real in the ✍️ Trace tab.</div>
           <div style={{ marginTop: 14 }}><Speaker text={a[0]} size={20} color={T.gold} /></div>
         </div>
         <button className="tap" onClick={() => { markLearned(a[0]); if (tIdx + 1 >= teachQueue.length) startQuiz(teachQueue); else setTIdx(tIdx + 1); }}
@@ -14550,12 +14687,12 @@ function ScriptChart({ set, chart, selGlyph, setSelGlyph, onTrace, prog, traceMa
         </div>
       )}
 
-      <AccLegend />
+      <MasteryLegend />
       <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 7, marginTop: 14 }}>
         {set.map((k) => {
           const sk = strokeInfo(k[0], chart);
           const on = selGlyph === k[0];
-          const tc = tierColor(accTier(mergeStats((prog || {})[k[0]], (traceMap || {})[k[0]])));
+          const tc = (() => { const _m = mastery(mergeStats((prog || {})[k[0]], (traceMap || {})[k[0]])); return _m == null ? null : masteryColor(_m); })();
           return (
             <button key={k[0]} className="tap" onClick={() => { setSelGlyph && setSelGlyph(on ? null : k[0]); speak(k[0]); }} style={{ background: on ? `${T.gold}14` : T.panel, border: `${on || tc ? 2 : 1.5}px solid ${on ? T.gold : (tc || T.line)}`, borderRadius: 12, padding: "10px 4px 8px", textAlign: "center", cursor: "pointer", position: "relative" }}>
               {sk && <span style={{ position: "absolute", top: 4, right: 6, fontSize: 9, color: T.textDim }}>{sk[0]}</span>}
@@ -14598,7 +14735,7 @@ function ScriptQuiz({ set, chart }) {
   const choose = (opt) => {
     if (picked) return;
     const ok = opt[1] === q.answer[1];
-    speak(q.answer[0]); setPicked(opt);
+    autoSpeak(q.answer[0]); setPicked(opt);
     setScore((s) => { const streak = ok ? s.streak + 1 : 0; return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: Math.max(s.best, streak) }; });
     timer.current = setTimeout(next, 950);
   };
@@ -14718,7 +14855,8 @@ function ScriptTrace({ set, chart, initialChar, srsProg, onSrsGrade }) {
   const end = () => { drawing.current = false; };
 
   const nextQuiz = () => { setRevealed(false); clear(); setQIdx((prev) => pickQuizIdx(prev)); };
-  const grade = (ok) => { if (onSrsGrade && kana) onSrsGrade(kana[0], ok); setScore((s) => { const streak = ok ? s.streak + 1 : 0; return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: Math.max(s.best, streak) }; }); nextQuiz(); };
+  const retake = () => { setRevealed(false); clear(); };
+  const grade = (ok) => { if (onSrsGrade && kana) onSrsGrade(kana[0], ok); setScore((s) => { const streak = ok ? s.streak + 1 : 0; return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: Math.max(s.best, streak) }; }); if (ok) nextQuiz(); else retake(); };
   const switchMode = (m) => { if (m === tmode) return; setTmode(m); setRevealed(false); clear(); if (m === "quiz") setQIdx(pickQuizIdx(-1)); };
   const acc = score.total ? Math.round((score.right / score.total) * 100) : 0;
 
@@ -14745,7 +14883,7 @@ function ScriptTrace({ set, chart, initialChar, srsProg, onSrsGrade }) {
       {isQuiz && (
         <>
           <div style={{ background: `${T.gold}10`, border: `1px solid ${T.gold}55`, borderRadius: 12, padding: "9px 13px", marginBottom: 12, fontSize: 12, color: T.text, lineHeight: 1.5 }}>
-            <b style={{ color: T.gold }}>Spaced-repetition test.</b> Due kana come first; correct answers push them further out, misses bring them back sooner. {dueCount > 0 ? `${dueCount} due now.` : "Nothing due — reviewing ahead."}
+            <b style={{ color: T.gold }}>Spaced-repetition test.</b> Due kana come first; correct answers push them further out, a miss brings them back sooner, halves their mastery, and you rewrite that same kana right away. {dueCount > 0 ? `${dueCount} due now.` : "Nothing due — reviewing ahead."}
           </div>
           <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
             <Stat label="Score" value={`${score.right}/${score.total}`} color={T.gold} />
@@ -14763,7 +14901,7 @@ function ScriptTrace({ set, chart, initialChar, srsProg, onSrsGrade }) {
           )}
           {showDetails ? (
             <>
-              <div style={{ fontSize: 16, color: T.text, fontWeight: 600 }}>{kana[1]}{sp[kana[0]] && <span style={{ fontSize: 10, fontWeight: 800, color: stageMeta(sp[kana[0]].stage).color, border: `1px solid ${stageMeta(sp[kana[0]].stage).color}55`, borderRadius: 6, padding: "1px 5px", marginLeft: 8 }}>{stageMeta(sp[kana[0]].stage).short}</span>}</div>
+              <div style={{ fontSize: 16, color: T.text, fontWeight: 600 }}>{kana[1]}{sp[kana[0]] && <span style={{ fontSize: 10, fontWeight: 800, color: stageMeta(sp[kana[0]].stage).color, border: `1px solid ${stageMeta(sp[kana[0]].stage).color}55`, borderRadius: 6, padding: "1px 5px", marginLeft: 8 }}>{stageMeta(sp[kana[0]].stage).short}</span>}{sp[kana[0]] && mastery(sp[kana[0]]) != null && <span style={{ marginLeft: 6 }}><MasteryDot m={mastery(sp[kana[0]])} size={9.5} /></span>}</div>
               {kana[2] && <div style={{ fontSize: 12, color: T.textDim, marginTop: 2 }}>{kana[2]}</div>}
               {sk && <div style={{ fontSize: 12.5, color: T.gold, marginTop: 5, lineHeight: 1.5 }}>✍️ {sk[0]} stroke{sk[0] > 1 ? "s" : ""}{sk[1] ? ` · ${sk[1]}` : ""}</div>}
             </>
@@ -15033,7 +15171,7 @@ function KanjiBrowse({ list, learned, onMark, selChar, setSelChar, level, onTrac
         )
       )}
 
-      <AccLegend />
+      <MasteryLegend />
       {displayList.length === 0 ? (
         <div style={{ textAlign: "center", color: T.textDim, padding: "30px 10px", fontSize: 13.5 }}>
           No kanji match “{q}”. Try an English meaning, a reading in kana, or romaji like “mizu”.
@@ -15043,7 +15181,7 @@ function KanjiBrowse({ list, learned, onMark, selChar, setSelChar, level, onTrac
           {visible.map((kj) => {
             const picked = selMode && !!sel[kj.char];
             const active = selMode ? picked : kj.char === selChar;
-            const tc = tierColor(accTier(mergeStats((statsMap || {})[kj.char], (traceMap || {})[kj.char])));
+            const tc = (() => { const _m = mastery(mergeStats((statsMap || {})[kj.char], (traceMap || {})[kj.char])); return _m == null ? null : masteryColor(_m); })();
             return (
             <button key={kj.char} className="tap" onClick={() => cellClick(kj.char)} style={{ position: "relative", background: active ? `${T.gold}14` : T.panel, border: `${active || tc ? 2 : 1.5}px solid ${active ? T.gold : (tc || T.line)}`, borderRadius: 13, padding: "14px 4px 9px", textAlign: "center", cursor: "pointer" }}>
               {!selMode && learned[kj.char] && <span style={{ position: "absolute", top: 4, right: 6, fontSize: 10, color: T.green }}>●</span>}
@@ -15096,7 +15234,7 @@ function KanjiStudy({ list, learned, onMark, batch, setBatch, best, onBest, onRe
   const choose = (opt) => {
     if (picked) return;
     const ok = opt.char === q.answer.char;
-    speak(kanjiSpeak(q.answer)); setPicked(opt);
+    autoSpeak(kanjiSpeak(q.answer)); setPicked(opt);
     if (onRecord) onRecord(q.answer.char, ok);
     setSess((p) => { const streak = ok ? p.streak + 1 : 0; const nb = Math.max(p.best, streak); if (nb > p.best) onBest(nb); return { right: p.right + (ok ? 1 : 0), total: p.total + 1, streak, best: nb }; });
     timer.current = setTimeout(advance, 1000);
@@ -15310,7 +15448,7 @@ function KanjiQuiz({ list, level, learned, best, onBest, autoPool, onRecord }) {
   const choose = (opt) => {
     if (picked) return;
     const ok = opt.char === q.answer.char;
-    speak(kanjiSpeak(q.answer));
+    autoSpeak(kanjiSpeak(q.answer));
     setPicked(opt);
     if (onRecord) onRecord(q.answer.char, ok);
     setScore((s) => { const streak = ok ? s.streak + 1 : 0; const nb = Math.max(s.best, streak); if (nb > s.best) onBest(nb); return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: nb }; });
@@ -15452,7 +15590,8 @@ function KanjiTrace({ list, initialChar, srsProg, onSrsGrade }) {
   const end = () => { drawing.current = false; };
 
   const nextQuiz = () => { setRevealed(false); clear(); setQIdx((prev) => pickQuizIdx(prev)); };
-  const grade = (ok) => { if (k && onSrsGrade) onSrsGrade(k.char, ok); setScore((s) => { const streak = ok ? s.streak + 1 : 0; return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: Math.max(s.best, streak) }; }); nextQuiz(); };
+  const retake = () => { setRevealed(false); clear(); };
+  const grade = (ok) => { if (k && onSrsGrade) onSrsGrade(k.char, ok); setScore((s) => { const streak = ok ? s.streak + 1 : 0; return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: Math.max(s.best, streak) }; }); if (ok) nextQuiz(); else retake(); };
   const switchMode = (m) => { if (m === tmode) return; setTmode(m); setRevealed(false); clear(); if (m === "quiz") setQIdx(pickQuizIdx(-1)); };
   const acc = score.total ? Math.round((score.right / score.total) * 100) : 0;
 
@@ -15487,7 +15626,7 @@ function KanjiTrace({ list, initialChar, srsProg, onSrsGrade }) {
           {isQuiz && (
             <>
               <div style={{ background: `${T.gold}10`, border: `1px solid ${T.gold}55`, borderRadius: 12, padding: "9px 13px", marginBottom: 12, fontSize: 12, color: T.text, lineHeight: 1.5 }}>
-                <b style={{ color: T.gold }}>Spaced-repetition test.</b> Due characters come first; getting one right pushes it further out, missing it brings it back sooner. {dueCount > 0 ? `${dueCount} due now.` : "Nothing due — reviewing ahead."}
+                <b style={{ color: T.gold }}>Spaced-repetition test.</b> Due characters come first; getting one right pushes it further out, a miss brings it back sooner, halves its mastery, and you rewrite it right away. {dueCount > 0 ? `${dueCount} due now.` : "Nothing due — reviewing ahead."}
               </div>
               <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
                 <Stat label="Score" value={`${score.right}/${score.total}`} color={T.gold} />
@@ -15505,7 +15644,7 @@ function KanjiTrace({ list, initialChar, srsProg, onSrsGrade }) {
               )}
               {showDetails ? (
                 <>
-                  <div style={{ fontSize: 16, color: T.text, fontWeight: 700 }}>{k.meaning} <span style={{ fontSize: 10, fontWeight: 800, color: T.terra, border: `1px solid ${T.terra}55`, borderRadius: 6, padding: "1px 5px", marginLeft: 4 }}>{k.jlpt}</span>{sp[k.char] && <span style={{ fontSize: 10, fontWeight: 800, color: stageMeta(sp[k.char].stage).color, border: `1px solid ${stageMeta(sp[k.char].stage).color}55`, borderRadius: 6, padding: "1px 5px", marginLeft: 6 }}>{stageMeta(sp[k.char].stage).short}</span>}</div>
+                  <div style={{ fontSize: 16, color: T.text, fontWeight: 700 }}>{k.meaning} <span style={{ fontSize: 10, fontWeight: 800, color: T.terra, border: `1px solid ${T.terra}55`, borderRadius: 6, padding: "1px 5px", marginLeft: 4 }}>{k.jlpt}</span>{sp[k.char] && <span style={{ fontSize: 10, fontWeight: 800, color: stageMeta(sp[k.char].stage).color, border: `1px solid ${stageMeta(sp[k.char].stage).color}55`, borderRadius: 6, padding: "1px 5px", marginLeft: 6 }}>{stageMeta(sp[k.char].stage).short}</span>}{sp[k.char] && mastery(sp[k.char]) != null && <span style={{ marginLeft: 6 }}><MasteryDot m={mastery(sp[k.char])} size={9.5} /></span>}</div>
                   <div style={{ fontSize: 12, color: T.textDim, marginTop: 3, lineHeight: 1.6 }}>
                     <span style={{ color: T.terra, fontWeight: 700 }}>On</span> {k.on}　·　<span style={{ color: T.goldSoft, fontWeight: 700 }}>Kun</span> {k.kun}
                   </div>
@@ -15660,8 +15799,9 @@ function App() {
   useEffect(() => {
     const key = (state && state.settings && state.settings.theme) || "rose";
     applyTheme(key);
+    AUTO_SPEAK = !(state && state.settings && state.settings.autoSpeak === false);
     try { document.body.style.background = T.bg; document.documentElement.style.background = T.bg; } catch (e) { /* ignore */ }
-  }, [state && state.settings && state.settings.theme]);
+  }, [state && state.settings && state.settings.theme, state && state.settings && state.settings.autoSpeak]);
   const stateRef = useRef(state);
   useEffect(() => { stateRef.current = state; }, [state]);
 
@@ -15701,7 +15841,8 @@ function App() {
       const ks = s.kanji || {};
       const stats = { ...(ks.stats || {}) };
       const p = stats[char] || { correct: 0, wrong: 0, recentWrong: 0 };
-      stats[char] = { correct: p.correct + (correct ? 1 : 0), wrong: p.wrong + (correct ? 0 : 1), recentWrong: correct ? 0 : (p.recentWrong || 0) + 1 };
+      const prevM = typeof p.m === "number" ? p.m : mastery(p);
+      stats[char] = { correct: p.correct + (correct ? 1 : 0), wrong: p.wrong + (correct ? 0 : 1), recentWrong: correct ? 0 : (p.recentWrong || 0) + 1, m: masteryNext(prevM, correct) };
       const day = todayStr();
       const daily = s.daily.date === day ? s.daily : { date: day, reviews: 0, lessons: 0 };
       const next = { ...s, kanji: { ...ks, stats }, daily: { ...daily, reviews: daily.reviews + 1 }, history: { ...s.history, [day]: (s.history[day] || 0) + 1 } };
@@ -15765,7 +15906,8 @@ function App() {
     let leveled = null;
     let np;
     if (mode === "practice") {
-      np = { ...prog, correct: prog.correct + (correct ? 1 : 0), wrong: prog.wrong + (correct ? 0 : 1), recentWrong: correct ? 0 : (prog.recentWrong || 0) + 1, lastReviewed: now };
+      const prevM = typeof prog.m === "number" ? prog.m : mastery(prog);
+      np = { ...prog, correct: prog.correct + (correct ? 1 : 0), wrong: prog.wrong + (correct ? 0 : 1), recentWrong: correct ? 0 : (prog.recentWrong || 0) + 1, lastReviewed: now, m: masteryNext(prevM, correct) };
     } else {
       np = reviewSchedule(prog, correct, now);
       const progress0 = { ...s.progress, [id]: np };
