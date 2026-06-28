@@ -30,6 +30,15 @@ trainer. The whole thing is a single self-contained HTML file..
   (kanji → meaning or meaning → kanji); and trace each character with the same
   stroke-order guidance. Many common kanji also include an example word with
   audio. Kana practice uses the same learn-5-then-quiz lesson rhythm.
+- **Mnemonics for every kanji** — each kanji now comes with a memory aid in the
+  proven *meaning-story + reading-hook* style (the approach popularized by Heisig
+  and WaniKani): a short visual story that ties the character's shape to its
+  meaning, plus a sound-alike hook for its on'yomi reading. All 79 N5 kanji have
+  hand-written original mnemonics; every other kanji gets an automatically
+  generated reading hook (clearly labelled "auto hint"). These are **original
+  mnemonics written for this app** — they follow the same *method* as WaniKani but
+  are not WaniKani's copyrighted text. They show up on the kanji study card and in
+  the Browse detail view, in a collapsible 🧠 panel.
 - **Custom quiz** — tap the **✚** on any word (in the Vocab list) or any kanji
   (in Kanji → Browse) to add it to your own collection — or select several at
   once (tap multiple Vocab rows, or use "Select multiple to add" in the kanji
@@ -81,6 +90,18 @@ trainer. The whole thing is a single self-contained HTML file..
   character from memory, self-grade, and each character is then scheduled for
   review (due characters come first, with the usual SRS stages). Works for
   hiragana, katakana, and kanji.
+- **Trace tests prompt from text, not sound** — the writing tests now show you
+  what to write *in writing*: the kana test gives you the romaji reading ("write
+  the kana for this reading"), and the kanji test gives you the English meaning
+  ("write the kanji that means …"). The 🔊 speaker is still there if you want to
+  hear it, but you're no longer relying on a synthesized voice that can mispronounce
+  some characters.
+- **Practice before you commit** — in both the kana and kanji lessons, before you
+  tap **Learn it** you get a practice pad right on the teaching card: trace the
+  character over the stroke-order guide (with a *Hide guide* toggle so you can test
+  yourself), and/or type it on your own keyboard to check you've got it. Nothing
+  is graded — it's a no-pressure warm-up so the character sticks before it enters
+  your review schedule.
 - **Script chart lookups** — in the Script → Chart, tap any kana to see its
   details (reading, note, stroke count) and a stroke-order diagram; tap the
   diagram to jump into tracing it, with a back button to return to the details.
@@ -88,6 +109,11 @@ trainer. The whole thing is a single self-contained HTML file..
   vocabulary and kanji mastery bars, a per-JLPT kanji breakdown (N5 → N1 + Jōyō),
   hiragana/katakana coverage, your SRS stage distribution, a 7-day review chart
   with an all-time total, and a level-progress grid.
+- **Study calendar (consistency heatmap)** — the Stats screen now includes a full
+  month calendar where each day is shaded by how much you studied that day —
+  darker = more reviews — so you can see your streak and consistency at a glance.
+  Today is outlined, each day shows its review count, and you can page back through
+  previous months.
 - **Missed items come back** — in a typed quiz, anything you get wrong is
   re-asked again later in the same session (a couple more times), and at the end
   you can retake just the items you missed so they actually stick.

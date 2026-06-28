@@ -14206,6 +14206,15 @@ function StatsView({ state, allItems, level, streak }) {
       </Card>
 
       <Card>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+          <span style={{ fontSize: 16 }}>📅</span>
+          <span style={{ fontSize: 13, fontWeight: 800 }}>Study calendar</span>
+        </div>
+        <MonthCalendar history={state.history || {}} />
+        <div style={{ fontSize: 11, color: T.textDim, marginTop: 10, lineHeight: 1.5 }}>Each square counts how many words, kanji and kana you reviewed that day — the darker the square, the busier the day. Keep the streak alive by filling in today.</div>
+      </Card>
+
+      <Card>
         <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>SRS distribution</div>
         {STAGE_GROUPS.map((g) => {
           const v = stageDist[g] || 0;
@@ -14308,6 +14317,320 @@ function StrokeGuide({ char, show, diagram }) {
     </svg>
   );
 }
+
+
+/* ===================== KANJI MNEMONICS ===================== */
+/* Original mnemonics written for this app in the well-known radical->meaning
+   plus sound-alike-reading style (Heisig / WaniKani method). WaniKani's own
+   mnemonics are copyrighted by Tofugu LLC and are NOT reproduced here — every
+   line below is written fresh. Kanji without a hand-written entry fall back to
+   an auto sound-hook generated from the on'yomi. */
+var KANJI_MNEM = {
+"日":["A window pane with a single line through it — one framed pane of daylight. One sun, one day.","ニチ (nichi) sounds like 'knee-chee': you bow so low each morning your KNEE squeaks 'cheese' at the sun."],
+"一":["A single horizontal stroke. One line — the number one.","イチ (ichi) = 'itchy': you have exactly ONE itchy spot you can't reach."],
+"国":["A border wall (口) around a precious jewel (玉) — a fenced land guarding its treasure. A country.","コク (koku) = 'coke': every COUNTRY on earth sells Coca-Cola."],
+"人":["Two legs striding forward — a person walking by.","ジン (jin) = 'gin': a PERSON walks into a bar and orders a gin."],
+"年":["A figure bent under a heavy load of harvested grain — one full YEAR of farming, gathered.","ネン (nen) = 'Nan': every YEAR your Nan throws you a birthday party."],
+"大":["A person (人) flinging arms and legs out as wide as they go — this BIG!","ダイ (dai) = 'die': the monster was so BIG you thought you'd die."],
+"十":["A plus sign — and across your two hands a full set of fingers makes TEN.","ジュウ (juu) = 'jewel': you scored TEN jewels, a perfect ten."],
+"二":["Two stacked horizontal lines. Two — the number two.","ニ (ni) = 'knee': you have TWO knees."],
+"本":["A tree (木) with a line marking its root — the origin, the main source, like a book's spine.","ホン (hon) = 'hone': you HONE your mind by reading a book."],
+"中":["A box speared dead through the centre — bang in the MIDDLE, the inside.","チュウ (chuu) = 'chew': you CHEW your gum right in the MIDDLE."],
+"長":["Long flowing hair and a long beard streaming down — long, and the elder who leads.","チョウ (chou) = 'Joe': the LONG-serving leader is old Joe."],
+"出":["Two little mountains stacked — climb up and over and you EXIT out the top.","シュツ (shutsu) = 'shoots': you SHOOT straight out the exit."],
+"三":["Three stacked lines. Three — the number three.","サン (san) = 'sun': by THREE o'clock the sun is high."],
+"時":["The sun (日) beside a temple (寺) — the temple bell that rings the sun's hour. Time.","ジ (ji) = 'gee': 'Gee, is it that TIME already?'"],
+"行":["A crossroads of streets stretching out — you set off and GO on a journey.","コウ (kou) = 'go': you GO down the road. (kou ≈ go)"],
+"見":["An eye (目) on a pair of legs — the eye walks around to SEE everything.","ケン (ken) = 'Ken': Ken can SEE perfectly."],
+"月":["A slim crescent shape — the moon, whose cycle marks one MONTH.","ゲツ (getsu) = 'gets-ya': you GET your paycheque once a MONTH."],
+"後":["A small step (彳) on a winding road — lagging BEHIND, coming later.","ゴ (go) = 'go': 'You GO ahead — I'll catch up AFTER.'"],
+"前":["A blade (刀) slicing forward out front — the part that comes BEFORE, the front.","ゼン (zen) = 'zen': BEFORE meditating, you settle into zen."],
+"生":["A young sprout pushing up out of the soil — fresh LIFE, birth, raw and growing.","セイ (sei) = 'say': a newborn's first cry is its way to SAY 'I'm alive!'"],
+"五":["A spool wound tight between two lines — count to FIVE on one hand.","ゴ (go) = 'go': on the count of FIVE, GO!"],
+"間":["The sun (日) peeking through a gate (門) — the gap, the space, the interval between.","カン (kan) = 'can': in the GAP on the shelf you wedged a tin CAN."],
+"上":["A mark sitting ABOVE the baseline — up, on top.","ジョウ (jou) = 'Joe': 'Lift it UP, Joe — hold it ABOVE your head.'"],
+"東":["The sun (日) caught behind a tree (木) — sunrise in the EAST.","トウ (tou) = 'toe': point your TOE EAST toward the sunrise — Tokyo sits in the east."],
+"四":["A box with two little legs braced inside — FOUR walls. The number four.","シ (shi) = 'she': SHE owns FOUR cats."],
+"今":["A roof tucked over a tiny mark — the present moment, sheltered right here, NOW.","コン (kon) = 'con': the con artist strikes NOW, this very second."],
+"金":["A king under a roof guarding two buried nuggets — GOLD, metal, money.","キン (kin) = 'kin': your GOLD all goes to your KIN."],
+"九":["A hook curling back on itself — bend the last finger and you've counted NINE.","キュウ (kyuu) = 'cue': line up the NINE-ball and take your cue."],
+"入":["An arrow angling inward at a doorway — step in, ENTER.","ニュウ (nyuu) = 'new': the NEW student ENTERS the room."],
+"学":["A child (子) under a roof scribbling away — a kid at school, STUDYing.","ガク (gaku) = 'gawk': you STUDY so hard you gawk at the page."],
+"高":["A tall tower with a little window high up top — TALL, high, and pricey.","コウ (kou) = 'go': it costs a fortune to GO up the TALL tower."],
+"円":["A smooth rounded enclosure — a coin, a perfect circle. Japan's YEN.","エン (en) = 'yen': a round coin of YEN."],
+"子":["A swaddled baby, arms out and legs wrapped up — a little CHILD.","シ (shi) = 'she': SHE just had a CHILD."],
+"外":["Evening (夕) and a fortune-stick (卜) — fortunes told OUTSIDE at dusk.","ガイ (gai) = 'guy': the GUY is waiting OUTSIDE."],
+"八":["Two strokes splitting cleanly apart — eight divides easily. The number EIGHT.","ハチ (hachi) = 'Hachi': the loyal dog Hachiko (hachi = 8) waited and waited."],
+"六":["A little roof balanced on two legs — count SIX under the shelter.","ロク (roku) = 'rock': you stacked SIX rocks in a tower."],
+"下":["A mark hanging BELOW the baseline — down, underneath.","カ (ka) = 'car': the CAR is parked DOWN below."],
+"来":["A tree drawing grain in from both sides — the harvest COMES to you.","ライ (rai) = 'rye': the RYE loaf is COMING out of the oven."],
+"気":["Swirling vapour rising up — invisible AIR, energy, SPIRIT, mood.","キ (ki) = 'key': good SPIRIT is the KEY to a good mood."],
+"小":["One slim stroke flanked by two tiny ones — little bits. SMALL.","ショウ (shou) = 'show': they put on a SMALL show."],
+"七":["A cross with a hook, like clock hands at seven — the number SEVEN.","シチ (shichi) = 'she-chee': SHE eats CHEESE every day at SEVEN."],
+"山":["Three peaks rising side by side — a MOUNTAIN range you can almost see.","サン (san) = 'sun': the SUN sets behind the MOUNTAIN."],
+"話":["Words (言) pouring from a tongue (舌) — TALK, conversation, a tale.","ワ (wa) = 'wah': the baby's first 'WAH' is its very first TALK."],
+"女":["A figure kneeling with legs gracefully crossed — a WOMAN.","ジョ (jo) = 'Jo': the WOMAN's name is Jo."],
+"北":["Two people back-to-back, turning from the cold — they face NORTH.","ホク (hoku) = 'hoax': it's a HOAX that the NORTH Pole is toasty."],
+"午":["A pestle standing dead upright — the sun stands straight overhead at NOON.","ゴ (go) = 'go': at NOON the lunch bell says GO eat."],
+"百":["A white (白) thing wearing a single cap (一) — count it to one HUNDRED.","ヒャク (hyaku) = 'yak': you counted a HUNDRED yaks in the field."],
+"書":["A brush (聿) sweeping over the sun (日) — a hand WRITING all day long.","ショ (sho) = 'show': you WRITE a note to SHOW someone."],
+"先":["Legs striding out in front — going AHEAD, the one who went before.","セン (sen) = 'send': SEND the scout AHEAD first."],
+"名":["Evening (夕) plus mouth (口) — in the dark you call out a NAME so you're known.","メイ (mei) = 'may': 'MAY I have your NAME, please?'"],
+"川":["Three flowing vertical lines — water running down a RIVER.","セン (sen) = 'send': the RIVER will SEND your little boat downstream."],
+"千":["A person (丿) over ten (十) — pile enough tens and you reach a THOUSAND.","セン (sen) = 'send': you SEND off a THOUSAND yen."],
+"水":["Streams branching off a central spine — splashing WATER.","スイ (sui) = 'sweet': cold WATER tastes sweet when you're parched."],
+"半":["A line splitting two dots evenly down the middle — cut in HALF.","ハン (han) = 'hand': you hand over HALF with one HAND."],
+"男":["A rice field (田) driven by strength (力) — the MAN who works the field.","ダン (dan) = 'Dan': the MALE's name is Dan."],
+"西":["A bird settling into its nest as the sun sinks in the WEST.","セイ (sei) = 'say': they all SAY the sun sets in the WEST."],
+"電":["Rain (雨) with a lightning bolt cracking below — a jolt of ELECTRICITY.","デン (den) = 'den': ELECTRICITY lights up the whole DEN."],
+"校":["A tree (木) where people cross and mix (交) — kids gathering at SCHOOL.","コウ (kou) = 'go': every morning you GO to SCHOOL."],
+"語":["Words (言) from many mouths (口) — voices weaving together into a LANGUAGE.","ゴ (go) = 'go': the new LANGUAGE is tough to GO through."],
+"土":["A cross planted into the ground line — a mound of SOIL, the EARTH.","ド (do) = 'doh': you dig in the SOIL and pull out a lump of dough."],
+"木":["A trunk with branches up and roots down — a TREE.","ボク (boku) = 'book': a TREE becomes the paper in a book."],
+"聞":["An ear (耳) pressed to a gate (門) — straining to HEAR through the door.","ブン (bun) = 'bun': you overHEAR someone next door order a BUN."],
+"食":["A roof over a bowl of good (良) food — sit down under cover to EAT.","ショク (shoku) = 'shock': it was a SHOCK how much he could EAT."],
+"車":["A cart seen from above — axle, frame and wheels. A CAR.","シャ (sha) = 'Shah': the Shah is chauffeured in a fancy CAR."],
+"何":["A person (亻) hauling a load (可) and asking 'WHAT is this thing?'","カ (ka) = 'car': 'WHAT? Whose CAR is parked there?'"],
+"南":["A tender plant thriving in a warm frame — it leans toward the sunny SOUTH.","ナン (nan) = 'nan': down SOUTH they serve warm NAN bread."],
+"万":["A single swirling stroke standing in for a huge number — TEN THOUSAND.","マン (man) = 'man': a MAN walks in with TEN THOUSAND dollars."],
+"毎":["A figure over a mother (母) — like mum, EVERY single day, over and over.","マイ (mai) = 'my': EVERY day is MY day."],
+"白":["A single ray of sun (日) topped with a beam — bright, blank, WHITE.","ハク (haku) = 'hawk': a pure WHITE hawk wheels overhead."],
+"天":["A person (大) with a bar stretched above their reach — the SKY, the heavens overhead.","テン (ten) = 'ten': HEAVEN is a perfect TEN out of ten."],
+"母":["A figure with two dots for a nursing chest — a MOTHER.","ボ (bo) = 'bow': you BOW to your MOTHER."],
+"火":["A figure throwing sparks off both sides — flickering FIRE.","カ (ka) = 'car': the CAR burst into FIRE."],
+"右":["A hand (𠂇) over a mouth (口) — the hand you eat with, your RIGHT.","ウ (u) = 'ooh': 'OOh — turn RIGHT here!'"],
+"読":["Words (言) put up for sale (売) — you READ the words on the page.","ドク (doku) = 'dock': you sit on the DOCK and READ a book."],
+"友":["Two hands reaching toward one another — a helping hand, a FRIEND.","ユウ (yuu) = 'you': a FRIEND is someone just like YOU."],
+"左":["A hand (𠂇) over a builder's ruler (工) — the steadying LEFT hand.","サ (sa) = 'saw': your LEFT hand holds the wood while the right saws."],
+"休":["A person (亻) leaning against a tree (木) — taking a REST in the shade.","キュウ (kyuu) = 'cue': take your REST cue and put your feet up."],
+"父":["Two crossed hands gripping tools — the FATHER who provides.","フ (fu) = 'foo(d)': FATHER hauls home the food."],
+"雨":["A cloud frame with droplets falling inside — RAIN.","ウ (u) = 'ooh': 'OOh, it's starting to RAIN!'"]
+};
+
+/* katakana first-mora -> English sound-alike keyword (for auto reading hooks) */
+var ONYOMI_HOOK = {
+"カ":"car","キ":"key","ク":"coo","ケ":"Kay","コ":"coat",
+"サ":"saw","シ":"she","ス":"Sue","セ":"say","ソ":"sew",
+"タ":"tar","チ":"cheese","ツ":"tsunami","テ":"telephone","ト":"toe",
+"ナ":"gnat","ニ":"knee","ヌ":"noodle","ネ":"net","ノ":"nose",
+"ハ":"hah","ヒ":"heat","フ":"food","ヘ":"hay","ホ":"hoe",
+"マ":"mop","ミ":"meat","ム":"moo","メ":"may","モ":"mow",
+"ヤ":"yacht","ユ":"you","ヨ":"yo-yo",
+"ラ":"rock","リ":"reef","ル":"roo","レ":"ray","ロ":"row",
+"ワ":"wad",
+"ガ":"gong","ギ":"geese","グ":"goo","ゲ":"gecko","ゴ":"goal",
+"ザ":"pizza","ジ":"genie","ズ":"zoo","ゼ":"zen","ゾ":"zorro",
+"ダ":"dart","ヂ":"jeep","ヅ":"zoo","デ":"desk","ド":"dough",
+"バ":"bar","ビ":"bee","ブ":"boot","ベ":"bear","ボ":"boat",
+"パ":"paw","ピ":"pea","プ":"pool","ペ":"pet","ポ":"pole",
+"キャ":"cat","キュ":"cute","キョ":"Tokyo",
+"シャ":"shark","シュ":"shoe","ショ":"show",
+"チャ":"charm","チュ":"chew","チョ":"choke",
+"ニャ":"meow","ニュ":"new","ニョ":"canyon",
+"ヒャ":"hatch","ヒュ":"hue","ヒョ":"hyoid",
+"ミャ":"meow","ミュ":"mute","ミョ":"myo",
+"リャ":"rack","リュ":"rude","リョ":"royal",
+"ギャ":"gather","ギュ":"goose","ギョ":"gyoza",
+"ジャ":"jab","ジュ":"juice","ジョ":"jaw",
+"ビャ":"bash","ビュ":"beautiful","ビョ":"bureau",
+"ピャ":"pack","ピュ":"pew","ピョ":"piano"
+};
+
+function primaryOn(onStr) {
+  if (!onStr) return "";
+  return String(onStr).split("\u30fb")[0].replace(/[\uff08(].*?[)\uff09]/g, "").trim();
+}
+function onHook(onStr) {
+  var on = primaryOn(onStr);
+  if (!on) return null;
+  var kw = ONYOMI_HOOK[on.slice(0, 2)] || ONYOMI_HOOK[on.slice(0, 1)] || null;
+  return { on: on, kw: kw };
+}
+function mnemonicFor(k) {
+  var hit = KANJI_MNEM[k.char];
+  if (hit) return { meaning: hit[0], reading: hit[1], source: "curated" };
+  var h = onHook(k.on);
+  var mean = (k.meaning || "").split(",")[0];
+  var reading = h
+    ? (h.kw
+        ? "On-reading \u300c" + h.on + "\u300d sounds a bit like \u201c" + h.kw + "\u201d \u2014 picture a " + h.kw + " mixed up with \u201c" + mean + "\u201d to fix the sound."
+        : "On-reading \u300c" + h.on + "\u300d \u2014 say it out loud a few times while picturing \u201c" + mean + "\u201d.")
+    : null;
+  var meaning = "Break " + k.char + " into its parts and spin a quick picture that lands on \u201c" + mean + "\u201d \u2014 the sillier the story, the stickier it sticks.";
+  return { meaning: meaning, reading: reading, source: "auto" };
+}
+function kanjiTypeMatch(typed, k) {
+  var t = (typed || "").trim();
+  if (!t) return false;
+  if (t === k.char) return true;
+  var readings = [];
+  (k.on || "").split("\u30fb").forEach(function (r) { readings.push(r); });
+  (k.kun || "").split("\u30fb").forEach(function (r) { readings.push(r.replace(/[\uff08(].*?[)\uff09]/g, "")); });
+  var norm = function (s) { return kataToHira(String(s).replace(/[\u30fc.\-\s]/g, "").trim()); };
+  var th = norm(t);
+  var tr = kataToHira(romajiToKana(normRomaji(t)));
+  return readings.some(function (r) { var rn = norm(r); return rn && (rn === th || rn === tr); });
+}
+
+/* ===================== MNEMONIC CARD ===================== */
+function MnemonicCard({ k }) {
+  const [open, setOpen] = useState(true);
+  const mn = mnemonicFor(k);
+  return (
+    <div style={{ background: T.panelHi, border: `1px solid ${T.line}`, borderRadius: 16, padding: "12px 14px", marginTop: 14, textAlign: "left" }}>
+      <div className="tap" onClick={() => setOpen((o) => !o)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}>
+        <span style={{ fontSize: 12.5, fontWeight: 800, color: T.gold }}>🧠 Mnemonics{mn.source === "auto" ? " · auto hint" : ""}</span>
+        <span style={{ fontSize: 12, color: T.textDim }}>{open ? "▾" : "▸"}</span>
+      </div>
+      {open && (
+        <div style={{ marginTop: 8, fontSize: 12.5, lineHeight: 1.65, color: T.text }}>
+          <div style={{ marginBottom: mn.reading ? 9 : 0 }}>
+            <span style={{ color: T.terra, fontWeight: 800 }}>Meaning</span> <span style={{ color: T.textDim }}>({(k.meaning || "").split(",")[0]})</span><br />
+            {mn.meaning}
+          </div>
+          {mn.reading && (
+            <div>
+              <span style={{ color: T.goldSoft, fontWeight: 800 }}>Reading</span> <span style={{ color: T.textDim }}>({primaryOn(k.on) || k.kun})</span><br />
+              {mn.reading}
+            </div>
+          )}
+          {mn.source === "auto" && <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 8, fontStyle: "italic" }}>Auto sound-hint — bend it into your own story for the best recall.</div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ===================== PRACTICE PAD (trace + type before "Learn it") ===================== */
+function PracticePad({ char, typeCheck, typePlaceholder, typeHint, label }) {
+  const [showGuide, setShowGuide] = useState(true);
+  const [typed, setTyped] = useState("");
+  const [result, setResult] = useState(null); // null | "ok" | "no"
+  const canvasRef = useRef(null);
+  const drawing = useRef(false);
+  const lastPt = useRef(null);
+
+  const setup = useCallback(() => {
+    const c = canvasRef.current; if (!c) return;
+    const rect = c.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    c.width = rect.width * dpr; c.height = rect.height * dpr;
+    const ctx = c.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = 10; ctx.strokeStyle = "#801d5c";
+  }, []);
+  useEffect(() => { setup(); const onR = () => setup(); window.addEventListener("resize", onR); return () => window.removeEventListener("resize", onR); }, [setup]);
+  const clear = useCallback(() => { const c = canvasRef.current; if (!c) return; const ctx = c.getContext("2d"); ctx.clearRect(0, 0, c.width, c.height); }, []);
+  useEffect(() => { clear(); setTyped(""); setResult(null); setShowGuide(true); }, [char, clear]);
+
+  const pos = (e) => { const c = canvasRef.current; const rect = c.getBoundingClientRect(); const p = e.touches ? e.touches[0] : e; return { x: p.clientX - rect.left, y: p.clientY - rect.top }; };
+  const start = (e) => { e.preventDefault(); drawing.current = true; lastPt.current = pos(e); };
+  const move = (e) => { if (!drawing.current) return; e.preventDefault(); const ctx = canvasRef.current.getContext("2d"); const p = pos(e); ctx.beginPath(); ctx.moveTo(lastPt.current.x, lastPt.current.y); ctx.lineTo(p.x, p.y); ctx.stroke(); lastPt.current = p; };
+  const end = () => { drawing.current = false; };
+  const checkTyped = () => { if (!typeCheck) return; setResult(typeCheck(typed) ? "ok" : "no"); };
+
+  return (
+    <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16, padding: 14, marginTop: 14, textAlign: "left" }}>
+      <div style={{ fontSize: 12, fontWeight: 800, color: T.gold, marginBottom: 8 }}>✍️ {label || "Try it yourself first"}</div>
+      <div style={{ position: "relative", width: "100%", aspectRatio: "1 / 1", maxWidth: 240, margin: "0 auto", background: T.panelHi, border: `1px solid ${T.line}`, borderRadius: 16, overflow: "hidden" }}>
+        <StrokeGuide char={char} show={showGuide} diagram={showGuide} />
+        <div style={{ position: "absolute", top: "50%", left: 0, right: 0, borderTop: `1px dashed ${T.line}`, pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: 0, bottom: 0, left: "50%", borderLeft: `1px dashed ${T.line}`, pointerEvents: "none" }} />
+        <canvas ref={canvasRef} onMouseDown={start} onMouseMove={move} onMouseUp={end} onMouseLeave={end} onTouchStart={start} onTouchMove={move} onTouchEnd={end}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", touchAction: "none", cursor: "crosshair" }} />
+      </div>
+      <div style={{ display: "flex", gap: 8, marginTop: 10, justifyContent: "center" }}>
+        <button className="tap" onClick={clear} style={ctrlBtn(false)}>Clear</button>
+        <button className="tap" onClick={() => setShowGuide((g) => !g)} style={ctrlBtn(showGuide)}>{showGuide ? "Hide guide" : "Show guide"}</button>
+      </div>
+      {typeCheck && (
+        <div style={{ marginTop: 12 }}>
+          <div style={{ fontSize: 11.5, color: T.textDim, marginBottom: 6 }}>{typeHint || "…or type it with your own keyboard:"}</div>
+          <div style={{ display: "flex", gap: 8 }}>
+            <input value={typed} onChange={(e) => { setTyped(e.target.value); setResult(null); }} onKeyDown={(e) => { if (e.key === "Enter") checkTyped(); }} placeholder={typePlaceholder || "type here"} autoCapitalize="off" autoCorrect="off" spellCheck={false}
+              style={{ flex: 1, minWidth: 0, padding: "10px 12px", borderRadius: 10, border: `1.5px solid ${result === "ok" ? T.green : result === "no" ? T.red : T.line}`, background: T.panelHi, color: T.text, fontSize: 16, fontFamily: jaFont }} />
+            <button className="tap" onClick={checkTyped} style={{ padding: "10px 16px", borderRadius: 10, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontWeight: 700, fontSize: 13 }}>Check</button>
+          </div>
+          {result === "ok" && <div style={{ fontSize: 12, color: T.green, fontWeight: 700, marginTop: 6 }}>✓ That matches — nicely done.</div>}
+          {result === "no" && <div style={{ fontSize: 12, color: T.red, fontWeight: 700, marginTop: 6 }}>Not quite — give it another go. (It's {char}.)</div>}
+        </div>
+      )}
+      <div style={{ fontSize: 11, color: T.textDim, marginTop: 10, lineHeight: 1.5 }}>Trace over the guide, then hide it and write it from memory. Nothing here is graded — it's just practice before you lock it in.</div>
+    </div>
+  );
+}
+
+/* ===================== MONTH CALENDAR (study heatmap) ===================== */
+function MonthCalendar({ history }) {
+  const hist = history || {};
+  const [off, setOff] = useState(0); // months back from current
+  const todayK = todayStr();
+  const tp = todayK.split("-").map(Number);
+  const base = new Date(Date.UTC(tp[0], tp[1] - 1 + off, 1));
+  const year = base.getUTCFullYear();
+  const month = base.getUTCMonth();
+  const monthName = base.toLocaleString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+  const firstDow = new Date(Date.UTC(year, month, 1)).getUTCDay();
+  const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+  const pad2 = (n) => String(n).padStart(2, "0");
+  const key = (d) => year + "-" + pad2(month + 1) + "-" + pad2(d);
+
+  let monthTotal = 0, activeDays = 0, maxC = 1;
+  for (let d = 1; d <= daysInMonth; d++) { const v = hist[key(d)] || 0; monthTotal += v; if (v > 0) activeDays++; if (v > maxC) maxC = v; }
+
+  const cellColor = (v) => {
+    if (!v) return T.panelHi;
+    const r = v / maxC;
+    if (r <= 0.25) return `${T.gold}30`;
+    if (r <= 0.5) return `${T.gold}66`;
+    if (r <= 0.75) return `${T.gold}b0`;
+    return T.terra;
+  };
+
+  const cells = [];
+  for (let i = 0; i < firstDow; i++) cells.push(null);
+  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
+
+  return (
+    <>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+        <button className="tap" onClick={() => setOff((o) => o - 1)} style={{ border: `1px solid ${T.line}`, background: T.panelHi, color: T.text, borderRadius: 9, padding: "5px 12px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>‹</button>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 13.5, fontWeight: 800 }}>{monthName}</div>
+          <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 1 }}>{monthTotal.toLocaleString()} reviews · {activeDays} active day{activeDays === 1 ? "" : "s"}</div>
+        </div>
+        <button className="tap" onClick={() => setOff((o) => Math.min(0, o + 1))} disabled={off >= 0} style={{ border: `1px solid ${T.line}`, background: off >= 0 ? T.panel : T.panelHi, color: off >= 0 ? T.textDim : T.text, borderRadius: 9, padding: "5px 12px", fontSize: 15, fontWeight: 700, cursor: off >= 0 ? "default" : "pointer" }}>›</button>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 4, marginBottom: 4 }}>
+        {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (<div key={i} style={{ textAlign: "center", fontSize: 9.5, color: T.textDim, fontWeight: 700 }}>{d}</div>))}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 4 }}>
+        {cells.map((d, i) => {
+          if (d === null) return <div key={"e" + i} />;
+          const v = hist[key(d)] || 0;
+          const isToday = key(d) === todayK;
+          const dark = v / maxC > 0.5;
+          return (
+            <div key={i} title={`${key(d)}: ${v} review${v === 1 ? "" : "s"}`} style={{ aspectRatio: "1 / 1", borderRadius: 7, background: cellColor(v), border: isToday ? `2px solid ${T.terra}` : `1px solid ${T.line}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: dark ? "#fff" : T.textDim, lineHeight: 1 }}>{d}</span>
+              {v > 0 && <span style={{ fontSize: 8.5, fontWeight: 800, color: dark ? "#fff" : T.gold, lineHeight: 1.2 }}>{v > 99 ? "99+" : v}</span>}
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 6, marginTop: 11, fontSize: 10, color: T.textDim }}>
+        <span>Less</span>
+        <span style={{ width: 13, height: 13, borderRadius: 4, background: T.panelHi, border: `1px solid ${T.line}`, display: "inline-block" }} />
+        <span style={{ width: 13, height: 13, borderRadius: 4, background: `${T.gold}30`, display: "inline-block" }} />
+        <span style={{ width: 13, height: 13, borderRadius: 4, background: `${T.gold}66`, display: "inline-block" }} />
+        <span style={{ width: 13, height: 13, borderRadius: 4, background: `${T.gold}b0`, display: "inline-block" }} />
+        <span style={{ width: 13, height: 13, borderRadius: 4, background: T.terra, display: "inline-block" }} />
+        <span>More</span>
+      </div>
+    </>
+  );
+}
+
 
 function ScriptView({ scriptState, setScript, traceState, gradeTrace }) {
   const ss = scriptState || {};
@@ -14532,9 +14855,10 @@ function ScriptTrain({ scriptState, setScript, chart, set }) {
           <div style={{ margin: "12px auto 0", position: "relative", width: 156, height: 156, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 16 }}>
             <StrokeGuide char={a[0]} show diagram />
           </div>
-          <div style={{ fontSize: 11, color: T.textDim, marginTop: 6, lineHeight: 1.5 }}>How it's written — numbers show where each stroke starts. Practice it for real in the ✍️ Trace tab.</div>
+          <div style={{ fontSize: 11, color: T.textDim, marginTop: 6, lineHeight: 1.5 }}>How it's written — numbers show where each stroke starts. Try it below before you lock it in.</div>
           <div style={{ marginTop: 14 }}><Speaker text={a[0]} size={20} color={T.gold} /></div>
         </div>
+        <PracticePad char={a[0]} typeCheck={(s) => kanaTypeMatch(s, a[0])} typePlaceholder={`type the romaji, e.g. ${a[1]}`} typeHint="…or type its romaji / kana on your own keyboard:" />
         <button className="tap" onClick={() => { markLearned(a[0]); if (tIdx + 1 >= teachQueue.length) startQuiz(teachQueue); else setTIdx(tIdx + 1); }}
           style={{ width: "100%", marginTop: 14, padding: 15, borderRadius: 14, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontSize: 15, fontWeight: 700 }}>
           {tIdx + 1 >= teachQueue.length ? "Got them — quiz me →" : "Learn it ✓"}
@@ -14897,7 +15221,7 @@ function ScriptTrace({ set, chart, initialChar, srsProg, onSrsGrade }) {
       <div style={{ display: "flex", alignItems: "center", gap: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px", marginBottom: 14 }}>
         <div style={{ flex: 1 }}>
           {isQuiz && !revealed && (
-            <div style={{ fontSize: 11, color: T.terra, fontWeight: 700, letterSpacing: 0.4, marginBottom: 3 }}>WRITE THIS KANA FROM MEMORY</div>
+            <div style={{ fontSize: 11, color: T.terra, fontWeight: 700, letterSpacing: 0.4, marginBottom: 3 }}>WRITE THE KANA FOR THIS READING</div>
           )}
           {showDetails ? (
             <>
@@ -14906,7 +15230,11 @@ function ScriptTrace({ set, chart, initialChar, srsProg, onSrsGrade }) {
               {sk && <div style={{ fontSize: 12.5, color: T.gold, marginTop: 5, lineHeight: 1.5 }}>✍️ {sk[0]} stroke{sk[0] > 1 ? "s" : ""}{sk[1] ? ` · ${sk[1]}` : ""}</div>}
             </>
           ) : (
-            <div style={{ fontSize: 16, color: T.text, fontWeight: 600 }}>Listen, then write it.</div>
+            <div>
+              <div style={{ fontSize: 11.5, color: T.textDim, marginBottom: 2 }}>Write the kana that reads</div>
+              <div style={{ fontSize: 27, color: T.gold, fontWeight: 800, lineHeight: 1.1 }}>{kana[1]}</div>
+              {kana[2] && <div style={{ fontSize: 11.5, color: T.textDim, marginTop: 3 }}>{kana[2]}</div>}
+            </div>
           )}
         </div>
         <Speaker text={kana[0]} color={T.terra} />
@@ -14945,7 +15273,7 @@ function ScriptTrace({ set, chart, initialChar, srsProg, onSrsGrade }) {
         {!isQuiz ? (
           <>Follow the numbered circles in order, drawing each stroke toward its arrow. Tap “Hide guide” to test yourself from memory.</>
         ) : !revealed ? (
-          <>Picture the kana, write it from memory, then tap <b style={{ color: T.text }}>Reveal answer</b> to check the shape. Tap 🔊 to hear it.</>
+          <>Read the romaji shown, write that kana from memory, then tap <b style={{ color: T.text }}>Reveal answer</b> to check the shape. (🔊 is optional.)</>
         ) : (
           <>Compare your writing to the guide. Be honest — did you get the <b style={{ color: T.text }}>shape and stroke order</b> right?</>
         )}
@@ -15143,6 +15471,7 @@ function KanjiBrowse({ list, learned, onMark, selChar, setSelChar, level, onTrac
             </div>
             <Speaker text={kanjiSpeak(k)} color={T.terra} />
           </div>
+          <MnemonicCard k={k} />
           <button className="tap" onClick={() => onMark(k.char, !learned[k.char])} style={{ width: "100%", marginTop: 12, padding: 11, borderRadius: 12, border: learned[k.char] ? `1px solid ${T.gold}` : "none", background: learned[k.char] ? `${T.gold}12` : `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: learned[k.char] ? T.gold : "#fff", fontSize: 13.5, fontWeight: 700 }}>
             {learned[k.char] ? "✓ Learned — tap to unmark" : "Mark as learned"}
           </button>
@@ -15307,6 +15636,8 @@ function KanjiStudy({ list, learned, onMark, batch, setBatch, best, onBest, onRe
           )}
           <div style={{ marginTop: 10 }}><Speaker text={kanjiSpeak(k)} size={20} color={T.gold} /></div>
         </div>
+        <MnemonicCard k={k} />
+        <PracticePad char={k.char} typeCheck={(s) => kanjiTypeMatch(s, k)} typePlaceholder="type 漢字 or a reading" typeHint="…or type the kanji (with a Japanese keyboard) or one of its readings:" />
         <button className="tap" onClick={() => { onMark(k.char, true); if (tIdx + 1 >= teach.length) startQuiz(teach); else setTIdx(tIdx + 1); }}
           style={{ width: "100%", marginTop: 14, padding: 15, borderRadius: 14, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontSize: 15, fontWeight: 700 }}>
           {tIdx + 1 >= teach.length ? "Got them — quiz me →" : "Learn it ✓"}
@@ -15640,7 +15971,7 @@ function KanjiTrace({ list, initialChar, srsProg, onSrsGrade }) {
           <div style={{ display: "flex", alignItems: "center", gap: 12, background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: "12px 14px", marginBottom: 14 }}>
             <div style={{ flex: 1 }}>
               {isQuiz && !revealed && (
-                <div style={{ fontSize: 11, color: T.terra, fontWeight: 700, letterSpacing: 0.4, marginBottom: 3 }}>WRITE THIS KANJI FROM MEMORY</div>
+                <div style={{ fontSize: 11, color: T.terra, fontWeight: 700, letterSpacing: 0.4, marginBottom: 3 }}>WRITE THIS KANJI FROM ITS MEANING</div>
               )}
               {showDetails ? (
                 <>
@@ -15655,7 +15986,10 @@ function KanjiTrace({ list, initialChar, srsProg, onSrsGrade }) {
                   )}
                 </>
               ) : (
-                <div style={{ fontSize: 14, color: T.text, fontWeight: 600 }}>Reading: <span style={{ color: T.gold }}>{k.meaning}</span></div>
+                <div>
+                  <div style={{ fontSize: 11.5, color: T.textDim, marginBottom: 2 }}>Write the kanji that means</div>
+                  <div style={{ fontSize: 18, color: T.gold, fontWeight: 800, lineHeight: 1.2 }}>{k.meaning}</div>
+                </div>
               )}
             </div>
             <Speaker text={kanjiSpeak(k)} color={T.terra} />
