@@ -14306,8 +14306,17 @@ function StrokeGuide({ char, show, diagram }) {
   if (!show) return null;
   const data = STROKE_DATA[char];
   if (!data) {
+    const s = String(char || "");
+    const n = [...s].length;
+    const single = n <= 1;
     return (
-      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: jaFont, fontSize: "min(58vw, 320px)", color: T.terra, opacity: 0.2, pointerEvents: "none", userSelect: "none", lineHeight: 1 }}>{char}</div>
+      <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
+        <text x="50" y="50" textAnchor="middle" dominantBaseline="central"
+          fontFamily={jaFont} fill={T.terra} fillOpacity={0.22}
+          fontSize={single ? 78 : Math.max(16, Math.round(96 / n))}
+          textLength={single ? undefined : 92} lengthAdjust="spacingAndGlyphs"
+          style={{ userSelect: "none" }}>{s}</text>
+      </svg>
     );
   }
   const babyPink = "#f7a8c9";
