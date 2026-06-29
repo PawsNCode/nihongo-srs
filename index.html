@@ -14537,7 +14537,7 @@ function PracticePad({ char, typeCheck, typePlaceholder, typeHint, label }) {
     c.width = rect.width * dpr; c.height = rect.height * dpr;
     const ctx = c.getContext("2d");
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = 10; ctx.strokeStyle = "#801d5c";
+    ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = 4.5; ctx.strokeStyle = "#801d5c";
   }, []);
   useEffect(() => { setup(); const onR = () => setup(); window.addEventListener("resize", onR); return () => window.removeEventListener("resize", onR); }, [setup]);
   const clear = useCallback(() => { const c = canvasRef.current; if (!c) return; const ctx = c.getContext("2d"); ctx.clearRect(0, 0, c.width, c.height); }, []);
