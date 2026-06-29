@@ -13281,9 +13281,12 @@ const JLPT_DESC = {
 };
 const KANJI = KANJI_RAW.map(([char, jlpt, meaning, on, kun, exJa, exKana, exEn]) => ({
   char, jlpt, meaning, on, kun, exJa, exKana, exEn,
+  strokes: (typeof STROKE_DATA !== "undefined" && STROKE_DATA[char] && STROKE_DATA[char].length) || 99,
 }));
+/* Teach simplest kanji first within each level, so a kanji's mnemonic can lean
+   on the simpler kanji/radicals already introduced before it. */
 const KANJI_BY_LEVEL = JLPT_LEVELS.reduce((acc, lv) => {
-  acc[lv] = KANJI.filter((k) => k.jlpt === lv);
+  acc[lv] = KANJI.filter((k) => k.jlpt === lv).slice().sort((a, b) => a.strokes - b.strokes);
   return acc;
 }, {});
 const KANJI_INDEX = (() => { const m = {}; KANJI.forEach((k) => { m[k.char] = k; }); return m; })();
@@ -13365,17 +13368,16 @@ function accTier(st) {
 function tierColor(t) { return t === "good" ? T.green : t === "mixed" ? T.amber : t === "bad" ? T.red : null; }
 
 /* ===================== MASTERY (single 0–100% per item) =====================
-   One number drives the color everywhere. A correct review climbs it (with
-   diminishing returns toward 100); a miss HALVES it (the "-50% on a mistake"
-   rule). Colors are fixed (theme-independent) so red always reads as "weak"
-   and green as "mastered". */
+   Mastery is the length of the current run of CORRECT answers across every quiz
+   type (recognition, reading, trace, review…). Each consecutive correct answer
+   adds 1%; a single miss resets the run to 0%. So 100% means a hundred correct
+   answers in a row with no slip — and "Mastered" (90%+) is genuinely earned. */
 function masteryNext(m, ok) {
   if (m == null || isNaN(m)) m = 0;
-  if (ok) return Math.min(100, Math.round(m + (100 - m) * 0.34));
-  return Math.round(m * 0.5);
+  return ok ? Math.min(100, Math.round(m) + 1) : 0;
 }
-/* Read a 0–100 mastery from any progress shape we store (vocab/trace carry an
-   explicit .m; kanji/kana stores are derived from stage or correct/wrong). */
+/* Read a 0–100 mastery from any progress shape we store. New blobs carry an
+   explicit .m streak; older blobs fall back to a stage/accuracy estimate. */
 function mastery(prog) {
   if (!prog) return null;
   if (typeof prog.m === "number") return Math.max(0, Math.min(100, Math.round(prog.m)));
@@ -13404,6 +13406,19 @@ function masteryBand(m) {
 }
 function masteryColor(m) { return masteryBand(m).color; }
 function masteryLabel(m) { return masteryBand(m).label; }
+/* Apply one graded answer to a mastery blob {correct,wrong,recentWrong,m},
+   advancing (or resetting) the consecutive-correct streak in .m. */
+function bumpMastery(blob, ok) {
+  const p = blob || { correct: 0, wrong: 0, recentWrong: 0 };
+  const prevM = typeof p.m === "number" ? p.m : (mastery(p) || 0);
+  return {
+    ...p,
+    correct: (p.correct || 0) + (ok ? 1 : 0),
+    wrong: (p.wrong || 0) + (ok ? 0 : 1),
+    recentWrong: ok ? 0 : (p.recentWrong || 0) + 1,
+    m: masteryNext(prevM, ok),
+  };
+}
 /* small "63%" pill colored by band, used in lists/cards */
 function MasteryDot({ m, size = 11 }) {
   if (m == null) return null;
@@ -13420,7 +13435,7 @@ function MasteryLegend({ compact }) {
           return <span key={b.label}><i style={{ display: "inline-block", width: 9, height: 9, borderRadius: 3, background: b.color, marginRight: 4, verticalAlign: "middle" }} />{b.label} <span style={{ opacity: 0.7 }}>{range}</span></span>;
         })}
       </div>
-      {!compact && <div style={{ textAlign: "center", fontSize: 10.5, color: T.textDim, marginTop: 6, lineHeight: 1.6 }}>Each correct review raises an item's mastery; a miss cuts it in half. The color is its current mastery.</div>}
+      {!compact && <div style={{ textAlign: "center", fontSize: 10.5, color: T.textDim, marginTop: 6, lineHeight: 1.6 }}>Mastery is your current run of correct answers across every quiz type — each correct answer adds 1%, a miss resets it to 0. 100 in a row earns full mastery.</div>}
     </div>
   );
 }
@@ -13471,7 +13486,7 @@ function Bar({ pct, h = 8 }) {
 
 /* ===================== TYPED QUIZ (romaji, with live kana preview) ===================== */
 /* ---- Twice-in-a-row session: an item only clears after 2 consecutive corrects.
-   A miss resets that item's streak (and, via onGrade, halves its mastery). The
+   A miss resets that item's streak (and, via onGrade, resets its mastery to 0%). The
    session ends only when every item has been cleared. (Logic unit-tested.) ---- */
 function sInit(ids) { return { q: ids.slice(), streak: {}, done: {}, total: ids.length }; }
 function sCur(st) { return st.q[0]; }
@@ -13488,7 +13503,7 @@ function sDone(st) { return st.q.length === 0; }
 function SessionRule({ note }) {
   return (
     <div style={{ background: `${T.gold}10`, border: `1px solid ${T.gold}55`, borderRadius: 12, padding: "9px 12px", fontSize: 11.5, color: T.text, lineHeight: 1.6, margin: "0 0 12px" }}>
-      <b style={{ color: T.gold }}>How this session works:</b> each item must be answered correctly <b>twice in a row</b> to clear it. Miss one and it goes back in the pile and its mastery drops by half. {note || "The session ends only when everything is cleared."}
+      <b style={{ color: T.gold }}>How this session works:</b> each item must be answered correctly <b>twice in a row</b> to clear it. Miss one and it goes back in the pile and its mastery resets to 0%. {note || "The session ends only when everything is cleared."}
     </div>
   );
 }
@@ -13681,7 +13696,7 @@ function LearnSession({ pool, batch, onLearn, onGrade, onExit, onKanji }) {
 }
 
 /* ===================== HOME ===================== */
-function HomeView({ state, level, levelPct, lessons, reviews, leeches, stageCounts, streak, onGo, onTrouble, onSetting, onReset, onUnlock, onImport }) {
+function HomeView({ state, level, levelPct, lessons, reviews, leeches, kanjiLessons, kanjiReviews, kanjiLevel, stageCounts, streak, onGo, onTrouble, onSetting, onReset, onUnlock, onImport }) {
   const [confirm, setConfirm] = useState(false);
   const [showBackup, setShowBackup] = useState(false);
   const [lastUpdated, setLastUpdated] = useState("");
@@ -13740,9 +13755,21 @@ function HomeView({ state, level, levelPct, lessons, reviews, leeches, stageCoun
         )}
       </div>
 
-      <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
-        <Tile label="Lessons" value={lessons} sub={lessons ? "new words ready" : "all caught up"} color={T.terra} onClick={() => onGo("lessons")} dim={!lessons} />
-        <Tile label="Reviews" value={reviews} sub={reviews ? "due now" : "nothing due"} color={T.gold} onClick={() => onGo("reviews")} dim={!reviews} />
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 12 }}>
+        <div style={{ border: `1px solid ${T.line}`, background: T.panel, borderRadius: 16, padding: "12px 14px 13px" }}>
+          <div style={{ fontSize: 12.5, fontWeight: 800, color: T.terra, marginBottom: 9 }}>📖 Vocabulary</div>
+          <div style={{ display: "flex", gap: 10 }}>
+            <Tile label="Lessons" value={lessons} sub={lessons ? "new words ready" : "all caught up"} color={T.terra} onClick={() => onGo("lessons")} dim={!lessons} />
+            <Tile label="Reviews" value={reviews} sub={reviews ? "due now" : "nothing due"} color={T.gold} onClick={() => onGo("reviews")} dim={!reviews} />
+          </div>
+        </div>
+        <div style={{ border: `1px solid ${T.line}`, background: T.panel, borderRadius: 16, padding: "12px 14px 13px" }}>
+          <div style={{ fontSize: 12.5, fontWeight: 800, color: T.terra, marginBottom: 9 }}>🈲 Kanji <span style={{ fontSize: 10.5, fontWeight: 700, color: T.textDim }}>· {kanjiLevel}</span></div>
+          <div style={{ display: "flex", gap: 10 }}>
+            <Tile label="Lessons" value={kanjiLessons} sub={kanjiLessons ? "new kanji to learn" : "level complete"} color={T.terra} onClick={() => onGo("kanji")} dim={!kanjiLessons} />
+            <Tile label="Reviews" value={kanjiReviews} sub={kanjiReviews ? "learned · keep drilling" : "nothing to review"} color={T.gold} onClick={() => onGo("kanji")} dim={!kanjiReviews} />
+          </div>
+        </div>
       </div>
 
       {leeches > 0 && (
@@ -14086,10 +14113,12 @@ function StatsView({ state, allItems, level, streak }) {
   let kGood = 0, kMixed = 0, kBad = 0;
   KANJI.forEach((k) => { const t = accTier(mergeStats(kStats[k.char], trK[k.char])); if (t === "good") kGood++; else if (t === "mixed") kMixed++; else if (t === "bad") kBad++; });
 
-  // average mastery (the per-item 0–100 metric)
-  const vMs = allItems.map((it) => mastery(state.progress[it.id])).filter((x) => x != null);
+  // average mastery (the per-item streak metric), over what you've learned
+  const vLearnedItems = allItems.filter((it) => state.progress[it.id]);
+  const vMs = vLearnedItems.map((it) => mastery(state.progress[it.id]) || 0);
   const avgVocabM = vMs.length ? Math.round(vMs.reduce((a, b) => a + b, 0) / vMs.length) : null;
-  const kMs = KANJI.map((k) => mastery(mergeStats(kStats[k.char], trK[k.char]))).filter((x) => x != null);
+  const kLearnedList = KANJI.filter((k) => kMap[k.char] || kStats[k.char]);
+  const kMs = kLearnedList.map((k) => mastery(kStats[k.char]) || 0);
   const avgKanjiM = kMs.length ? Math.round(kMs.reduce((a, b) => a + b, 0) / kMs.length) : null;
 
   // history
@@ -14302,6 +14331,10 @@ function kanaTypeMatch(typed, glyph) {
 
 /* ---- wrapper with mode tabs + hiragana/katakana toggle ---- */
 /* ===================== STROKE-ORDER GUIDE (numbers + arrows) ===================== */
+/* One light-pink guide color for every tracing surface (word fallback + stroke
+   diagram), so the thing you trace over always looks the same and stays faint. */
+const GUIDE_COLOR = "#f0c4da";
+const GUIDE_STRONG = "#dd9cc0";
 function StrokeGuide({ char, show, diagram }) {
   if (!show) return null;
   const data = STROKE_DATA[char];
@@ -14312,25 +14345,25 @@ function StrokeGuide({ char, show, diagram }) {
     return (
       <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
         <text x="50" y="50" textAnchor="middle" dominantBaseline="central"
-          fontFamily={jaFont} fill={T.terra} fillOpacity={0.22}
+          fontFamily={jaFont} fill={GUIDE_COLOR} fillOpacity={0.85}
           fontSize={single ? 78 : Math.max(16, Math.round(96 / n))}
           textLength={single ? undefined : 92} lengthAdjust="spacingAndGlyphs"
           style={{ userSelect: "none" }}>{s}</text>
       </svg>
     );
   }
-  const babyPink = "#f7a8c9";
+  const babyPink = GUIDE_STRONG;
   return (
     <svg viewBox="0 0 109 109" preserveAspectRatio="xMidYMid meet" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
       {data.map((st, i) => (
-        <path key={"p" + i} d={st[0]} fill="none" stroke={diagram ? T.text : T.textDim} strokeOpacity={diagram ? 0.7 : 0.4} strokeWidth={3.4} strokeLinecap="round" strokeLinejoin="round" />
+        <path key={"p" + i} d={st[0]} fill="none" stroke={GUIDE_COLOR} strokeOpacity={diagram ? 0.95 : 0.7} strokeWidth={3.4} strokeLinecap="round" strokeLinejoin="round" />
       ))}
       {data.map((st, i) => (
         <path key={"a" + i} d="M0,-2.4 L4.4,0 L0,2.4 Z" fill={babyPink} transform={`translate(${st[3]} ${st[4]}) rotate(${st[5]})`} />
       ))}
       {data.map((st, i) => (
         <g key={"n" + i}>
-          <circle cx={st[1]} cy={st[2]} r={1.9} fill={T.terra} stroke="#fff" strokeWidth={0.3} />
+          <circle cx={st[1]} cy={st[2]} r={1.9} fill={GUIDE_STRONG} stroke="#fff" strokeWidth={0.3} />
           <text x={st[1]} y={st[2]} dy="0.34em" textAnchor="middle" fill="#fff" fontSize={i + 1 > 9 ? 2.1 : 2.6} fontWeight="700" style={{ fontFamily: uiFont }}>{i + 1}</text>
         </g>
       ))}
@@ -14537,7 +14570,7 @@ function PracticePad({ char, typeCheck, typePlaceholder, typeHint, label }) {
     c.width = rect.width * dpr; c.height = rect.height * dpr;
     const ctx = c.getContext("2d");
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = 2.8; ctx.strokeStyle = "#801d5c";
+    ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = 3.2; ctx.strokeStyle = "#801d5c";
   }, []);
   useEffect(() => { setup(); const onR = () => setup(); window.addEventListener("resize", onR); return () => window.removeEventListener("resize", onR); }, [setup]);
   const clear = useCallback(() => { const c = canvasRef.current; if (!c) return; const ctx = c.getContext("2d"); ctx.clearRect(0, 0, c.width, c.height); }, []);
@@ -14659,6 +14692,34 @@ function MonthCalendar({ history }) {
    that stay grammatical for nouns, adjectives, verbs and set phrases alike. */
 function firstForm(s) { return String(s || "").split(/[;,、・\/]|\s\u00b7\s/)[0].trim(); }
 
+/* kana -> Hepburn romaji (for readings & romaji-based quizzes) */
+var K2R = { "あ":"a","い":"i","う":"u","え":"e","お":"o","か":"ka","き":"ki","く":"ku","け":"ke","こ":"ko","が":"ga","ぎ":"gi","ぐ":"gu","げ":"ge","ご":"go","さ":"sa","し":"shi","す":"su","せ":"se","そ":"so","ざ":"za","じ":"ji","ず":"zu","ぜ":"ze","ぞ":"zo","た":"ta","ち":"chi","つ":"tsu","て":"te","と":"to","だ":"da","ぢ":"ji","づ":"zu","で":"de","ど":"do","な":"na","に":"ni","ぬ":"nu","ね":"ne","の":"no","は":"ha","ひ":"hi","ふ":"fu","へ":"he","ほ":"ho","ば":"ba","び":"bi","ぶ":"bu","べ":"be","ぼ":"bo","ぱ":"pa","ぴ":"pi","ぷ":"pu","ぺ":"pe","ぽ":"po","ま":"ma","み":"mi","む":"mu","め":"me","も":"mo","や":"ya","ゆ":"yu","よ":"yo","ら":"ra","り":"ri","る":"ru","れ":"re","ろ":"ro","わ":"wa","を":"o","ん":"n","ぁ":"a","ぃ":"i","ぅ":"u","ぇ":"e","ぉ":"o" };
+var K2R_Y = { "ゃ":"ya","ゅ":"yu","ょ":"yo" };
+function kanaToRomaji(input) {
+  var s = kataToHira(String(input || ""));
+  var out = "", i = 0;
+  while (i < s.length) {
+    var ch = s[i], nx = s[i + 1];
+    if (ch === "・" || ch === "／" || ch === "/") { out += "/"; i++; continue; }
+    if (ch === "ー" || ch === "〜") { out += out.slice(-1) || ""; i++; continue; }
+    if (ch === "っ") { var n2 = s[i + 1]; var r = n2 && (K2R[n2] || "") ; out += r ? r[0] : ""; i++; continue; }
+    if (nx && K2R_Y[nx] && K2R[ch]) {
+      var base = K2R[ch];
+      if (base.length >= 2 && /[iy]$/.test(base[base.length - 1])) base = base.slice(0, -1);
+      else if (/i$/.test(base)) base = base.slice(0, -1);
+      out += base + K2R_Y[nx]; i += 2; continue;
+    }
+    if (K2R[ch]) { out += K2R[ch]; i++; continue; }
+    out += ch === "　" || ch === " " ? " " : ""; i++;
+  }
+  return out;
+}
+/* first reading's romaji from an on/kun field like "ニチ・ジツ" or "おお(きい)" */
+function readingRomaji(field) {
+  var first = firstForm(String(field || "").replace(/[()（）]/g, ""));
+  return kanaToRomaji(first);
+}
+
 function jpExamples(word) {
   if (!word) return [];
   var ja = firstForm(word.ja || word.kana || "");
@@ -14773,7 +14834,7 @@ function vocabTypeMatch(typed, item) {
 
 
 
-function ScriptView({ scriptState, setScript, traceState, gradeTrace }) {
+function ScriptView({ scriptState, setScript, traceState, gradeTrace, gradeKana }) {
   const ss = scriptState || {};
   const chart = ss.chart || "hira";
   const set = KANA_SETS[chart];
@@ -14805,7 +14866,7 @@ function ScriptView({ scriptState, setScript, traceState, gradeTrace }) {
 
       {mode === "train" && <ScriptTrain scriptState={ss} setScript={setScript} chart={chart} set={set} />}
       {mode === "chart" && <ScriptChart set={set} chart={chart} selGlyph={selGlyph} setSelGlyph={setSelGlyph} onTrace={() => { setTraceReturn("chart"); setMode("trace"); }} prog={(ss && ss.progress) || {}} traceMap={tp} />}
-      {mode === "quiz" && <ScriptQuiz set={set} chart={chart} />}
+      {mode === "quiz" && <ScriptQuiz set={set} chart={chart} onGrade={gradeKana} />}
       {mode === "trace" && (
         <>
           {traceReturn && (
@@ -15187,8 +15248,8 @@ function ScriptChart({ set, chart, selGlyph, setSelGlyph, onTrace, prog, traceMa
 }
 
 /* ===================== QUIZ: standalone recognition drill ===================== */
-function ScriptQuiz({ set, chart }) {
-  const [dirMode, setDirMode] = useState("k2s"); // k2s: kana→sound · s2k: sound→kana
+function ScriptQuiz({ set, chart, onGrade }) {
+  const [dirMode, setDirMode] = useState("k2s"); // k2s: kana→rōmaji · s2k: rōmaji→kana
   const [q, setQ] = useState(() => makeKanaQ(set[Math.floor(Math.random() * set.length)], set));
   const [picked, setPicked] = useState(null);
   const [score, setScore] = useState({ right: 0, total: 0, streak: 0, best: 0 });
@@ -15203,6 +15264,7 @@ function ScriptQuiz({ set, chart }) {
     if (picked) return;
     const ok = opt[1] === q.answer[1];
     autoSpeak(q.answer[0]); setPicked(opt);
+    if (onGrade) onGrade(q.answer[0], ok);
     setScore((s) => { const streak = ok ? s.streak + 1 : 0; return { right: s.right + (ok ? 1 : 0), total: s.total + 1, streak, best: Math.max(s.best, streak) }; });
     timer.current = setTimeout(next, 950);
   };
@@ -15219,12 +15281,12 @@ function ScriptQuiz({ set, chart }) {
 
       <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
         <button className="tap" onClick={() => { setDirMode((d) => (d === "k2s" ? "s2k" : "k2s")); setPicked(null); }} style={{ border: `1px solid ${T.line}`, background: T.panelHi, color: T.gold, borderRadius: 20, padding: "7px 14px", fontSize: 12.5, fontWeight: 600 }}>
-          {showKana ? "See kana → pick sound" : "See sound → pick kana"} ⇄
+          {showKana ? "See kana → pick rōmaji" : "See rōmaji → pick kana"} ⇄
         </button>
       </div>
 
       <div className="pop" key={q.answer[1] + dirMode} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "30px 20px", textAlign: "center", boxShadow: "0 14px 36px rgba(128,29,92,.10)", marginBottom: 16 }}>
-        <div style={{ fontSize: 12, color: T.textDim, marginBottom: 10 }}>{showKana ? "Which sound is this?" : "Which kana makes this sound?"}</div>
+        <div style={{ fontSize: 12, color: T.textDim, marginBottom: 10 }}>{showKana ? "Which rōmaji is this?" : "Which kana makes this sound?"}</div>
         {showKana ? (
           <div style={{ fontFamily: jaFont, fontSize: 84, color: T.text, lineHeight: 1 }}>{q.answer[0]}</div>
         ) : (
@@ -15309,7 +15371,7 @@ function ScriptTrace({ set, chart, initialChar, srsProg, onSrsGrade }) {
     c.width = rect.width * dpr; c.height = rect.height * dpr;
     const ctx = c.getContext("2d");
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = 11; ctx.strokeStyle = "#801d5c";
+    ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = 3.2; ctx.strokeStyle = "#801d5c";
   }, []);
   useEffect(() => { setup(); const onR = () => setup(); window.addEventListener("resize", onR); return () => window.removeEventListener("resize", onR); }, [setup]);
 
@@ -15350,7 +15412,7 @@ function ScriptTrace({ set, chart, initialChar, srsProg, onSrsGrade }) {
       {isQuiz && (
         <>
           <div style={{ background: `${T.gold}10`, border: `1px solid ${T.gold}55`, borderRadius: 12, padding: "9px 13px", marginBottom: 12, fontSize: 12, color: T.text, lineHeight: 1.5 }}>
-            <b style={{ color: T.gold }}>Spaced-repetition test.</b> Due kana come first; correct answers push them further out, a miss brings them back sooner, halves their mastery, and you rewrite that same kana right away. {dueCount > 0 ? `${dueCount} due now.` : "Nothing due — reviewing ahead."}
+            <b style={{ color: T.gold }}>Spaced-repetition test.</b> Due kana come first; correct answers push them further out, a miss brings them back sooner, resets their mastery to 0%, and you rewrite that same kana right away. {dueCount > 0 ? `${dueCount} due now.` : "Nothing due — reviewing ahead."}
           </div>
           <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
             <Stat label="Score" value={`${score.right}/${score.total}`} color={T.gold} />
@@ -15919,7 +15981,20 @@ function KanjiQuiz({ list, level, learned, best, onBest, autoPool, onRecord }) {
 
   /* ----- QUIZ ----- */
   if (!q) return <div style={{ color: T.textDim, textAlign: "center", padding: 30 }}>Nothing to quiz.</div>;
-  const showKanji = dir === "k2m";
+  const meaning = (k) => k.meaning.split(",")[0];
+  const kKana = (k) => firstForm(k.kun) || firstForm(k.on) || "";
+  const kRomaji = (k) => readingRomaji(k.kun || k.on);
+  const KQ_DIRS = [["k2m", "Kanji → Meaning"], ["k2r", "Kanji → Rōmaji"], ["k2k", "Kanji → Kana"], ["m2k", "Meaning → Kanji"], ["r2k", "Rōmaji → Kanji"], ["kk2k", "Kana → Kanji"]];
+  const DIR_SIDES = { k2m: ["kanji", "m"], k2r: ["kanji", "r"], k2k: ["kanji", "k"], m2k: ["m", "kanji"], r2k: ["r", "kanji"], kk2k: ["k", "kanji"] };
+  const [promptKind, optKind] = DIR_SIDES[dir] || DIR_SIDES.k2m;
+  const showKanji = promptKind === "kanji";
+  const renderAttr = (k, kind, col, big) => {
+    if (kind === "kanji") return <span style={{ fontFamily: jaFont, fontSize: big ? 88 : 40, color: col, lineHeight: 1 }}>{k.char}</span>;
+    if (kind === "m") return <span style={{ fontFamily: displayFont, fontSize: big ? 32 : 17, color: col, fontWeight: 600, textAlign: "center" }}>{meaning(k)}</span>;
+    if (kind === "r") return <span style={{ fontFamily: displayFont, fontSize: big ? 34 : 19, color: col, fontWeight: 700, fontStyle: "italic" }}>{kRomaji(k)}</span>;
+    return <span style={{ fontFamily: jaFont, fontSize: big ? 46 : 30, color: col }}>{kKana(k)}</span>;
+  };
+  const promptLabel = showKanji ? (optKind === "m" ? "What does this kanji mean?" : optKind === "r" ? "What is this kanji's reading (rōmaji)?" : "What is this kanji's reading (kana)?") : "Which kanji is this?";
   const next = () => { setPicked(null); setQ(makeKanjiQ(pool[Math.floor(Math.random() * pool.length)], pool.length >= 4 ? pool : KANJI)); };
   const choose = (opt) => {
     if (picked) return;
@@ -15931,7 +16006,6 @@ function KanjiQuiz({ list, level, learned, best, onBest, autoPool, onRecord }) {
     timer.current = setTimeout(next, 1000);
   };
   const acc = score.total ? Math.round((score.right / score.total) * 100) : 0;
-  const meaning = (k) => k.meaning.split(",")[0];
 
   return (
     <div className="fade">
@@ -15942,22 +16016,21 @@ function KanjiQuiz({ list, level, learned, best, onBest, autoPool, onRecord }) {
         <Stat label="Best" value={score.best} color={T.green} />
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 16 }}>
-        <button className="tap" onClick={() => { setDir((d) => (d === "k2m" ? "m2k" : "k2m")); setPicked(null); }} style={{ border: `1px solid ${T.line}`, background: T.panelHi, color: T.gold, borderRadius: 20, padding: "7px 14px", fontSize: 12.5, fontWeight: 600 }}>
-          {showKanji ? "See kanji → pick meaning" : "See meaning → pick kanji"} ⇄
-        </button>
-        <button className="tap" onClick={() => { clearTimeout(timer.current); setPhase("setup"); }} style={{ border: `1px solid ${T.line}`, background: T.panelHi, color: T.textDim, borderRadius: 20, padding: "7px 12px", fontSize: 12.5, fontWeight: 600 }}>Change selection</button>
+      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 6, marginBottom: 10 }}>
+        {KQ_DIRS.map(([d, lbl]) => (
+          <button key={d} className="tap" onClick={() => { setDir(d); setPicked(null); }} style={{ border: `1px solid ${dir === d ? T.gold : T.line}`, background: dir === d ? `${T.gold}14` : T.panelHi, color: dir === d ? T.gold : T.textDim, borderRadius: 20, padding: "6px 11px", fontSize: 11.5, fontWeight: 700 }}>{lbl}</button>
+        ))}
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
+        <button className="tap" onClick={() => { clearTimeout(timer.current); setPhase("setup"); }} style={{ border: `1px solid ${T.line}`, background: T.panelHi, color: T.textDim, borderRadius: 20, padding: "6px 12px", fontSize: 12, fontWeight: 600 }}>Change selection</button>
       </div>
 
       <div style={{ fontSize: 11.5, color: T.textDim, textAlign: "center", marginBottom: 10 }}>Quizzing {pool.length} kanji</div>
 
       <div className="pop" key={q.answer.char + dir} style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 22, padding: "28px 20px", textAlign: "center", boxShadow: "0 14px 36px rgba(128,29,92,.10)", marginBottom: 16 }}>
-        <div style={{ fontSize: 12, color: T.textDim, marginBottom: 10 }}>{showKanji ? "What does this kanji mean?" : "Which kanji means this?"}</div>
-        {showKanji ? (
-          <div style={{ fontFamily: jaFont, fontSize: 88, color: T.text, lineHeight: 1 }}>{q.answer.char}</div>
-        ) : (
-          <div style={{ fontFamily: displayFont, fontSize: 32, color: T.gold, fontWeight: 700 }}>{meaning(q.answer)}</div>
-        )}
+        <div style={{ fontSize: 12, color: T.textDim, marginBottom: 10 }}>{promptLabel}</div>
+        {renderAttr(q.answer, promptKind, showKanji ? T.text : T.gold, true)}
+        <div style={{ marginTop: 14 }}><Speaker text={kanjiSpeak(q.answer)} size={18} color={T.terra} /></div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
@@ -15970,12 +16043,8 @@ function KanjiQuiz({ list, level, learned, best, onBest, autoPool, onRecord }) {
             else if (isPicked) { bg = `${T.red}1a`; border = T.red; col = T.red; }
           }
           return (
-            <button key={i} className="tap" onClick={() => choose(opt)} style={{ background: bg, border: `1.5px solid ${border}`, borderRadius: 14, padding: showKanji ? "14px 8px" : "16px 8px", cursor: "pointer", minHeight: 64, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              {showKanji ? (
-                <span style={{ fontFamily: displayFont, fontSize: 17, color: col, fontWeight: 600, textAlign: "center" }}>{meaning(opt)}</span>
-              ) : (
-                <span style={{ fontFamily: jaFont, fontSize: 40, color: col }}>{opt.char}</span>
-              )}
+            <button key={i} className="tap" onClick={() => choose(opt)} style={{ background: bg, border: `1.5px solid ${border}`, borderRadius: 14, padding: optKind === "kanji" ? "14px 8px" : "16px 8px", cursor: "pointer", minHeight: 64, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {renderAttr(opt, optKind, col, false)}
             </button>
           );
         })}
@@ -16043,7 +16112,7 @@ function KanjiTrace({ list, initialChar, srsProg, onSrsGrade }) {
     c.width = rect.width * dpr; c.height = rect.height * dpr;
     const ctx = c.getContext("2d");
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = 11; ctx.strokeStyle = "#801d5c";
+    ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = 3.2; ctx.strokeStyle = "#801d5c";
   }, []);
   useEffect(() => { setup(); const onR = () => setup(); window.addEventListener("resize", onR); return () => window.removeEventListener("resize", onR); }, [setup]);
 
@@ -16102,7 +16171,7 @@ function KanjiTrace({ list, initialChar, srsProg, onSrsGrade }) {
           {isQuiz && (
             <>
               <div style={{ background: `${T.gold}10`, border: `1px solid ${T.gold}55`, borderRadius: 12, padding: "9px 13px", marginBottom: 12, fontSize: 12, color: T.text, lineHeight: 1.5 }}>
-                <b style={{ color: T.gold }}>Spaced-repetition test.</b> Due characters come first; getting one right pushes it further out, a miss brings it back sooner, halves its mastery, and you rewrite it right away. {dueCount > 0 ? `${dueCount} due now.` : "Nothing due — reviewing ahead."}
+                <b style={{ color: T.gold }}>Spaced-repetition test.</b> Due characters come first; getting one right pushes it further out, a miss brings it back sooner, resets its mastery to 0%, and you rewrite it right away. {dueCount > 0 ? `${dueCount} due now.` : "Nothing due — reviewing ahead."}
               </div>
               <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
                 <Stat label="Score" value={`${score.right}/${score.total}`} color={T.gold} />
@@ -16134,6 +16203,11 @@ function KanjiTrace({ list, initialChar, srsProg, onSrsGrade }) {
                 <div>
                   <div style={{ fontSize: 11.5, color: T.textDim, marginBottom: 2 }}>Write the kanji that means</div>
                   <div style={{ fontSize: 18, color: T.gold, fontWeight: 800, lineHeight: 1.2 }}>{k.meaning}</div>
+                  <div style={{ fontSize: 13, color: T.text, marginTop: 6, lineHeight: 1.6 }}>
+                    <span style={{ color: T.textDim }}>reading </span>
+                    <span style={{ fontFamily: jaFont, fontWeight: 700 }}>{k.kun || k.on}</span>
+                    <span style={{ color: T.goldSoft, fontStyle: "italic", marginLeft: 6 }}>{readingRomaji(k.kun || k.on)}</span>
+                  </div>
                 </div>
               )}
             </div>
@@ -16319,12 +16393,21 @@ function App() {
     setState((s) => {
       const ks = s.kanji || {};
       const stats = { ...(ks.stats || {}) };
-      const p = stats[char] || { correct: 0, wrong: 0, recentWrong: 0 };
-      const prevM = typeof p.m === "number" ? p.m : mastery(p);
-      stats[char] = { correct: p.correct + (correct ? 1 : 0), wrong: p.wrong + (correct ? 0 : 1), recentWrong: correct ? 0 : (p.recentWrong || 0) + 1, m: masteryNext(prevM, correct) };
+      stats[char] = bumpMastery(stats[char], correct);
       const day = todayStr();
       const daily = s.daily.date === day ? s.daily : { date: day, reviews: 0, lessons: 0 };
       const next = { ...s, kanji: { ...ks, stats }, daily: { ...daily, reviews: daily.reviews + 1 }, history: { ...s.history, [day]: (s.history[day] || 0) + 1 } };
+      saveState(next);
+      return next;
+    });
+  }, []);
+  const gradeKana = useCallback((glyph, correct) => {
+    setState((s) => {
+      const sc = s.script || {}; const prog = { ...(sc.progress || {}) };
+      prog[glyph] = { ...bumpMastery(prog[glyph], correct), learned: true };
+      const day = todayStr();
+      const daily = s.daily.date === day ? s.daily : { date: day, reviews: 0, lessons: 0 };
+      const next = { ...s, script: { ...sc, progress: prog }, daily: { ...daily, reviews: daily.reviews + 1 }, history: { ...s.history, [day]: (s.history[day] || 0) + 1 } };
       saveState(next);
       return next;
     });
@@ -16337,7 +16420,17 @@ function App() {
       bucket[char] = reviewSchedule(bucket[char], correct, now);
       const day = todayStr();
       const daily = s.daily.date === day ? s.daily : { date: day, reviews: 0, lessons: 0 };
-      const next = { ...s, trace: { ...store, [scriptKey]: bucket }, daily: { ...daily, reviews: daily.reviews + 1 }, history: { ...s.history, [day]: (s.history[day] || 0) + 1 } };
+      let next = { ...s, trace: { ...store, [scriptKey]: bucket }, daily: { ...daily, reviews: daily.reviews + 1 }, history: { ...s.history, [day]: (s.history[day] || 0) + 1 } };
+      // feed the same unified mastery streak the recognition quizzes use
+      if (scriptKey === "kanji") {
+        const ks = next.kanji || {}; const stats = { ...(ks.stats || {}) };
+        stats[char] = bumpMastery(stats[char], correct);
+        next = { ...next, kanji: { ...ks, stats } };
+      } else {
+        const sc = next.script || {}; const prog = { ...(sc.progress || {}) };
+        prog[char] = { ...bumpMastery(prog[char], correct), learned: true };
+        next = { ...next, script: { ...sc, progress: prog } };
+      }
       saveState(next);
       return next;
     });
@@ -16355,7 +16448,13 @@ function App() {
     const levelPct = levelItems.length ? guru / levelItems.length : 0;
     const stageCounts = {};
     allItems.forEach((it) => { const p = state.progress[it.id]; if (!p) return; const g = stageMeta(p.stage).group; stageCounts[g] = (stageCounts[g] || 0) + 1; });
-    return { pool, due, leechList, levelPct, stageCounts };
+    const ks = state.kanji || {};
+    const kLearned = ks.learned || {};
+    const kStats = ks.stats || {};
+    const kList = KANJI_BY_LEVEL[ks.level || "N5"] || [];
+    const kanjiLessons = kList.filter((k) => !kLearned[k.char]).length;
+    const kanjiReviews = KANJI.filter((k) => kLearned[k.char] && (mastery(kStats[k.char]) == null || mastery(kStats[k.char]) < 90)).length;
+    return { pool, due, leechList, levelPct, stageCounts, kanjiLessons, kanjiReviews, kanjiLevel: ks.level || "N5" };
   }, [state, allItems]);
 
   const streak = useMemo(() => {
@@ -16470,6 +16569,7 @@ function App() {
         {view === "home" && (
           <HomeView state={state} level={state.currentLevel} levelPct={derived.levelPct}
             lessons={derived.pool.length} reviews={derived.due.length} leeches={derived.leechList.length}
+            kanjiLessons={derived.kanjiLessons} kanjiReviews={derived.kanjiReviews} kanjiLevel={derived.kanjiLevel}
             stageCounts={derived.stageCounts} streak={streak} onGo={setView}
             onTrouble={() => startPractice("leeches")}
             onUnlock={() => persist({ ...state, currentLevel: Math.min(state.currentLevel + 1, MAX_LEVEL) })}
@@ -16495,7 +16595,7 @@ function App() {
         {view === "lessons" && (<LearnSession pool={derived.pool} batch={state.settings.lessonBatch} onLearn={commitLearn} onGrade={grade} onExit={() => setView("home")} onKanji={openKanji} />)}
         {view === "reviews" && <ReviewsView due={derived.due} grade={grade} onKanji={openKanji} kanjiState={state.kanji} setKanji={(next) => persist({ ...state, kanji: next })} customWordItems={customWordItems} customKanjiItems={customKanjiItems} onClearCustom={clearCustomQuiz} onRecordKanji={recordKanji} />}
         {view === "practice" && <TypedQuiz items={practiceItems} mode="practice" onGrade={grade} onExit={() => setView("items")} title="Practice" onKanji={openKanji} />}
-        {view === "script" && <ScriptView scriptState={state.script} setScript={(next) => persist({ ...state, script: next })} traceState={state.trace} gradeTrace={gradeTrace} />}
+        {view === "script" && <ScriptView scriptState={state.script} setScript={(next) => persist({ ...state, script: next })} traceState={state.trace} gradeTrace={gradeTrace} gradeKana={gradeKana} />}
         {view === "kanji" && (
           <>
             {cameFrom && (

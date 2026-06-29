@@ -9,6 +9,30 @@ trainer. The whole thing is a single self-contained HTML file..
 
 ## Features
 
+**Latest updates**
+
+- **Choose your kanji & kana quiz direction** — the Kanji quiz now offers six
+  directions you can switch between mid-session: **kanji → meaning**, **kanji →
+  rōmaji**, **kanji → kana reading**, and the reverse of each (**meaning →
+  kanji**, **rōmaji → kanji**, **kana → kanji**). The kana quiz flips between
+  **kana → rōmaji** and **rōmaji → kana**. Every quiz has a 🔊 button so you can
+  hear the answer, and after you pick, the **correct choice turns green** (and a
+  wrong pick turns red).
+- **Type it and write it in every lesson** — words, kanji, and kana all get a
+  practice card before **Learn it**: a **"try writing"** pad (trace over a faint
+  guide of the whole word/character) and a **"try typing"** box with a **Check**
+  button that accepts kana, kanji, or rōmaji.
+- **Two example sentences everywhere** — every word and kanji shows at least two
+  example sentences while you learn it and when you look it up; kana show real
+  words that use them.
+- **Home shows vocab *and* kanji** — separate Lessons and Reviews counts for
+  vocabulary and for kanji, each tappable.
+- **Kanji taught simplest-first** — within each JLPT level, kanji are introduced
+  in order of stroke count so a kanji's mnemonic can build on the simpler kanji
+  and radicals you've already met.
+- **Consistent, lighter trace guide** — every tracing surface uses the same soft
+  pink guide with a thin pen, so your strokes never bury the character.
+
 - **Spaced-repetition vocabulary — the full JLPT range (N5 → N1)** — roughly
   8,000 words organised into bite-size levels (e.g. *N5 · 1*, *N5 · 2* … through
   N1). Each card shows the word in kanji/kana, its reading, the English meaning,
@@ -144,21 +168,27 @@ trainer. The whole thing is a single self-contained HTML file..
   time it was last updated** (detected automatically from the deployed file).
 - **Auto-play pronunciation toggle** — a switch on the Home screen turns the
   automatic read-aloud on or off. The 🔊 button always plays even when it's off.
-- **Mastery system (0–100%)** — every item carries a single mastery percentage.
-  A correct review raises it (with diminishing returns near 100%); **a miss cuts
-  it in half**. The percentage and a color band show up on vocab, kanji, kana,
-  the trace tests, and the Stats screen. Color bands: **Learning** (red, 0–19%),
-  **Shaky** (orange, 20–44%), **Familiar** (gold, 45–69%), **Strong** (light
-  green, 70–89%), **Mastered** (green, 90–100%).
-- **Master-it quizzes** — a quiz or review session now ends only once **every
-  item has been answered correctly twice in a row**. Miss one and it goes back in
-  the pile (and its mastery halves). On-screen instructions explain the rule, and
-  there's no false "well done" when you've been struggling.
-- **Stroke order while learning** — the kana lesson card now shows a numbered
+- **Mastery = your streak of correct answers (0–100%)** — every item carries one
+  mastery percentage that is simply **your current run of correct answers across
+  every quiz type** (recognition, reading, rōmaji, kana, trace, review…). Each
+  correct answer adds **1%**; a single miss **resets it to 0%**. So 100% means a
+  hundred correct answers in a row with no slip, and **"Mastered" (90%+) is
+  genuinely earned** rather than handed out after a few lucky guesses. Because
+  every quiz type feeds the *same* streak, mastering an item means you can read
+  it, recognise it, and write it. The percentage and a color band show up on
+  vocab, kanji, kana, the trace tests, and the Stats screen. Color bands:
+  **Learning** (red, 0–19%), **Shaky** (orange, 20–44%), **Familiar** (gold,
+  45–69%), **Strong** (light green, 70–89%), **Mastered** (green, 90–100%).
+- **Master-it quizzes** — a quiz or review session ends only once **every item
+  has been answered correctly twice in a row**. Miss one and it goes back in the
+  pile (and its mastery resets to 0%).
+- **Stroke order while learning** — the kana lesson card shows a numbered
   stroke-order diagram so you can see how each character is written.
 - **Trace test = SRS with retake** — the ✍️ Trace test feeds the same spaced-
-  repetition schedule; a miss halves mastery and immediately asks you to rewrite
-  that same character.
+  repetition schedule and the same mastery streak; a miss resets mastery and
+  immediately asks you to rewrite that same character. The kanji trace test shows
+  the meaning **plus the kana reading and its rōmaji** so you can write from any
+  cue.
 - **Progress saves on your device** and the app installs to your home screen.
 
 ## How to use
