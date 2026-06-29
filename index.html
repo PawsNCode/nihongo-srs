@@ -13392,6 +13392,11 @@ function mastery(prog) {
   if ((prog.recentWrong || 0) >= 1) est = Math.round(est * 0.5);
   return est;
 }
+/* True green / red for answer correctness — the per-theme T.green/T.red are
+   tinted to match each palette (in the rose theme "green" is actually pink), so
+   for right/wrong feedback we use fixed, unmistakable colors instead. */
+const OK_GREEN = "#2e9e57";
+const BAD_RED = "#d23f3f";
 const MASTERY_BANDS = [
   { min: 90, color: "#34a35a", label: "Mastered" },
   { min: 70, color: "#7cc24e", label: "Strong" },
@@ -13602,7 +13607,7 @@ function TypedQuiz({ items, mode, onGrade, onExit, title, onKanji }) {
       <div style={{ background: `linear-gradient(160deg, ${T.panelHi}, ${T.panel})`, border: `1px solid ${T.line}`, borderRadius: 20, padding: "22px 18px", textAlign: "center", boxShadow: "0 12px 30px rgba(128,29,92,.08)" }}>
         <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: 1, color: T.goldSoft }}>Type the reading · {item.type}</div>
         <div style={{ fontFamily: displayFont, fontSize: 24, color: T.text, marginTop: 8 }}>{item.en}</div>
-        <div style={{ marginTop: 8, fontSize: 11, color: curStreak >= 1 ? T.green : T.textDim }}>{curStreak >= 1 ? "✓ 1 in a row — one more clears it" : "needs 2 correct in a row"}</div>
+        <div style={{ marginTop: 8, fontSize: 11, color: curStreak >= 1 ? OK_GREEN : T.textDim }}>{curStreak >= 1 ? "✓ 1 in a row — one more clears it" : "needs 2 correct in a row"}</div>
       </div>
 
       <input
@@ -13613,7 +13618,7 @@ function TypedQuiz({ items, mode, onGrade, onExit, title, onKanji }) {
         placeholder="type romaji…  e.g. arigatou"
         autoCapitalize="none" autoCorrect="off" autoComplete="off" spellCheck={false}
         readOnly={!!feedback}
-        style={{ width: "100%", marginTop: 12, padding: "13px 16px", borderRadius: 14, border: `2px solid ${correct ? T.green : wrong ? T.red : T.line}`, background: correct ? `${T.green}10` : wrong ? `${T.red}10` : T.panel, color: T.text, fontFamily: uiFont, fontSize: 19, outline: "none", textAlign: "center" }}
+        style={{ width: "100%", marginTop: 12, padding: "13px 16px", borderRadius: 14, border: `2px solid ${correct ? OK_GREEN : wrong ? BAD_RED : T.line}`, background: correct ? `${OK_GREEN}12` : wrong ? `${BAD_RED}12` : T.panel, color: T.text, fontFamily: uiFont, fontSize: 19, outline: "none", textAlign: "center" }}
       />
       {!feedback && (
         <div style={{ textAlign: "center", minHeight: 30, marginTop: 6, fontFamily: jaFont, fontSize: 24, color: answer ? T.gold : T.textDim, letterSpacing: 1 }}>
@@ -13622,8 +13627,9 @@ function TypedQuiz({ items, mode, onGrade, onExit, title, onKanji }) {
       )}
 
       {feedback && (
-        <div className="fade" style={{ marginTop: 12, background: T.panel, border: `1px solid ${wrong ? T.red : T.green}`, borderRadius: 14, padding: "12px 14px", textAlign: "center" }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: wrong ? T.red : T.green }}>{correct ? (curStreak + 1 >= 2 ? "Correct! Cleared ✓" : "Correct! One more in a row") : "Not quite — it'll come back"}</div>
+        <div className="fade" style={{ marginTop: 12, background: T.panel, border: `2px solid ${wrong ? BAD_RED : OK_GREEN}`, borderRadius: 14, padding: "12px 14px", textAlign: "center" }}>
+          <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: 1, textTransform: "uppercase", color: wrong ? BAD_RED : OK_GREEN }}>{correct ? "Correct ✓" : "Not quite ✕"}</div>
+          <div style={{ fontSize: 12, fontWeight: 600, color: T.textDim, marginTop: 2, marginBottom: 2 }}>{correct ? (curStreak + 1 >= 2 ? "Cleared — answered twice in a row" : "One more in a row clears it") : "It'll come back later in this session"}</div>
           <JaText text={item.ja} onKanji={onKanji} style={{ fontFamily: jaFont, fontSize: 30, color: T.text, marginTop: 4, display: "inline-block" }} />
           {item.kana !== item.ja && (<div style={{ fontFamily: jaFont, fontSize: 17, color: T.textDim }}>{item.kana}</div>)}
           <div style={{ color: T.goldSoft, fontStyle: "italic", fontSize: 14 }}>{item.romaji}</div>
@@ -14609,11 +14615,11 @@ function PracticePad({ char, typeCheck, typePlaceholder, typeHint, label }) {
           <div style={{ fontSize: 11.5, color: T.textDim, marginBottom: 6 }}>{typeHint || "…or type it with your own keyboard:"}</div>
           <div style={{ display: "flex", gap: 8 }}>
             <input value={typed} onChange={(e) => { setTyped(e.target.value); setResult(null); }} onKeyDown={(e) => { if (e.key === "Enter") checkTyped(); }} placeholder={typePlaceholder || "type here"} autoCapitalize="off" autoCorrect="off" spellCheck={false}
-              style={{ flex: 1, minWidth: 0, padding: "10px 12px", borderRadius: 10, border: `1.5px solid ${result === "ok" ? T.green : result === "no" ? T.red : T.line}`, background: T.panelHi, color: T.text, fontSize: 16, fontFamily: jaFont }} />
+              style={{ flex: 1, minWidth: 0, padding: "10px 12px", borderRadius: 10, border: `1.5px solid ${result === "ok" ? OK_GREEN : result === "no" ? BAD_RED : T.line}`, background: result === "ok" ? `${OK_GREEN}10` : result === "no" ? `${BAD_RED}10` : T.panelHi, color: T.text, fontSize: 16, fontFamily: jaFont }} />
             <button className="tap" onClick={checkTyped} style={{ padding: "10px 16px", borderRadius: 10, border: "none", background: `linear-gradient(135deg, ${T.gold}, ${T.terra})`, color: "#fff", fontWeight: 700, fontSize: 13 }}>Check</button>
           </div>
-          {result === "ok" && <div style={{ fontSize: 12, color: T.green, fontWeight: 700, marginTop: 6 }}>✓ That matches — nicely done.</div>}
-          {result === "no" && <div style={{ fontSize: 12, color: T.red, fontWeight: 700, marginTop: 6 }}>Not quite — give it another go. (It's {char}.)</div>}
+          {result === "ok" && <div style={{ fontSize: 13, fontWeight: 800, letterSpacing: 0.5, color: OK_GREEN, marginTop: 6 }}>✓ CORRECT — nicely done.</div>}
+          {result === "no" && <div style={{ fontSize: 13, fontWeight: 800, color: BAD_RED, marginTop: 6 }}>Not quite — give it another go. (It's {char}.)</div>}
         </div>
       )}
       <div style={{ fontSize: 11, color: T.textDim, marginTop: 10, lineHeight: 1.5 }}>Trace over the guide, then hide it and write it from memory. Nothing here is graded — it's just practice before you lock it in.</div>
@@ -15126,8 +15132,8 @@ function ScriptTrain({ scriptState, setScript, chart, set }) {
               if (picked) {
                 const isCorrect = opt[1] === ans[1];
                 const isPicked = opt[1] === picked[1];
-                if (isCorrect) { bg = `${T.green}1a`; border = T.green; col = T.gold; }
-                else if (isPicked) { bg = `${T.red}1a`; border = T.red; col = T.red; }
+                if (isCorrect) { bg = OK_GREEN; border = OK_GREEN; col = "#fff"; }
+                else if (isPicked) { bg = `${BAD_RED}1e`; border = BAD_RED; col = BAD_RED; }
               }
               return (
                 <button key={i} className="tap" onClick={() => choose(opt)} style={{ background: bg, border: `1.5px solid ${border}`, borderRadius: 14, padding: "14px 8px", cursor: "pointer", minHeight: 58, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -15155,15 +15161,15 @@ function ScriptTrain({ scriptState, setScript, chart, set }) {
           <div style={{ position: "relative", marginTop: 12 }}>
             <input value={typed} onChange={(e) => !feedback && setTyped(e.target.value)} onKeyDown={(e) => e.key === "Enter" && checkType()}
               placeholder="type romaji…  e.g. shi" readOnly={!!feedback} autoCapitalize="off" autoCorrect="off" spellCheck={false}
-              style={{ width: "100%", padding: "12px 16px", borderRadius: 14, border: `2px solid ${correct ? T.green : wrong ? T.red : T.line}`, background: correct ? `${T.green}10` : wrong ? `${T.red}10` : T.panel, color: T.text, fontSize: 18, outline: "none", textAlign: "center" }} />
+              style={{ width: "100%", padding: "12px 16px", borderRadius: 14, border: `2px solid ${correct ? OK_GREEN : wrong ? BAD_RED : T.line}`, background: correct ? `${OK_GREEN}12` : wrong ? `${BAD_RED}12` : T.panel, color: T.text, fontSize: 18, outline: "none", textAlign: "center" }} />
             {typed && !feedback && (
               <div style={{ textAlign: "center", marginTop: 8, fontFamily: jaFont, fontSize: 30, color: T.gold }}>{preview}</div>
             )}
           </div>
 
           {feedback && (
-            <div className="fade" style={{ marginTop: 12, background: T.panel, border: `1px solid ${wrong ? T.red : T.green}`, borderRadius: 14, padding: "12px 14px", textAlign: "center" }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: wrong ? T.red : T.green }}>{correct ? "Correct!" : "Answer:"}</div>
+            <div className="fade" style={{ marginTop: 12, background: T.panel, border: `2px solid ${wrong ? BAD_RED : OK_GREEN}`, borderRadius: 14, padding: "12px 14px", textAlign: "center" }}>
+              <div style={{ fontSize: 18, fontWeight: 800, letterSpacing: 1, textTransform: "uppercase", color: wrong ? BAD_RED : OK_GREEN }}>{correct ? "Correct ✓" : "Answer"}</div>
               <div style={{ fontFamily: jaFont, fontSize: 44, color: T.text, marginTop: 2 }}>{ans[0]}</div>
               <div style={{ color: T.gold, fontSize: 15, fontWeight: 700 }}>{ans[1]}</div>
             </div>
@@ -15309,8 +15315,8 @@ function ScriptQuiz({ set, chart, onGrade }) {
           if (picked) {
             const isCorrect = opt[1] === q.answer[1];
             const isPicked = opt[1] === picked[1];
-            if (isCorrect) { bg = `${T.green}1a`; border = T.green; col = T.gold; }
-            else if (isPicked) { bg = `${T.red}1a`; border = T.red; col = T.red; }
+            if (isCorrect) { bg = OK_GREEN; border = OK_GREEN; col = "#fff"; }
+            else if (isPicked) { bg = `${BAD_RED}1e`; border = BAD_RED; col = BAD_RED; }
           }
           return (
             <button key={i} className="tap" onClick={() => choose(opt)} style={{ background: bg, border: `1.5px solid ${border}`, borderRadius: 14, padding: showKana ? "12px 8px" : "16px 8px", cursor: "pointer", minHeight: 64, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -15893,8 +15899,8 @@ function KanjiStudy({ list, learned, onMark, batch, setBatch, best, onBest, onRe
           let bg = T.panel, border = T.line, col = T.text;
           if (picked) {
             const isCorrect = opt.char === ans.char, isPicked = opt.char === picked.char;
-            if (isCorrect) { bg = `${T.green}1a`; border = T.green; col = T.gold; }
-            else if (isPicked) { bg = `${T.red}1a`; border = T.red; col = T.red; }
+            if (isCorrect) { bg = OK_GREEN; border = OK_GREEN; col = "#fff"; }
+            else if (isPicked) { bg = `${BAD_RED}1e`; border = BAD_RED; col = BAD_RED; }
           }
           return (
             <button key={i} className="tap" onClick={() => choose(opt)} style={{ background: bg, border: `1.5px solid ${border}`, borderRadius: 14, padding: "14px 8px", cursor: "pointer", minHeight: 64, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -16047,8 +16053,8 @@ function KanjiQuiz({ list, level, learned, best, onBest, autoPool, onRecord }) {
           if (picked) {
             const isCorrect = opt.char === q.answer.char;
             const isPicked = opt.char === picked.char;
-            if (isCorrect) { bg = `${T.green}1a`; border = T.green; col = T.gold; }
-            else if (isPicked) { bg = `${T.red}1a`; border = T.red; col = T.red; }
+            if (isCorrect) { bg = OK_GREEN; border = OK_GREEN; col = "#fff"; }
+            else if (isPicked) { bg = `${BAD_RED}1e`; border = BAD_RED; col = BAD_RED; }
           }
           return (
             <button key={i} className="tap" onClick={() => choose(opt)} style={{ background: bg, border: `1.5px solid ${border}`, borderRadius: 14, padding: optKind === "kanji" ? "14px 8px" : "16px 8px", cursor: "pointer", minHeight: 64, display: "flex", alignItems: "center", justifyContent: "center" }}>
