@@ -13395,8 +13395,16 @@ function mastery(prog) {
 /* True green / red for answer correctness — the per-theme T.green/T.red are
    tinted to match each palette (in the rose theme "green" is actually pink), so
    for right/wrong feedback we use fixed, unmistakable colors instead. */
-const OK_GREEN = "#2e9e57";
+const OK_GREEN = "#15a24a";
 const BAD_RED = "#d23f3f";
+/* One consistent right/wrong verdict: the word shows in green (correct) or red
+   (wrong) so it reads at a glance, on a faint matching fill with a bold ring. */
+function Verdict({ ok, size }) {
+  const c = ok ? OK_GREEN : BAD_RED;
+  return (
+    <span style={{ display: "inline-block", fontSize: size || 20, fontWeight: 900, letterSpacing: 1.4, textTransform: "uppercase", color: c, background: `${c}16`, border: `2px solid ${c}`, borderRadius: 999, padding: "6px 20px", boxShadow: `0 4px 14px ${c}33` }}>{ok ? "Correct ✓" : "Not quite ✕"}</span>
+  );
+}
 const MASTERY_BANDS = [
   { min: 90, color: "#34a35a", label: "Mastered" },
   { min: 70, color: "#7cc24e", label: "Strong" },
@@ -13628,7 +13636,7 @@ function TypedQuiz({ items, mode, onGrade, onExit, title, onKanji }) {
 
       {feedback && (
         <div className="fade" style={{ marginTop: 12, background: T.panel, border: `2px solid ${wrong ? BAD_RED : OK_GREEN}`, borderRadius: 14, padding: "12px 14px", textAlign: "center" }}>
-          <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: 1, textTransform: "uppercase", color: wrong ? BAD_RED : OK_GREEN }}>{correct ? "Correct ✓" : "Not quite ✕"}</div>
+          <div style={{ display: "inline-block" }}><Verdict ok={!!correct} size={22} /></div>
           <div style={{ fontSize: 12, fontWeight: 600, color: T.textDim, marginTop: 2, marginBottom: 2 }}>{correct ? (curStreak + 1 >= 2 ? "Cleared — answered twice in a row" : "One more in a row clears it") : "It'll come back later in this session"}</div>
           <JaText text={item.ja} onKanji={onKanji} style={{ fontFamily: jaFont, fontSize: 30, color: T.text, marginTop: 4, display: "inline-block" }} />
           {item.kana !== item.ja && (<div style={{ fontFamily: jaFont, fontSize: 17, color: T.textDim }}>{item.kana}</div>)}
@@ -13975,6 +13983,9 @@ function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice, on
   const selWithProgress = selectedIds.filter((id) => state.progress[id]).length;
   const addSelectedToCustom = () => { if (selectedIds.length && onAddManyCustom) { onAddManyCustom(selectedIds); setSelected({}); } };
   const learnedItems = allItems.filter((it) => state.progress[it.id]);
+  const stageGroups = {};
+  learnedItems.forEach((it) => { const grp = stageMeta(state.progress[it.id].stage).group; (stageGroups[grp] = stageGroups[grp] || []).push(it.id); });
+  const stageColor = (g) => stageMeta(g === "Apprentice" ? 1 : g === "Guru" ? 5 : g === "Master" ? 7 : g === "Enlightened" ? 8 : 9).color;
   const filters = [["all", "All"], ["learned", "Learned"], ["due", "Due"], ["leech", "Tricky"]];
 
   return (
@@ -13999,6 +14010,21 @@ function ItemsView({ allItems, state, level, leeches, onAdd, onStartPractice, on
           <button key={k} className="tap" onClick={() => setFilter(k)} style={{ whiteSpace: "nowrap", padding: "7px 13px", borderRadius: 999, border: `1px solid ${filter === k ? T.gold : T.line}`, background: filter === k ? `${T.gold}14` : T.panel, color: filter === k ? T.gold : T.textDim, fontWeight: 600, fontSize: 13 }}>{label}</button>
         ))}
       </div>
+
+      {learnedItems.length > 0 && (
+        <div style={{ margin: "10px 0 2px" }}>
+          <div style={{ fontSize: 11, color: T.textDim, fontWeight: 700, marginBottom: 5 }}>Quick-add to custom quiz by SRS stage</div>
+          <div style={{ display: "flex", gap: 6, overflowX: "auto", paddingBottom: 4 }}>
+            {STAGE_GROUPS.map((g) => {
+              const ids = stageGroups[g] || [];
+              const c = stageColor(g);
+              return (
+                <button key={g} className="tap" disabled={!ids.length} onClick={() => ids.length && onAddManyCustom && onAddManyCustom(ids)} style={{ whiteSpace: "nowrap", padding: "6px 11px", borderRadius: 999, border: `1px solid ${ids.length ? c : T.line}`, background: ids.length ? `${c}12` : T.panel, color: ids.length ? c : T.textDim, fontWeight: 700, fontSize: 12, opacity: ids.length ? 1 : 0.5, cursor: ids.length ? "pointer" : "default" }}>{g} · {ids.length}</button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {selCount > 0 ? (
         <div style={{ margin: "10px 0", display: "flex", flexDirection: "column", gap: 8 }}>
@@ -14134,6 +14160,14 @@ function StatsView({ state, allItems, level, streak }) {
   const kLearnedList = KANJI.filter((k) => kMap[k.char] || kStats[k.char]);
   const kMs = kLearnedList.map((k) => mastery(kStats[k.char]) || 0);
   const avgKanjiM = kMs.length ? Math.round(kMs.reduce((a, b) => a + b, 0) / kMs.length) : null;
+  const kanaAvg = (set, prog, tr) => {
+    const learned = set.filter((a) => prog[a[0]] || (tr && tr[a[0]]));
+    if (!learned.length) return null;
+    const ms = learned.map((a) => Math.max(mastery(prog[a[0]]) || 0, (tr && mastery(tr[a[0]])) || 0));
+    return Math.round(ms.reduce((x, y) => x + y, 0) / ms.length);
+  };
+  const avgHiraM = kanaAvg(HIRAGANA, sp, trH);
+  const avgKataM = kanaAvg(KATAKANA, sp, trA);
 
   // history
   const days = [];
@@ -14212,17 +14246,14 @@ function StatsView({ state, allItems, level, streak }) {
           <span style={{ fontSize: 16 }}>🎯</span>
           <span style={{ fontSize: 14, fontWeight: 800 }}>Average mastery</span>
         </div>
-        <div style={{ display: "flex", gap: 8 }}>
-          <div style={{ flex: 1, textAlign: "center", background: T.panelHi, border: `1px solid ${T.line}`, borderRadius: 14, padding: "13px 4px" }}>
-            <div style={{ fontSize: 23, fontWeight: 800, color: avgVocabM == null ? T.textDim : masteryColor(avgVocabM) }}>{avgVocabM == null ? "—" : avgVocabM + "%"}</div>
-            <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 2 }}>Vocabulary</div>
-            {avgVocabM != null && <div style={{ fontSize: 10, color: masteryColor(avgVocabM), marginTop: 1, fontWeight: 700 }}>{masteryLabel(avgVocabM)}</div>}
-          </div>
-          <div style={{ flex: 1, textAlign: "center", background: T.panelHi, border: `1px solid ${T.line}`, borderRadius: 14, padding: "13px 4px" }}>
-            <div style={{ fontSize: 23, fontWeight: 800, color: avgKanjiM == null ? T.textDim : masteryColor(avgKanjiM) }}>{avgKanjiM == null ? "—" : avgKanjiM + "%"}</div>
-            <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 2 }}>Kanji</div>
-            {avgKanjiM != null && <div style={{ fontSize: 10, color: masteryColor(avgKanjiM), marginTop: 1, fontWeight: 700 }}>{masteryLabel(avgKanjiM)}</div>}
-          </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+          {[["Vocabulary", avgVocabM], ["Kanji", avgKanjiM], ["Hiragana", avgHiraM], ["Katakana", avgKataM]].map(([label, val]) => (
+            <div key={label} style={{ textAlign: "center", background: T.panelHi, border: `1px solid ${T.line}`, borderRadius: 14, padding: "13px 4px" }}>
+              <div style={{ fontSize: 23, fontWeight: 800, color: val == null ? T.textDim : masteryColor(val) }}>{val == null ? "—" : val + "%"}</div>
+              <div style={{ fontSize: 10.5, color: T.textDim, marginTop: 2 }}>{label}</div>
+              {val != null && <div style={{ fontSize: 10, color: masteryColor(val), marginTop: 1, fontWeight: 700 }}>{masteryLabel(val)}</div>}
+            </div>
+          ))}
         </div>
         <div style={{ marginTop: 12 }}><MasteryLegend /></div>
       </Card>
@@ -15144,6 +15175,9 @@ function ScriptTrain({ scriptState, setScript, chart, set }) {
           </div>
           {picked && (
             <div className="fade" style={{ textAlign: "center", marginTop: 14, fontSize: 14 }}>
+              <div style={{ marginBottom: 7 }}>
+                <Verdict ok={picked[1] === ans[1]} size={16} />
+              </div>
               <span style={{ fontFamily: jaFont, fontSize: 26, color: T.text }}>{ans[0]}</span>
               <span style={{ color: T.textDim }}> = </span>
               <span style={{ color: T.gold, fontWeight: 700 }}>{ans[1]}</span>
@@ -15169,7 +15203,7 @@ function ScriptTrain({ scriptState, setScript, chart, set }) {
 
           {feedback && (
             <div className="fade" style={{ marginTop: 12, background: T.panel, border: `2px solid ${wrong ? BAD_RED : OK_GREEN}`, borderRadius: 14, padding: "12px 14px", textAlign: "center" }}>
-              <div style={{ fontSize: 18, fontWeight: 800, letterSpacing: 1, textTransform: "uppercase", color: wrong ? BAD_RED : OK_GREEN }}>{correct ? "Correct ✓" : "Answer"}</div>
+              {correct ? <Verdict ok size={18} /> : <span style={{ display: "inline-block", fontSize: 18, fontWeight: 900, letterSpacing: 1.2, textTransform: "uppercase", color: BAD_RED, background: `${BAD_RED}16`, border: `2px solid ${BAD_RED}`, borderRadius: 999, padding: "5px 16px" }}>Answer</span>}
               <div style={{ fontFamily: jaFont, fontSize: 44, color: T.text, marginTop: 2 }}>{ans[0]}</div>
               <div style={{ color: T.gold, fontSize: 15, fontWeight: 700 }}>{ans[1]}</div>
             </div>
@@ -15573,7 +15607,17 @@ function KanjiView({ kanjiState, setKanji, focusChar, onFocusDone, customKanji, 
   const markLearned = (char, val) => {
     const next = { ...learned };
     if (val) next[char] = true; else delete next[char];
-    setKanji({ ...ks, learned: next });
+    let lv = ks.level || "N5";
+    if (val) {
+      // once every kanji in the current JLPT level is learned, move on to the next
+      let i = JLPT_LEVELS.indexOf(lv);
+      while (i >= 0 && i < JLPT_LEVELS.length - 1) {
+        const curList = KANJI_BY_LEVEL[JLPT_LEVELS[i]] || [];
+        if (curList.length && curList.every((k) => next[k.char])) i += 1; else break;
+      }
+      lv = JLPT_LEVELS[i] || lv;
+    }
+    setKanji({ ...ks, learned: next, level: lv });
   };
 
   const [mode, setMode] = useState("browse"); // browse | study | quiz | trace
@@ -15649,6 +15693,9 @@ function KanjiBrowse({ list, learned, onMark, selChar, setSelChar, level, onTrac
   const selCount = Object.values(sel).filter(Boolean).length;
   const toggleSel = (ch) => setSel((s) => ({ ...s, [ch]: !s[ch] }));
   const addSelected = () => { const chars = Object.keys(sel).filter((c) => sel[c]); if (chars.length && onAddManyCustom) onAddManyCustom(chars); setSel({}); setSelMode(false); };
+  const kanjiBandGroups = {};
+  KANJI.forEach((kj) => { if (!learned[kj.char]) return; const lbl = masteryLabel(mastery(statsMap[kj.char])); (kanjiBandGroups[lbl] = kanjiBandGroups[lbl] || []).push(kj.char); });
+  const kanjiBandDefs = [...MASTERY_BANDS, { label: "New", color: "#b9a48f" }];
   const cellClick = (ch) => { if (selMode) toggleSel(ch); else setSelChar(ch === selChar ? null : ch); };
   return (
     <div className="fade">
@@ -15706,6 +15753,20 @@ function KanjiBrowse({ list, learned, onMark, selChar, setSelChar, level, onTrac
       {searching && (
         <div style={{ fontSize: 12, color: T.textDim, margin: "0 2px 10px" }}>
           {displayList.length} {displayList.length === 1 ? "match" : "matches"} across all levels
+        </div>
+      )}
+
+      {onAddManyCustom && Object.keys(kanjiBandGroups).length > 0 && (
+        <div style={{ margin: "0 0 10px" }}>
+          <div style={{ fontSize: 11, color: T.textDim, fontWeight: 700, marginBottom: 5 }}>Quick-add to custom quiz by mastery</div>
+          <div style={{ display: "flex", gap: 6, overflowX: "auto", paddingBottom: 4 }}>
+            {kanjiBandDefs.map((b) => {
+              const chars = kanjiBandGroups[b.label] || [];
+              return (
+                <button key={b.label} className="tap" disabled={!chars.length} onClick={() => chars.length && onAddManyCustom(chars)} style={{ whiteSpace: "nowrap", padding: "6px 11px", borderRadius: 999, border: `1px solid ${chars.length ? b.color : T.line}`, background: chars.length ? `${b.color}12` : T.panel, color: chars.length ? b.color : T.textDim, fontWeight: 700, fontSize: 12, opacity: chars.length ? 1 : 0.5, cursor: chars.length ? "pointer" : "default" }}>{b.label} · {chars.length}</button>
+              );
+            })}
+          </div>
         </div>
       )}
 
@@ -16066,6 +16127,9 @@ function KanjiQuiz({ list, level, learned, best, onBest, autoPool, onRecord }) {
 
       {picked && (
         <div className="fade" style={{ textAlign: "center", marginTop: 16, fontSize: 14 }}>
+          <div style={{ marginBottom: 8 }}>
+            <Verdict ok={picked.char === q.answer.char} size={18} />
+          </div>
           <span style={{ fontFamily: jaFont, fontSize: 28, color: T.text }}>{q.answer.char}</span>
           <span style={{ color: T.textDim }}> = </span>
           <span style={{ color: T.gold, fontWeight: 700 }}>{q.answer.meaning}</span>
@@ -16273,7 +16337,7 @@ function KanjiTrace({ list, initialChar, srsProg, onSrsGrade }) {
 }
 
 /* ===================== REVIEWS HUB (choose what to review) ===================== */
-function ReviewsView({ due, grade, onKanji, kanjiState, setKanji, customWordItems, customKanjiItems, onClearCustom, onRecordKanji }) {
+function ReviewsView({ due, grade, onKanji, kanjiState, setKanji, customWordItems, customKanjiItems, onClearCustom, onRecordKanji, gradeKana }) {
   const [pick, setPick] = useState(null); // null | vocab | kanji | hira | kata | cwords | ckanji
   const learnedKanji = KANJI.filter((k) => (kanjiState && kanjiState.learned && kanjiState.learned[k.char]));
   const cw = customWordItems || [], ck = customKanjiItems || [];
@@ -16294,8 +16358,8 @@ function ReviewsView({ due, grade, onKanji, kanjiState, setKanji, customWordItem
         </button>
         {pick === "vocab" && <TypedQuiz items={due} mode="srs" onGrade={grade} onExit={() => setPick(null)} title="Vocabulary review" onKanji={onKanji} />}
         {pick === "kanji" && <KanjiQuiz list={learnedKanji} level="all levels" learned={(kanjiState && kanjiState.learned) || {}} best={(kanjiState && kanjiState.best) || 0} onBest={(b) => setKanji({ ...kanjiState, best: Math.max((kanjiState && kanjiState.best) || 0, b) })} onRecord={onRecordKanji} />}
-        {pick === "hira" && <ScriptQuiz set={HIRAGANA} chart="hira" />}
-        {pick === "kata" && <ScriptQuiz set={KATAKANA} chart="kata" />}
+        {pick === "hira" && <ScriptQuiz set={HIRAGANA} chart="hira" onGrade={gradeKana} />}
+        {pick === "kata" && <ScriptQuiz set={KATAKANA} chart="kata" onGrade={gradeKana} />}
         {pick === "cwords" && <TypedQuiz items={cw} mode="practice" onGrade={grade} onExit={() => setPick(null)} title="Custom quiz · words" onKanji={onKanji} />}
         {pick === "ckanji" && <KanjiQuiz list={ck} level="your custom set" learned={(kanjiState && kanjiState.learned) || {}} best={(kanjiState && kanjiState.best) || 0} onBest={(b) => setKanji({ ...kanjiState, best: Math.max((kanjiState && kanjiState.best) || 0, b) })} autoPool={ck} onRecord={onRecordKanji} />}
       </div>
@@ -16398,11 +16462,11 @@ function App() {
   const itemsById = useMemo(() => Object.fromEntries(allItems.map((it) => [it.id, it])), [allItems]);
   const customWordItems = useMemo(() => Object.keys(cq.words || {}).map((id) => itemsById[id]).filter(Boolean), [cq.words, itemsById]);
   const customKanjiItems = useMemo(() => Object.keys(cq.kanji || {}).map((c) => KANJI_INDEX[c]).filter(Boolean), [cq.kanji]);
-  const toggleCustomWord = useCallback((id) => { setState((s) => { const w = { ...(s.customQuiz?.words || {}) }; if (w[id]) delete w[id]; else w[id] = true; const next = { ...s, customQuiz: { words: w, kanji: { ...(s.customQuiz?.kanji || {}) } } }; saveState(next); return next; }); }, []);
-  const toggleCustomKanji = useCallback((ch) => { setState((s) => { const k = { ...(s.customQuiz?.kanji || {}) }; if (k[ch]) delete k[ch]; else k[ch] = true; const next = { ...s, customQuiz: { kanji: k, words: { ...(s.customQuiz?.words || {}) } } }; saveState(next); return next; }); }, []);
+  const toggleCustomWord = useCallback((id) => { setState((s) => { const w = { ...(s.customQuiz?.words || {}) }; const adding = !w[id]; if (w[id]) delete w[id]; else w[id] = true; const progress = adding && !s.progress[id] ? { ...s.progress, [id]: learnItem(Date.now()) } : s.progress; const next = { ...s, progress, customQuiz: { words: w, kanji: { ...(s.customQuiz?.kanji || {}) } } }; saveState(next); return next; }); }, []);
+  const toggleCustomKanji = useCallback((ch) => { setState((s) => { const k = { ...(s.customQuiz?.kanji || {}) }; const adding = !k[ch]; if (k[ch]) delete k[ch]; else k[ch] = true; const kanji = adding ? { ...s.kanji, learned: { ...((s.kanji && s.kanji.learned) || {}), [ch]: true } } : s.kanji; const next = { ...s, kanji, customQuiz: { kanji: k, words: { ...(s.customQuiz?.words || {}) } } }; saveState(next); return next; }); }, []);
   const clearCustomQuiz = useCallback(() => { setState((s) => { const next = { ...s, customQuiz: { words: {}, kanji: {} } }; saveState(next); return next; }); }, []);
-  const addCustomWords = useCallback((ids) => { setState((s) => { const w = { ...(s.customQuiz?.words || {}) }; ids.forEach((id) => { w[id] = true; }); const next = { ...s, customQuiz: { words: w, kanji: { ...(s.customQuiz?.kanji || {}) } } }; saveState(next); return next; }); }, []);
-  const addCustomKanjiMany = useCallback((chars) => { setState((s) => { const k = { ...(s.customQuiz?.kanji || {}) }; chars.forEach((c) => { k[c] = true; }); const next = { ...s, customQuiz: { kanji: k, words: { ...(s.customQuiz?.words || {}) } } }; saveState(next); return next; }); }, []);
+  const addCustomWords = useCallback((ids) => { setState((s) => { const w = { ...(s.customQuiz?.words || {}) }; const progress = { ...s.progress }; ids.forEach((id) => { w[id] = true; if (!progress[id]) progress[id] = learnItem(Date.now()); }); const next = { ...s, progress, customQuiz: { words: w, kanji: { ...(s.customQuiz?.kanji || {}) } } }; saveState(next); return next; }); }, []);
+  const addCustomKanjiMany = useCallback((chars) => { setState((s) => { const k = { ...(s.customQuiz?.kanji || {}) }; const learned = { ...((s.kanji && s.kanji.learned) || {}) }; chars.forEach((c) => { k[c] = true; learned[c] = true; }); const next = { ...s, kanji: { ...s.kanji, learned }, customQuiz: { kanji: k, words: { ...(s.customQuiz?.words || {}) } } }; saveState(next); return next; }); }, []);
   const recordKanji = useCallback((char, correct) => {
     setState((s) => {
       const ks = s.kanji || {};
@@ -16483,7 +16547,13 @@ function App() {
     setState((s) => {
       const day = todayStr();
       const daily = s.daily.date === day ? s.daily : { date: day, reviews: 0, lessons: 0 };
-      const next = { ...s, progress: { ...s.progress, [id]: learnItem(Date.now()) }, daily: { ...daily, lessons: daily.lessons + 1 } };
+      const progress = { ...s.progress, [id]: learnItem(Date.now()) };
+      // unlock the next level as soon as every word in the current level is learned
+      let currentLevel = s.currentLevel;
+      while (currentLevel < MAX_LEVEL && ITEMS.filter((it) => it.level === currentLevel).every((it) => progress[it.id])) {
+        currentLevel += 1;
+      }
+      const next = { ...s, currentLevel, progress, daily: { ...daily, lessons: daily.lessons + 1 } };
       saveState(next);
       return next;
     });

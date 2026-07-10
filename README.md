@@ -37,9 +37,11 @@ trainer. The whole thing is a single self-contained HTML file..
   8,000 words organised into bite-size levels (e.g. *N5 · 1*, *N5 · 2* … through
   N1). Each card shows the word in kanji/kana, its reading, the English meaning,
   and tap-to-hear audio. WaniKani-style scheduling brings cards back at growing
-  intervals, and reaching **Guru** on most of a level unlocks the next — or, if
+  intervals, and **the next level unlocks the moment you've learned every word in
+  your current one** (no need to wait for reviews) — or, if
   you already know the basics, tap **"I already know these — unlock Level N"**
-  on the home screen to jump ahead whenever you're ready.
+  on the home screen to jump ahead whenever you're ready. Kanji work the same
+  way: finishing every character in a JLPT level moves you straight on to the next.
 - **Romaji typed answers with a live kana preview** — type the reading in
   romaji and watch it turn into kana as you go. Both romaji and kana input are
   accepted, and long vowels (e.g. *ou / uu*) count.
@@ -66,7 +68,13 @@ trainer. The whole thing is a single self-contained HTML file..
 - **Custom quiz** — tap the **✚** on any word (in the Vocab list) or any kanji
   (in Kanji → Browse) to add it to your own collection — or select several at
   once (tap multiple Vocab rows, or use "Select multiple to add" in the kanji
-  grid) and add them in one go. Then drill exactly those items from the Reviews
+  grid) and add them in one go. **Anything you add is unlocked and marked as
+  learned right away**, so you can build a custom set even from words or kanji you
+  haven't formally studied yet. You can also **quick-add by level of mastery**:
+  the Vocab list has a chip row that adds every learned word at a chosen **SRS
+  stage** (Apprentice, Guru, Master, Enlightened, Burned — tap several to combine
+  them), and the kanji Browse grid has the same by **mastery band** (Learning →
+  Mastered). Then drill exactly those items from the Reviews
   tab — words and kanji each get their own quiz, and you can clear the set
   anytime. Your collection is saved on your device.
 - **Reviews hub** — the Reviews tab lets you choose what to practice: your due
